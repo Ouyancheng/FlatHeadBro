@@ -80,6 +80,14 @@ DRAM simple test OK.
 And then it will echo anything you type into the UART terminal. 
 If you connect an LED to GPIO PE16, you will also see the LED blinking each time you type a character. 
 
+## References 
+https://github.com/xboot/xfel
+https://github.com/smaeul/sun20i_d1_spl
+https://github.com/bigmagic123/d1-nezha-baremeta 
+https://mp.weixin.qq.com/s/MdrtuX3s1aUf0tdivXfpKQ
+https://whycan.com/t_6440.html 
+https://linux-sunxi.org/Allwinner_Nezha#U-Boot
+
 
 
 
