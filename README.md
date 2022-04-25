@@ -26,7 +26,7 @@ cd build
 cmake .. --toolchain ../cmake/toolchain.cmake
 make 
 ```
-
+#### Using clang 
 If using clang, modify `boot0-spl/cmake/clang-toolchain.cmake` to specify your path to clang (Note: if you are using macOS, Apple's clang shipped with Command Line Tools will NOT work, please install the LLVM toolchain via homebrew: `brew install llvm`, and make sure your clang has the riscv64 target: `${YOUR_PATH_TO_CLANG}/clang --print-targets`). 
 ```
 cd boot0-spl 
@@ -78,7 +78,7 @@ DRAM simple test OK.
 ```
 
 And then it will echo anything you type into the UART terminal. 
-If you connect an LED to GPIO PE16, you will also see the LED blinking each time you type a character to the UART terminal. 
+If you connect an LED to GPIO PE16, you will also see the LED blinking each time you type a character. 
 
 
 
