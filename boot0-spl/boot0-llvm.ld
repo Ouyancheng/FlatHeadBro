@@ -1,0 +1,36 @@
+OUTPUT_FORMAT("elf64-littleriscv", "elf64-littleriscv", "elf64-littleriscv")
+OUTPUT_ARCH("riscv")
+ENTRY(_entry)
+SECTIONS
+{
+    . = 0x20000;
+    . = ALIGN(4);
+    .boot0header :
+    {
+        CMakeFiles/boot0.elf.dir/src/boot0-header.c.o (.rodata)
+    }
+    . = ALIGN(1);
+    /*. = 0x203C8;*/
+    .text_entry : { CMakeFiles/boot0.elf.dir/src/boot0-entry.S.o (.text) }
+    .text : {
+        *(.text)
+    }
+    . = ALIGN(16);
+    .rodata : { 
+        *(.rodata) 
+        *(.rodata.*)
+    }
+    . = ALIGN(16);
+    .data : { *(.data) }
+    . = ALIGN(4);
+    .bss :
+    {
+        __bss_start = .;
+        *(.bss)
+    }
+    . = ALIGN(4);
+    __bss_end = .;
+    _end = .;
+    ASSERT(. <= (0x20000 + 0x10000), "boot0 image has exceeded its limit.")
+}
+
