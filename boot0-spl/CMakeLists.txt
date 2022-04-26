@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 # NOTE: the PROJECT_ROOT variable is set after the first project directive, so we couldn't use it here 
 set(FHB_MODULE_PATH "../modules")
-include(${FHB_MODULE_PATH}/ccu/CMakeLists.txt)
-include(${FHB_MODULE_PATH}/common/CMakeLists.txt)
+# include(${FHB_MODULE_PATH}/ccu/CMakeLists.txt)
+# include(${FHB_MODULE_PATH}/common/CMakeLists.txt)
 include(${FHB_MODULE_PATH}/dram/CMakeLists.txt)
-include(${FHB_MODULE_PATH}/gpio/CMakeLists.txt)
+# include(${FHB_MODULE_PATH}/gpio/CMakeLists.txt)
 include(${FHB_MODULE_PATH}/timer/CMakeLists.txt)
-include(${FHB_MODULE_PATH}/uart/CMakeLists.txt)
+# include(${FHB_MODULE_PATH}/uart/CMakeLists.txt)
 include(${FHB_MODULE_PATH}/uartgetcode/CMakeLists.txt)
 project(boot0main)
 
@@ -43,12 +43,12 @@ target_include_directories(${TARGET}.elf PUBLIC
 )
 
 
-target_link_libraries(${TARGET}.elf PUBLIC ccu)
-target_link_libraries(${TARGET}.elf PUBLIC common)
+# target_link_libraries(${TARGET}.elf PUBLIC ccu)
+# target_link_libraries(${TARGET}.elf PUBLIC common)
 target_link_libraries(${TARGET}.elf PUBLIC dram)
-target_link_libraries(${TARGET}.elf PUBLIC gpio)
+# target_link_libraries(${TARGET}.elf PUBLIC gpio)
 target_link_libraries(${TARGET}.elf PUBLIC timer)
-target_link_libraries(${TARGET}.elf PUBLIC uart)
+# target_link_libraries(${TARGET}.elf PUBLIC uart)
 target_link_libraries(${TARGET}.elf PUBLIC uartgetcode)
 
 add_custom_command(TARGET ${TARGET}.elf POST_BUILD
