@@ -38,18 +38,18 @@ add_executable(${TARGET}.elf
     "${CMAKE_CURRENT_LIST_DIR}/boot0-header.c"
 ) 
 
-target_include_directories(${TARGET}.elf PRIVATE 
+target_include_directories(${TARGET}.elf PUBLIC 
     ${TARGET_INCLUDE_DIRS}
 )
 
 
-target_link_libraries(${TARGET}.elf PRIVATE ccu)
-target_link_libraries(${TARGET}.elf PRIVATE common)
-target_link_libraries(${TARGET}.elf PRIVATE dram)
-target_link_libraries(${TARGET}.elf PRIVATE gpio)
-target_link_libraries(${TARGET}.elf PRIVATE timer)
-target_link_libraries(${TARGET}.elf PRIVATE uart)
-target_link_libraries(${TARGET}.elf PRIVATE uartgetcode)
+target_link_libraries(${TARGET}.elf PUBLIC ccu)
+target_link_libraries(${TARGET}.elf PUBLIC common)
+target_link_libraries(${TARGET}.elf PUBLIC dram)
+target_link_libraries(${TARGET}.elf PUBLIC gpio)
+target_link_libraries(${TARGET}.elf PUBLIC timer)
+target_link_libraries(${TARGET}.elf PUBLIC uart)
+target_link_libraries(${TARGET}.elf PUBLIC uartgetcode)
 
 add_custom_command(TARGET ${TARGET}.elf POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} ${TARGET}.elf -O binary ${TARGET}.bin

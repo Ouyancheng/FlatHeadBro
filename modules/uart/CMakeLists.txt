@@ -23,9 +23,13 @@ add_library(${TARGET}
 # set_target_properties(${TARGET}  PROPERTIES PREFIX "")
 # set_target_properties(${TARGET}  PROPERTIES OUTPUT_NAME ${TARGET})
 # set_target_properties(${TARGET}  PROPERTIES SUFFIX ".a")
-target_include_directories(${TARGET} PRIVATE 
+target_include_directories(${TARGET} PUBLIC 
     ${TARGET_INCLUDE_DIRS}
 )
-
+target_link_libraries(${TARGET} PUBLIC
+    common 
+    ccu 
+    gpio 
+)
 
 

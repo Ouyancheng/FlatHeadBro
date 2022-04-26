@@ -27,9 +27,12 @@ add_library(${TARGET}
 # set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "dram")
 # set_target_properties(${TARGET} PROPERTIES SUFFIX ".a")
 
-target_include_directories(dram PRIVATE 
+target_include_directories(dram PUBLIC 
     ${TARGET_INCLUDE_DIRS}
 )
 
+target_link_libraries(${TARGET} PUBLIC
+    uart
+)
 
 

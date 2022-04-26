@@ -4,6 +4,8 @@
 #include "boot0-header.h"
 #include "gpio.h"
 #include "timer.h"
+#include "uartgetcode.h"
+#include "delay.h"
 #ifndef FEL_BASE
 #define FEL_BASE   0x20UL 
 #endif 
@@ -17,34 +19,45 @@ void main(void) {
     int status;
 
     uart_ctl = uart_init(0, 1); 
-    const char msg[] = "Hello World!!!"; 
-    for (unsigned i = 0; i < sizeof(msg); ++i) {
-        if (msg[i] == '\0') {
-            uart_putc(uart_ctl, '\n'); 
-        } else {
-            uart_putc(uart_ctl, msg[i]); 
-        }
-    }
+    // const char msg[] = "Hello World!!!"; 
+    // for (unsigned i = 0; i < sizeof(msg); ++i) {
+    //     if (msg[i] == '\0') {
+    //         uart_putc(uart_ctl, '\n'); 
+    //     } else {
+    //         uart_putc(uart_ctl, msg[i]); 
+    //     }
+    // }
     sys_clock_init(); 
     sys_dram_init(&(BT0_head.prvt_head.dram_para)); 
 
-    gpio_set_config(gpio_pe, 16, gpio_config_output); 
-    int pe16v = 0; 
-    int count = 0; 
-    while (count < 10) {
-        char c = uart_getc(uart_ctl); 
-        uart_putc(uart_ctl, c);
-        pe16v = (!pe16v); 
-        gpio_write(gpio_pe, 16, pe16v);
-        count += 1; 
-    }
+    // gpio_set_config(gpio_pe, 16, gpio_config_output); 
+    // int pe16v = 0; 
+    // int count = 0; 
+    // while (count < 10) {
+    //     char c = uart_getc(uart_ctl); 
+    //     uart_putc(uart_ctl, c);
+    //     pe16v = (!pe16v); 
+    //     gpio_write(gpio_pe, 16, pe16v);
+    //     count += 1; 
+    // }
 
-    software_reset(); 
+    // software_reset(); 
 
     // get code via UART 
-
-    // void(*dram_entry)(void) = (void(*)(void))0x40000000UL; 
-    // dram_entry(); 
+    uintptr_t secondary_program_start_address = uart_get_code(); 
+    if (!secondary_program_start_address || secondary_program_start_address != DRAM_START) {
+        const char msg[] = "Boot Error! Rebooting..."; 
+        for (unsigned i = 0; i < sizeof(msg); ++i) {
+            if (msg[i] == '\0') {
+                uart_putc(uart_ctl, '\r'); 
+                uart_putc(uart_ctl, '\n'); 
+            } else {
+                uart_putc(uart_ctl, msg[i]); 
+            }
+        }
+        delay_ms(1000); 
+        software_reset(); 
+    }
 
     boot0_jmp(DRAM_START); 
 

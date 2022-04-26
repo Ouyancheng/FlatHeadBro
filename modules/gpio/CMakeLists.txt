@@ -23,7 +23,7 @@ add_library(${TARGET}
 # set_target_properties(${TARGET}  PROPERTIES SUFFIX ".a")
 
 
-target_include_directories(${TARGET} PRIVATE 
+target_include_directories(${TARGET} PUBLIC 
     ${TARGET_INCLUDE_DIRS}
 )
 
