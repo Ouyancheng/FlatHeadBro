@@ -59,7 +59,10 @@ void main(void) {
         software_reset(); 
     }
 
-    boot0_jmp(DRAM_START); 
+    // boot0_jmp(DRAM_START); 
+    void(*dram_start)(void) = (void(*)(void))(uintptr_t)DRAM_START;
+
+    dram_start(); 
 
     software_reset(); 
 
