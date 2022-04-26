@@ -13,11 +13,16 @@ MEMORY
 
 SECTIONS
 {
+	/*.dram_start : 
+	{
+		PROVIDE(__image_start = .);
+		PROVIDE(__text_start = .);
+	} > ram */
 	.text :
 	{
 		PROVIDE(__image_start = .);
 		PROVIDE(__text_start = .);
-        CMakeFiles/bootloadertest.elf.dir/start.S.o (.text*)
+		*(.text.start)
 		/*start.o (.text*)*/
 		/*main.o (.text*)*/
 		*(.text*)
@@ -77,8 +82,10 @@ SECTIONS
 	.rodata ALIGN(8) :
 	{
 		PROVIDE(__rodata_start = .);
+		*(.rodata)
 		*(.rodata*)
 		*(.srodata*)
+		*(.got*) /* Global Offset Table */
 		PROVIDE(__rodata_end = .);
 	} > ram
 

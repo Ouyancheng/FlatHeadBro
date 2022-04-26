@@ -1,5 +1,6 @@
 #include "riscv64.h"
 #include "linkage.h"
+.section .text.start
 	.global _start
 _start:
 	j reset
@@ -191,7 +192,7 @@ vectors:
 	csrrw t0, mscratch, x0
 	csrr s0, mstatus
 	csrr t1, mepc
-	csrr t2, mbadaddr
+	csrr t2, mtval /*NOTE:CLANG gives a warning on this, original is mbadaddr*/
 	csrr t3, mcause
 	sd t0, 2 * REGSZ(x2)
 	sd s0, 32 * REGSZ(x2)
