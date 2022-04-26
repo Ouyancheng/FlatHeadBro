@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
-include_guard()
-if (NOT DEFINED FHB_MODULE_PATH)
-    set(FHB_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/..")
-endif()
-project(gpio)
+include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
+include_guard(GLOBAL)
 
+
+project(gpio)
+enable_language( C CXX ASM )
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(TARGET gpio)
 set(gpio_INCLUDE_DIRS 

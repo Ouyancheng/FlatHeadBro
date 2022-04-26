@@ -87,10 +87,12 @@ e.g., if you want to build the uart module and all of its dependencies:
 ```
 mkdir build 
 cd build 
-cmake ../modules/uart --toolchain ../cmake/toolchain.cmake 
+cmake ../modules/uart --toolchain ../cmake/toolchain.cmake -DFHB_MODULE_USE_INCLUDE=ON
 make 
 ```
 You will see `libccu.a`, `libcommon.a`, `libgpio.a`, `libuart.a` in the build directory, and as you can see the uart module depends on the ccu, common and gpio modules. 
+
+The option `FHB_MODULE_USE_INCLUDE` is to tell CMake to use include for importing dependency instead of add_subdirectory. Using include will list all of the dependencies at the top-level build folder, instead of hiding in one of the subdirectories. However, using include to import the module will cause CMake generate a chain of directories from / to your module path in the build directory for each dependency... 
 
 ## References 
 - https://github.com/xboot/xfel

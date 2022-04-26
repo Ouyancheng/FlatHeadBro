@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
-include_guard()
-if (NOT DEFINED FHB_MODULE_PATH)
-    set(FHB_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/..")
-endif()
-include(${FHB_MODULE_PATH}/common/CMakeLists.txt)
+include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
+fhb_include_module(common)
+include_guard(GLOBAL)
+
 project(ccu)
+enable_language( C CXX ASM )
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(TARGET ccu)
 set(ccu_INCLUDE_DIRS 

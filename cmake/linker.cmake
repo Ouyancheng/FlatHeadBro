@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-include_guard()
+include_guard(GLOBAL)
 enable_language(C ASM CXX)
 
 
