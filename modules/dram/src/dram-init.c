@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "dram-init.h"
-#include "timer.h"
+#include "delay.h"
 extern int init_DRAM(int type, const struct ddr3_param_t *param);
 
 void sys_dram_init(const struct ddr3_param_t *param) {

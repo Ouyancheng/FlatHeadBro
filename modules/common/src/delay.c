@@ -1,5 +1,4 @@
-#include "timer.h"
-
+#include "delay.h"
 void delay_us(uint64_t us) {
     uint64_t current; 
     uint64_t target; 
@@ -12,7 +11,3 @@ void delay_us(uint64_t us) {
 void delay_ms(uint64_t ms) {
     return delay_us(ms * 1000UL); 
 }
-
-
-
-

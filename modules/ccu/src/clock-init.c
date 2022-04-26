@@ -27,7 +27,7 @@
  */
 #include "clock-init.h"
 #include "get-put.h"
-#include "timer.h"
+#include "delay.h"
 static void set_pll_cpux_axi(void) {
     uint32_t val;
 

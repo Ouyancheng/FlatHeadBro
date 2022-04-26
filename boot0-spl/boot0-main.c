@@ -3,10 +3,15 @@
 #include "dram-init.h"
 #include "boot0-header.h"
 #include "gpio.h"
-#define FEL_BASE 0x20 
+#include "timer.h"
+#ifndef FEL_BASE
+#define FEL_BASE   0x20UL 
+#endif 
+#define DRAM_START 0x40000000UL
 void boot0_jmp(uintptr_t addr) {
     asm volatile ("jr a0"); 
 }
+int sys_uart_printf(const char * fmt, ...);
 void main(void) {
     int dram_size;
     int status;
@@ -25,15 +30,43 @@ void main(void) {
 
     gpio_set_config(gpio_pe, 16, gpio_config_output); 
     int pe16v = 0; 
-    while (1) {
+    int count = 0; 
+    while (count < 10) {
         char c = uart_getc(uart_ctl); 
         uart_putc(uart_ctl, c);
         pe16v = (!pe16v); 
         gpio_write(gpio_pe, 16, pe16v);
+        count += 1; 
     }
+
+    software_reset(); 
+
+    // get code via UART 
+
+    // void(*dram_entry)(void) = (void(*)(void))0x40000000UL; 
+    // dram_entry(); 
+
+    boot0_jmp(DRAM_START); 
+
+    software_reset(); 
 
     // complete! 
     boot0_jmp(FEL_BASE); 
 } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

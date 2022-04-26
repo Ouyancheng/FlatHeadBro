@@ -1,17 +1,17 @@
-cmake_minimum_required(VERSION 3.9)
-
+cmake_minimum_required(VERSION 3.10)
+include_guard()
 enable_language(C ASM CXX)
 
 
-if(NOT DEFINED LINKER_SCRIPT)
-    if (NOT USING_LLVM_TOOLCHAIN)
-        set(LINKER_SCRIPT "${PROJECT_ROOT}/boot0.ld")
-        message(STATUS "linker script = ${LINKER_SCRIPT}")
-    else()
-        set(LINKER_SCRIPT "${PROJECT_ROOT}/boot0-llvm.ld")
-        message(STATUS "linker script = ${LINKER_SCRIPT}")
-    endif()
-endif()
+# if(NOT DEFINED LINKER_SCRIPT)
+#     if (NOT USING_LLVM_TOOLCHAIN)
+#         set(LINKER_SCRIPT "${PROJECT_ROOT}/boot0-spl/boot0.ld")
+#         message(STATUS "linker script = ${LINKER_SCRIPT}")
+#     else()
+#         set(LINKER_SCRIPT "${PROJECT_ROOT}/boot0-spl/boot0-llvm.ld")
+#         message(STATUS "linker script = ${LINKER_SCRIPT}")
+#     endif()
+# endif()
 
 # set(CMAKE_EXE_LINKER_FLAGS   "${CMAKE_EXE_LINKER_FLAGS} -T ${LINKER_SCRIPT} ")
 set(CMAKE_C_LINK_EXECUTABLE   "<CMAKE_LINKER> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> -T ${LINKER_SCRIPT} <OBJECTS> -o <TARGET> <LINK_LIBRARIES> -Map <TARGET>.map")

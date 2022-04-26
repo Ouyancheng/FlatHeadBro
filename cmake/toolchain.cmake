@@ -20,6 +20,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 set(PROJECT_ROOT "${CMAKE_CURRENT_LIST_DIR}/..")
+# message(STATUS "toolchain project root = ${PROJECT_ROOT}")
 set(CPU_TYPE "")
 set(TARGET_TRIPLET "riscv64-unknown-none-elf") 
 set(TARGET_ARCH "")

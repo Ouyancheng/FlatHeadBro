@@ -1,5 +1,5 @@
-#ifndef TIMER_H 
-#define TIMER_H 
+#ifndef DELAY_H
+#define DELAY_H
 #include <stdint.h>
 static inline uint64_t get_arch_counter(void) {
     uint64_t cnt = 0;
@@ -23,6 +23,8 @@ void delay_us(uint64_t us);
 void delay_ms(uint64_t ms); 
 
 #endif 
+
+
 
 
 

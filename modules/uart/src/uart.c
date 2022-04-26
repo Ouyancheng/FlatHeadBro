@@ -1,8 +1,8 @@
 #include "uart.h"
 #include "clock-init.h"
 #include "get-put.h"
-#include "timer.h"
 #include "gpio.h"
+#include "delay.h"
 // struct uart_control *uart0_control = (struct uart_control*)(UART0_BASE); 
 // struct uart_status  *uart0_status  = (struct uart_status*)(UART0_BASE + 0x007C); 
 // struct uart_halt    *uart0_halt    = (struct uart_halt*)(UART0_BASE + 0x00A4); 
