@@ -20,19 +20,17 @@ This is the first program to run after powering on and going through the BROM ph
 
 If using riscv64-unknown-elf-gcc, modify `boot0-spl/cmake/toolchain.cmake` to specify your path to riscv64-unknown-elf-gcc. 
 ```
-cd boot0-spl 
 mkdir build 
 cd build 
-cmake .. --toolchain ../cmake/toolchain.cmake
+cmake ../boot0-spl --toolchain ../cmake/toolchain.cmake
 make 
 ```
 #### Using clang 
 If using clang, modify `boot0-spl/cmake/clang-toolchain.cmake` to specify your path to clang (Note: if you are using macOS, Apple's clang shipped with Command Line Tools will NOT work, please install the LLVM toolchain via homebrew: `brew install llvm`, and make sure your clang has the riscv64 target: `${YOUR_PATH_TO_CLANG}/clang --print-targets`). 
 ```
-cd boot0-spl 
 mkdir build 
 cd build 
-cmake .. --toolchain ../cmake/clang-toolchain.cmake
+cmake ../boot0-spl --toolchain ../cmake/clang-toolchain.cmake
 make 
 ```
 
@@ -79,6 +77,20 @@ DRAM simple test OK.
 
 And then it will echo anything you type into the UART terminal. 
 If you connect an LED to GPIO PE16, you will also see the LED blinking each time you type a character. 
+
+## Modules 
+
+Invidividual modules in the modules directory could be built as library -- just use the corresponding CMakeLists.txt. 
+Notice that if you build one module as a library, all other modules it depends on will be built! 
+
+e.g., if you want to build the uart module and all of its dependencies: 
+```
+mkdir build 
+cd build 
+cmake ../modules/uart --toolchain ../cmake/toolchain.cmake 
+make 
+```
+You will see `libccu.a`, `libcommon.a`, `libgpio.a`, `libuart.a` in the build directory, and as you can see the uart module depends on the ccu, common and gpio modules. 
 
 ## References 
 - https://github.com/xboot/xfel
