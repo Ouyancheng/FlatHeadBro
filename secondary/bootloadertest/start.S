@@ -150,7 +150,11 @@ reset:
 	mul t0, t0, t3
 	sub sp, t2, t0
 	
-	j main
+	jal main
+	/* we need to call this if we don't return, */
+	/* and we couldn't return because we've cleared the ra/x1 register */
+	jal software_reset 
+	
 /*
  * Exception vectors.
  */

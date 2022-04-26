@@ -63,7 +63,7 @@ void main(void) {
     void(*dram_start)(void) = (void(*)(void))(uintptr_t)DRAM_START;
 
     dram_start(); 
-
+    // if the secondary program exits gracefully, it's great!!! 
     software_reset(); 
 
     // complete! 

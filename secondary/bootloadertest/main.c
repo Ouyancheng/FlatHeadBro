@@ -2,6 +2,8 @@
 #include "clock-init.h"
 #include "delay.h"
 #include "uart.h"
+#include "gpio.h"
+#include "timer.h"
 #if 0
 //typedef unsigned int virtual_addr_t;
 //typedef unsigned int u32_t;
@@ -123,7 +125,7 @@ void delay_ms(uint64_t ms) {
 
 int main(void)
 {
-    sys_clock_init();
+    // sys_clock_init();
     #if 0
     sys_jtag_init();
     sys_uart_init();
@@ -140,15 +142,31 @@ int main(void)
     // int uart_has_data(struct uart_control *ctl);
 
     struct uart_control *ctl = uart_init(0, 1); 
+    
+
+    gpio_set_config(gpio_pe, 16, gpio_config_output); 
+    int pe16v = 0; 
+
+    int i = 0; 
+    while (i < 4) {
+        char c = uart_getc(ctl);
+        uart_putc(ctl, c);
+        // delay_ms(500);
+        i += 1;
+        pe16v = (!pe16v); 
+        gpio_write(gpio_pe, 16, pe16v);
+    }
+
     uart_putc(ctl, 'h');
     uart_putc(ctl, 'e');
     uart_putc(ctl, 'l');
     uart_putc(ctl, 'l');
     uart_putc(ctl, 'o');
+    uart_putc(ctl, '\r');
     uart_putc(ctl, '\n');
 
-
-    delay_ms(3000);
+    // software_reset();
+    // delay_ms(1000);
 
     // while(1);
     // *((volatile uint32_t *)(0x020500a0 + 0x08)) = (0x16aa << 16) | (0x1 << 0);
