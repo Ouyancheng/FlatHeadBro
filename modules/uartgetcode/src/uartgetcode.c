@@ -65,7 +65,7 @@ uintptr_t uart_get_code(void) {
         uint32_t addr          = boot_get32();  // unused here 
         uint32_t nbytes        = boot_get32();  // number of bytes in the binary 
         uint32_t cksum         = boot_get32();  // crc checksum 
-
+        (void)addr;
         if (put_prog_info != PUT_PROG_INFO) {
             boot_put32(BOOT_ERROR);
             continue; 
@@ -83,7 +83,7 @@ uintptr_t uart_get_code(void) {
         //    you can assume that code must be below where the booloader code
         //    gap starts.
         // code too big that it wraps around, this should not happen anyways 
-        if (code_address + nbytes < addr) {
+        if (code_address + nbytes < code_address) {
             boot_put32(BAD_CODE_ADDR);
             continue; 
         }
