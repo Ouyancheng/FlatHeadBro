@@ -148,7 +148,7 @@ int main(void)
     int pe16v = 0; 
 
     int i = 0; 
-    while (i < 4) {
+    while (i < 10) {
         char c = uart_getc(ctl);
         uart_putc(ctl, c);
         // delay_ms(500);
