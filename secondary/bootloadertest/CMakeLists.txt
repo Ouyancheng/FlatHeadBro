@@ -34,6 +34,7 @@ target_link_libraries(${TARGET}.elf PUBLIC
     uart
     gpio
     timer
+    common
 )
 
 add_custom_command(TARGET ${TARGET}.elf POST_BUILD
