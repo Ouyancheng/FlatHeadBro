@@ -7,12 +7,14 @@ SECTIONS
     . = ALIGN(4);
     .boot0header :
     {
-        CMakeFiles/boot0main.elf.dir/boot0-header.c.o (.rodata)
+        *(.boot0header.header)
+        /*CMakeFiles/boot0main.elf.dir/boot0-header.c.o (.rodata)*/
     }
     . = ALIGN(1);
     .text :
     {
-        CMakeFiles/boot0main.elf.dir/boot0-entry.S.o (.text)
+        *(.text.boot0entry)
+        /*CMakeFiles/boot0main.elf.dir/boot0-entry.S.o (.text)*/
         *(.text)
     }
     . = ALIGN(16);

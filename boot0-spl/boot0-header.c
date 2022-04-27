@@ -33,7 +33,7 @@
 #ifdef __clang__
 // __attribute__((section (".header"))) 
 #endif 
-const boot0_file_head_t  BT0_head = {
+const boot0_file_head_t __attribute__((section (".boot0header.header")))  BT0_head = {
     {
         /* jump_instruction*/
         JUMP_INSTRUCTION,

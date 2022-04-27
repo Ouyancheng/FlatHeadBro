@@ -8,6 +8,7 @@
 /* mxstatus */
 #define EN_THEADISAEE (0x1 << 22)
 #define REGBYTES      4
+.section .text.boot0entry
 .globl _entry 
 _entry: 
     /* disable interrupt */
