@@ -162,7 +162,7 @@ def main(argv: T.List[str]) -> int:
         tattr = termios.tcgetattr(sys.stdin.fileno())
         tty.setcbreak(sys.stdin.fileno(), termios.TCSANOW)
         serial_fd = serial_handler.fileno()
-        stdin_fd = 0 # sys.stdin.fileno()
+        stdin_fd = sys.stdin.fileno()
         while 1:
             # if serial_handler.in_waiting > 0: 
             r, _, _ = select([stdin_fd, serial_fd], [], [])
