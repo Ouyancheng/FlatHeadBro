@@ -162,22 +162,22 @@ def main(argv: T.List[str]) -> int:
         tattr = termios.tcgetattr(sys.stdin.fileno())
         tty.setcbreak(sys.stdin.fileno(), termios.TCSANOW)
         serial_fd = serial_handler.fileno()
-        stdin_fd = sys.stdin.fileno()
+        stdin_fd = 0 # sys.stdin.fileno()
         while 1:
             # if serial_handler.in_waiting > 0: 
-            r, _, x = select([stdin_fd, serial_fd], [], [serial_fd], 0.01)
+            r, _, _ = select([stdin_fd, serial_fd], [], [])
             if serial_fd in r:
-                b = serial_handler.read_until(expected=b'\n')
+                # b = serial_handler.read_until(expected=b'\n')
+                b = serial_handler.read_all()
+                if b'\x22\x11\x11' in b:
+                    break
+                # else:
+                #     print(hex(int.from_bytes(b, "little", signed=False)))
                 translated_string = bytes.decode(b, encoding="ascii", errors="backslashreplace")
                 print(translated_string, flush=True, end='') 
-                if "DONE!!!\n" in translated_string:
-                    # print(b)
-                    break
             if stdin_fd in r: 
                 s = sys.stdin.read(1)
                 serial_handler.write(s.encode("ascii"))
-            if serial_fd in x: 
-                raise serial.SerialException("serial exception from select")
     except serial.SerialException as serial_exception:
         print("Serial exception:", serial_exception)
     except Exception as exception: 
