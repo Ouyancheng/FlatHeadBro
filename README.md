@@ -2,7 +2,7 @@
 
 This is an experiment to run baremetal programs on Lichee RV or D1 Nezha development boards. 
 
-The program is loaded from the SD card, instead of downloading via FEL. 
+The boot0 program is loaded from the SD card, and it will further load secondary program from UART, instead of downloading using FEL. 
 
 ## boot0-spl 
 
@@ -55,8 +55,7 @@ diskutil unmountDisk <YOUR_SD_CARD_DEVICE>
 
 Then insert your SD card to the Lichee RV and power it on (could be done via GPIO pins), the UART will print the following, use `screen /dev/cu.SLAB_USBtoUART 115200` to monitor UART, of course with a USB to UART dongle: 
 ```
-Hello World!!!
-              DRAM only have internal ZQ!!
+DRAM only have internal ZQ!!
 get_pmu_exist() = 4294967295
 ddr_efuse_type: 0x0
 [AUTO DEBUG] single rank and full DQ!
@@ -74,9 +73,13 @@ DRAM SIZE =512 M
 DRAM simple test OK.
 
 ```
-
-And then it will echo anything you type into the UART terminal. 
-If you connect an LED to GPIO PE16, you will also see the LED blinking each time you type a character. 
+~~And then it will echo anything you type into the UART terminal. ~~
+~~If you connect an LED to GPIO PE16, you will also see the LED blinking each time you type a character. ~~
+Then you would be able to use `uart-uploader/my-install.py` to upload the binary file through UART. 
+```
+python3 uart-loader/my-install.py <YOUR_BINARY_FILE>
+```
+After uploading it will handle the UART communication between host and the board. 
 
 ## Modules 
 
