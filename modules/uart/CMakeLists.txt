@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
+include_guard(GLOBAL)
 fhb_include_module(common)
 fhb_include_module(ccu)
 fhb_include_module(gpio)
-include_guard(GLOBAL)
 
 project(uart)
 enable_language( C CXX ASM )

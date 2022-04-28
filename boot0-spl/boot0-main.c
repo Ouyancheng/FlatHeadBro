@@ -49,7 +49,7 @@ void main(void) {
         const char msg[] = "Boot Error! Rebooting..."; 
         for (unsigned i = 0; i < sizeof(msg); ++i) {
             if (msg[i] == '\0') {
-                uart_putc(uart_ctl, '\r'); 
+                // uart_putc(uart_ctl, '\r'); 
                 uart_putc(uart_ctl, '\n'); 
             } else {
                 uart_putc(uart_ctl, msg[i]); 

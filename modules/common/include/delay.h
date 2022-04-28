@@ -21,7 +21,7 @@ static inline uint64_t get_current_time_us(void) {
 
 void delay_us(uint64_t us); 
 void delay_ms(uint64_t ms); 
-
+void delay_cycles(uint64_t cycles); 
 #endif 
 
 

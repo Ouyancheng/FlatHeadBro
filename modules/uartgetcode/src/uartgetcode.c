@@ -122,12 +122,17 @@ uintptr_t uart_get_code(void) {
         // 7. send back a BOOT_SUCCESS!
         boot_put32(BOOT_SUCCESS);
 
-        const char msg[] = "<Yancheng Ou>: success: Received the program!";
+        const char msg[] = "<Yancheng Ou>: success: Received the program!\n";
         for (unsigned i = 0; i < sizeof(msg)-1; ++i) {
             uart_putc(uart_ctl, msg[i]); 
         }
-        uart_putc(uart_ctl, '\r');
-        uart_putc(uart_ctl, '\n');
+        asm volatile (
+            "fence iorw, iorw" 
+            : 
+            : 
+            : "memory"
+        );
+        delay_ms(1);
 
         return code_address;
 

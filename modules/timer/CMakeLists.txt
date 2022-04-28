@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
-fhb_include_module(common)
 include_guard(GLOBAL)
+fhb_include_module(common)
 
 project(timer)
 enable_language( C CXX ASM )
