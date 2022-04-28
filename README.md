@@ -73,8 +73,8 @@ DRAM SIZE =512 M
 DRAM simple test OK.
 
 ```
-~~And then it will echo anything you type into the UART terminal. ~~
-~~If you connect an LED to GPIO PE16, you will also see the LED blinking each time you type a character. ~~
+~~And then it will echo anything you type into the UART terminal.~~ 
+~~If you connect an LED to GPIO PE16, you will also see the LED blinking each time you type a character.~~ 
 Then you would be able to use `uart-uploader/my-install.py` to upload the binary file through UART. 
 ```
 python3 uart-uploader/my-install.py <YOUR_BINARY_FILE>
