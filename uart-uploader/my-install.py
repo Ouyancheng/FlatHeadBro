@@ -120,12 +120,24 @@ def simple_boot(serial_handler: serial.Serial, raw_binary: bytes):
     serial_handler.write(uart_boot_msgs.PUT_CODE.value)
     serial_handler.write(raw_binary)
 
-    msg = serial_handler.read(4)
-    if msg != uart_boot_msgs.BOOT_SUCCESS.value:
-        print("expected BOOT_SUCCESS, got <{}>.".format(msg))
-        exit(3) 
-
-    print("Done!!!")
+    while 1:
+        msg = serial_handler.read(4)
+        if msg == uart_boot_msgs.PRINT_STRING.value:
+            string_len = int.from_bytes(serial_handler.read(4), "little", signed=False)
+            if string_len >= 512:
+                print("the board sent a suspiciously long string") 
+                exit(3)
+            else: 
+                print("board sent print string:")
+                for i in range(string_len):
+                    print(serial_handler.read(1).decode("ascii", "ignore"), end="", sep="")
+                print()
+        elif msg != uart_boot_msgs.BOOT_SUCCESS.value:
+            print("expected BOOT_SUCCESS, got <{}>.".format(msg))
+            exit(3) 
+        else: 
+            print("Done!!!")
+            break
     return
 
 def main(argv: T.List[str]) -> int:
@@ -153,23 +165,31 @@ def main(argv: T.List[str]) -> int:
         stdin_fd = sys.stdin.fileno()
         while 1:
             # if serial_handler.in_waiting > 0: 
-            r, _, _ = select([stdin_fd, serial_fd], [], [], 0.01)
+            r, _, x = select([stdin_fd, serial_fd], [], [serial_fd], 0.01)
             if serial_fd in r:
-                b = serial_handler.read_all()
-                print(bytes.decode(b, encoding="ascii", errors="backslashreplace"), flush=True, end='') 
+                b = serial_handler.read_until(expected=b'\n')
+                translated_string = bytes.decode(b, encoding="ascii", errors="backslashreplace")
+                print(translated_string, flush=True, end='') 
+                if "DONE!!!\n" in translated_string:
+                    # print(b)
+                    break
             if stdin_fd in r: 
                 s = sys.stdin.read(1)
                 serial_handler.write(s.encode("ascii"))
+            if serial_fd in x: 
+                raise serial.SerialException("serial exception from select")
     except serial.SerialException as serial_exception:
         print("Serial exception:", serial_exception)
     except Exception as exception: 
         print(exception)
     finally:
         termios.tcsetattr(sys.stdin.fileno(), termios.TCSANOW, tattr)
+        print("quitting...")
+        serial_handler.close()
         exit(0)
     
 
-    
+
 
 if __name__ == '__main__': 
     main(sys.argv)
