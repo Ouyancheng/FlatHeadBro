@@ -77,7 +77,7 @@ DRAM simple test OK.
 ~~If you connect an LED to GPIO PE16, you will also see the LED blinking each time you type a character. ~~
 Then you would be able to use `uart-uploader/my-install.py` to upload the binary file through UART. 
 ```
-python3 uart-loader/my-install.py <YOUR_BINARY_FILE>
+python3 uart-uploader/my-install.py <YOUR_BINARY_FILE>
 ```
 After uploading it will handle the UART communication between host and the board. 
 
