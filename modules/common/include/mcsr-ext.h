@@ -43,7 +43,7 @@
 //     MHINT         = 0x7C5, // hardware hint operation 
 //     MRVBR         = 0x7C7, // the reset vector base 
 //     MCER          = 0x7C8, // L1 cache ECC 
-//     MCOUNTERWEN   = 0x7C9, // counter write enable 
+//     MCOUNTERWEN   = 0x7C9, // counter write enable in super mode 
 //     MCOUNTERINTEN = 0x7CA, // enable interrupt on counter overflow 
 //     MCOUNTEROF    = 0x7CB, // counter overflow 
 //     MAPBADDR      = 0xFC1, // peripherial address high bits 
@@ -144,6 +144,7 @@
 // invalidate BTB 
 #define MCOR_BTB_INV (1 << 17)
 
+
 // dcache prefetch, 1 = ON, 0 = OFF 
 #define MHINT_DPLD   (1 << 2)
 
@@ -163,7 +164,25 @@
 // 16 lines 
 #define MHINT_D_DIS_16 (0b11 << 13)
 
-#define struct_to_int64(x) (*(uint64_t*)(&x))
+// issue a read request to L1 cache! should set the mcindex 
+#define MCINS_READ_L1 (1 << 0)
+// the index offset for mcindex 
+#define MCINDEX_INDEX_OFFSET (0)
+// the way offset 
+#define MCINDEX_WAY_OFFSET1 (17)
+#define MCINDEX_WAY_OFFSET2 (21)
+// the cache category to access 
+#define MCINDEX_RID_ICACHE_TAG (0b00 << 28)
+#define MCINDEX_RID_ICACHE_DATA (0b01 << 28)
+#define MCINDEX_RID_DCACHE_TAG (0b10 << 28)
+#define MCINDEX_RID_DCACHE_DATA (0b11 << 28)
+
+/*
+ICACHE TAG  => MCDATA0[39:12] TAG, MCDATA0[0] VALID bit 
+ICACHE DATA => MCDATA0 data[63:0], MCDATA1 data[127:64]
+DCACHE TAG  => MCDATA0[39:12] TAG, MCDATA0[2] DIRTY bit, MCDATA0[0] VALID bit
+DCACHE DATA => MCDATA0 data[63:0], MCDATA1 data[127:64]
+*/
 
 #define write_csr(csr, val) \
 ({ \
@@ -190,24 +209,5 @@
 
 
 
-int printsize() {
-    // struct MHCR_csr hcr = {
-    //     .IE = 1,
-    //     .DE = 1, 
-    //     .WA = 1,
-    //     .WB = 1, 
-    //     .RS = 1,
-    //     .BPE = 1, 
-    //     .BTB = 1,
-    //     .set0 = 0,
-    //     .WBR = 1,
-    //     .set0_1 = 0,
-    //     .set0_2 = 0
-    // };
-    // write_csr(MHCR, struct_to_int64(hcr));
-    // uint64_t cor; 
-    // cor = read_csr(MCOR);
-    // return sizeof(struct MHCR_csr);
-}
 
 #endif 
