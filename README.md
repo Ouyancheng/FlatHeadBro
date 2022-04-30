@@ -18,7 +18,7 @@ This is the first program to run after powering on and going through the BROM ph
 
 #### Using riscv64 gcc 
 
-If using riscv64-unknown-elf-gcc, modify `boot0-spl/cmake/toolchain.cmake` to specify your path to riscv64-unknown-elf-gcc. 
+If using riscv64-unknown-elf-gcc, modify `cmake/toolchain.cmake` to specify your path to riscv64-unknown-elf-gcc. 
 ```
 mkdir build 
 cd build 
@@ -26,7 +26,7 @@ cmake ../boot0-spl --toolchain ../cmake/toolchain.cmake
 make 
 ```
 #### Using clang 
-If using clang, modify `boot0-spl/cmake/clang-toolchain.cmake` to specify your path to clang (Note: if you are using macOS, Apple's clang shipped with Command Line Tools will NOT work, please install the LLVM toolchain via homebrew: `brew install llvm`, and make sure your clang has the riscv64 target: `${YOUR_PATH_TO_CLANG}/clang --print-targets`). 
+If using clang, modify `cmake/clang-toolchain.cmake` to specify your path to clang (Note: if you are using macOS, Apple's clang shipped with Command Line Tools will NOT work, please install the LLVM toolchain via homebrew: `brew install llvm`, and make sure your clang has the riscv64 target: `${YOUR_PATH_TO_CLANG}/clang --print-targets`). 
 ```
 mkdir build 
 cd build 
@@ -36,11 +36,11 @@ make
 
 ### Running the boot0-spl 
 
-After your build, in the build directory you will get a binary file `boot0-sdcard.bin`, and that's the file that will be flashed to the SD card. 
+After your build, in the build/bin directory you will get a binary file `boot0-sdcard.bin`, and that's the file that will be flashed to the SD card. 
 
 ```
 # In the build directory 
-sudo dd if=boot0-sdcard.bin of=/dev/<YOUR_SD_CARD_DEVICE> bs=4096 seek=2
+sudo dd if=bin/boot0-sdcard.bin of=/dev/<YOUR_SD_CARD_DEVICE> bs=4096 seek=2
 sync 
 ```
 
@@ -48,7 +48,7 @@ For macOS, you may want to unmount the disk before dd-ing:
 ```
 # In the build directory 
 diskutil unmountDisk <YOUR_SD_CARD_DEVICE> 
-sudo dd if=boot0-sdcard.bin of=/dev/<YOUR_SD_CARD_DEVICE> bs=4096 seek=2
+sudo dd if=bin/boot0-sdcard.bin of=/dev/<YOUR_SD_CARD_DEVICE> bs=4096 seek=2
 sync 
 diskutil unmountDisk <YOUR_SD_CARD_DEVICE> 
 ``` 
@@ -90,12 +90,12 @@ e.g., if you want to build the uart module and all of its dependencies:
 ```
 mkdir build 
 cd build 
-cmake ../modules/uart --toolchain ../cmake/toolchain.cmake -DFHB_MODULE_USE_INCLUDE=ON
+cmake ../modules/uart --toolchain ../cmake/toolchain.cmake 
 make 
 ```
-You will see `libccu.a`, `libcommon.a`, `libgpio.a`, `libuart.a` in the build directory, and as you can see the uart module depends on the ccu, common and gpio modules. 
+You will see `libcommon.a`, `libgpio.a`, `libuart.a` in the build/lib directory, and as you can see the uart module depends on the common and gpio modules. 
 
-The option `FHB_MODULE_USE_INCLUDE` is to tell CMake to use include for importing dependency instead of add_subdirectory. Using include will list all of the dependencies at the top-level build folder, instead of hiding in one of the subdirectories. However, using include to import the module will cause CMake generate a chain of directories from / to your module path in the build directory for each dependency... 
+~~The option `FHB_MODULE_USE_INCLUDE` is to tell CMake to use include for importing dependency instead of add_subdirectory. Using include will list all of the dependencies at the top-level build folder, instead of hiding in one of the subdirectories. However, using include to import the module will cause CMake generate a chain of directories from / to your module path in the build directory for each dependency...~~ 
 
 ## References 
 - https://github.com/xboot/xfel

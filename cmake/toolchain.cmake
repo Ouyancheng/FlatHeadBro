@@ -33,3 +33,6 @@ set(CMAKE_CXX_FLAGS_RELEASE         "-Os -DNDEBUG ${C_FLAGS_COMMON} -std=gnu++17
 set(CMAKE_ASM_FLAGS                 "-nostdlib -ffreestanding -Wa,--fatal-warnings ")
 
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

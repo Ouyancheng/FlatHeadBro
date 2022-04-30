@@ -35,4 +35,7 @@ set(CMAKE_CXX_FLAGS                 "-Og ${C_FLAGS_COMMON} -std=gnu++17 -fno-exc
 set(CMAKE_CXX_FLAGS_RELEASE         "-Os -DNDEBUG ${C_FLAGS_COMMON} -std=gnu++17 -fno-exceptions -fno-unwind-tables -fno-rtti")
 set(CMAKE_ASM_FLAGS                 "-fPIC --target=${TARGET_TRIPLET} -mabi=lp64d -mcmodel=medany -nostdlib -ffreestanding -Wa,--fatal-warnings -mno-relax")
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
