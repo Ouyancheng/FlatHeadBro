@@ -4,6 +4,7 @@
 #include "reset.h"
 #include "fence.h"
 #include "printf.h"
+/** get the hardware core id, should be 0 as D1 only has single core */
 inline uintptr_t get_mhartid(void) {
     uintptr_t thread_id; 
     asm volatile (
@@ -20,7 +21,7 @@ void print_str(const char *str) {
     }
 }
 void print_hex(uintptr_t i) {
-    char buffer[sizeof(uintptr_t) + 2]; 
+    char buffer[sizeof(uintptr_t)*2 + 2]; 
     int buf_idx = 0; 
     if (i == 0) {
         buffer[buf_idx++] = '0'; 

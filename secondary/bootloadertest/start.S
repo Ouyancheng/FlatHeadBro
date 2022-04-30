@@ -150,7 +150,9 @@ reset:
     la t2, _stack_end
     ld t2, (t2)
     sub t0, t2, t1  /* basically the stack size */
+    
     csrr t3, mhartid  /* the thread id */
+    /* since we have only one core, we only need to care about core0, if multicore, other cores go to sleep (WFI?) */
     li t4, 1
     div t0, t0, t4
     mul t0, t0, t3
