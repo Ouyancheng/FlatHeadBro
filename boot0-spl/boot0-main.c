@@ -2,8 +2,8 @@
 #include "clock-init.h"
 #include "dram-init.h"
 #include "boot0-header.h"
+#include "reset.h"
 #include "gpio.h"
-#include "timer.h"
 #include "uartgetcode.h"
 #include "delay.h"
 #ifndef FEL_BASE

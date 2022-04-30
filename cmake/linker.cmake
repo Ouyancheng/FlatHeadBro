@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
-include_guard(GLOBAL)
 enable_language(C ASM CXX)
-
+# no include guard 
 
 # if(NOT DEFINED LINKER_SCRIPT)
 #     if (NOT USING_LLVM_TOOLCHAIN)

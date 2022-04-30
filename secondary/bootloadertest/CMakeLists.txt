@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
+include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../../modules/module.cmake)
-fhb_include_module(uart)
 fhb_include_module(common)
-fhb_include_module(ccu)
 fhb_include_module(gpio)
-fhb_include_module(timer)
+fhb_include_module(uart)
 project(bootloadertest)
 
 enable_language( C CXX ASM )
@@ -31,10 +30,9 @@ target_include_directories(${TARGET}.elf PUBLIC
 )
 
 target_link_libraries(${TARGET}.elf PUBLIC 
-    uart
-    gpio
-    timer
     common
+    gpio
+    uart
 )
 
 add_custom_command(TARGET ${TARGET}.elf POST_BUILD

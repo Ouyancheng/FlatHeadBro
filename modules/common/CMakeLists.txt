@@ -17,6 +17,7 @@ set(TARGET_INCLUDE_DIRS
 )
 add_library(${TARGET} 
     "${CMAKE_CURRENT_LIST_DIR}/src/delay.c"
+    "${CMAKE_CURRENT_LIST_DIR}/src/reset.c"
 )
 
 # set_target_properties(${TARGET}  PROPERTIES PREFIX "")

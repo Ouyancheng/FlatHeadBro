@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.10)
 include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
 include_guard(GLOBAL)
 fhb_include_module(common)
-fhb_include_module(ccu)
 fhb_include_module(gpio)
 
 project(uart)
@@ -27,8 +26,7 @@ target_include_directories(${TARGET} PUBLIC
     ${TARGET_INCLUDE_DIRS}
 )
 target_link_libraries(${TARGET} PUBLIC
-    common 
-    ccu 
+    common  
     gpio 
 )
 
