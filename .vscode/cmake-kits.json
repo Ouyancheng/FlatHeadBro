@@ -1,0 +1,11 @@
+[
+    {
+        "name": "xuantie-gcc",
+        "toolchainFile": "${workspaceFolder}/cmake/toolchain.cmake"
+    },
+    {
+        "name": "clang-riscv64", 
+        "toolchainFile": "${workspaceFolder}/cmake/clang-toolchain.cmake"
+    }
+]
+
