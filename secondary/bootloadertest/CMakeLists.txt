@@ -36,11 +36,11 @@ target_link_libraries(${TARGET}.elf PUBLIC
 )
 
 add_custom_command(TARGET ${TARGET}.elf POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} ${TARGET}.elf -O binary ${TARGET}.bin
+    COMMAND ${CMAKE_OBJCOPY} "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET}.elf" -O binary "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET}.bin"
     COMMENT "Invoking: objcopy")
 
 add_custom_command(TARGET ${TARGET}.elf POST_BUILD
-    COMMAND ${CMAKE_OBJDUMP} -D ${TARGET}.elf  > ${TARGET}.list
+    COMMAND ${CMAKE_OBJDUMP} -D "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET}.elf"  > "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET}.list"
     COMMENT "Invoking: objdump")
 
 
