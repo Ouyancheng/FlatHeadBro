@@ -113,7 +113,7 @@ void uart_putc(struct uart_control *ctl, char c);
 char uart_getc(struct uart_control *ctl); 
 int uart_has_data(struct uart_control *ctl);
 
-extern struct uart_control *uart_ctl; 
+extern struct uart_control *uart0_ctl; 
 #endif 
 
 

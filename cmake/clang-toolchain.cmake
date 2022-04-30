@@ -28,12 +28,14 @@ set(TARGET_ARCH "rv64gvxthead")
 set(USING_LLVM_TOOLCHAIN ON)
 # -nostartfiles  in C_FLAGS + ASM_FLAGS? 
 # -menable-experimental-extensions 
-set(C_FLAGS_COMMON                  "-fPIC --target=${TARGET_TRIPLET} -mabi=lp64d -mcmodel=medany -mno-relax -fno-stack-protector -Wall -nostdlib -ffreestanding -Werror -Wno-unused-function -Wno-unused-variable")
+# set(CODE_MODEL "medany")  # use auipc instruction rd = pc + (imm20 << 12)
+set(CODE_MODEL "medlow")  # use lui instruction to take the upper 20 bits of an immediate rd = (imm20 << 12) 
+set(C_FLAGS_COMMON                  "-fPIC --target=${TARGET_TRIPLET} -mabi=lp64d -mcmodel=${CODE_MODEL} -mno-relax -fno-stack-protector -Wall -nostdlib -ffreestanding -Werror -Wno-unused-function -Wno-unused-variable")
 set(CMAKE_C_FLAGS                   "-Og ${C_FLAGS_COMMON} -std=gnu11 -Wno-pointer-sign ")
 set(CMAKE_C_FLAGS_RELEASE           "-Os -DNDEBUG ${C_FLAGS_COMMON} -std=gnu11 -Wno-pointer-sign ")
 set(CMAKE_CXX_FLAGS                 "-Og ${C_FLAGS_COMMON} -std=gnu++17 -fno-exceptions -fno-unwind-tables -fno-rtti")
 set(CMAKE_CXX_FLAGS_RELEASE         "-Os -DNDEBUG ${C_FLAGS_COMMON} -std=gnu++17 -fno-exceptions -fno-unwind-tables -fno-rtti")
-set(CMAKE_ASM_FLAGS                 "-fPIC --target=${TARGET_TRIPLET} -mabi=lp64d -mcmodel=medany -nostdlib -ffreestanding -Wa,--fatal-warnings -mno-relax")
+set(CMAKE_ASM_FLAGS                 "-fPIC --target=${TARGET_TRIPLET} -mabi=lp64d -mcmodel=${CODE_MODEL} -nostdlib -ffreestanding -Wa,--fatal-warnings -mno-relax")
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

@@ -29,7 +29,7 @@
 #include "uart.h"
 #include "stdarg.h"
 static void sys_uart_putc(char c) {
-    uart_putc(uart_ctl, c); 
+    uart_putc(uart0_ctl, c); 
 }
 static int vpf_str_to_num(const char * fmt, int * num) 
 {

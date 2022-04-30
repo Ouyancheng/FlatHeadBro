@@ -4,6 +4,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../../modules/module.cmake)
 fhb_include_module(common)
 fhb_include_module(gpio)
 fhb_include_module(uart)
+fhb_include_module(printf)
 project(bootloadertest)
 
 enable_language( C CXX ASM )
@@ -33,6 +34,7 @@ target_link_libraries(${TARGET}.elf PUBLIC
     common
     gpio
     uart
+    printf
 )
 
 add_custom_command(TARGET ${TARGET}.elf POST_BUILD

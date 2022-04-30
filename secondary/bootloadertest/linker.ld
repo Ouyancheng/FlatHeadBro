@@ -2,7 +2,7 @@ OUTPUT_FORMAT("elf64-littleriscv", "elf64-littleriscv", "elf64-littleriscv")
 OUTPUT_ARCH(riscv)
 ENTRY(_start)
 
-STACK_SIZE = 0x100000;
+STACK_SIZE = 0x100000;  /* 1MB */
 
 MEMORY
 {
@@ -13,11 +13,6 @@ MEMORY
 
 SECTIONS
 {
-	/*.dram_start : 
-	{
-		PROVIDE(__image_start = .);
-		PROVIDE(__text_start = .);
-	} > ram */
 	.text :
 	{
 		PROVIDE(__image_start = .);

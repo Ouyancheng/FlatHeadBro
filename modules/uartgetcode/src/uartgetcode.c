@@ -18,18 +18,18 @@ enum uart_boot_msgs {
     BAD_CODE_CKSUM  = 0xfeedface,
 };
 static uint32_t boot_get32(void) {
-    uint32_t u = (uint32_t)uart_getc(uart_ctl); 
-    u |= uart_getc(uart_ctl) << 8;
-    u |= uart_getc(uart_ctl) << 16;
-    u |= uart_getc(uart_ctl) << 24;
+    uint32_t u = (uint32_t)uart_getc(uart0_ctl); 
+    u |= uart_getc(uart0_ctl) << 8;
+    u |= uart_getc(uart0_ctl) << 16;
+    u |= uart_getc(uart0_ctl) << 24;
     return u; 
 }
 
 static void boot_put32(uint32_t u) {
-    uart_putc(uart_ctl, (u >> 0)  & 0xff);
-    uart_putc(uart_ctl, (u >> 8)  & 0xff);
-    uart_putc(uart_ctl, (u >> 16) & 0xff);
-    uart_putc(uart_ctl, (u >> 24) & 0xff);
+    uart_putc(uart0_ctl, (u >> 0)  & 0xff);
+    uart_putc(uart0_ctl, (u >> 8)  & 0xff);
+    uart_putc(uart0_ctl, (u >> 16) & 0xff);
+    uart_putc(uart0_ctl, (u >> 24) & 0xff);
 }
 
 static unsigned has_data_timeout(uint64_t timeout) {
@@ -40,7 +40,7 @@ static unsigned has_data_timeout(uint64_t timeout) {
         if (now_usec - starting_usec > timeout) {
             return 1;
         }
-        if (uart_has_data(uart_ctl)) {
+        if (uart_has_data(uart0_ctl)) {
             return 0;
         }
     }
@@ -107,7 +107,7 @@ uintptr_t uart_get_code(void) {
 
         volatile char *addr_ptr = (volatile char*)(code_address); 
         for (uint32_t i = 0; i < nbytes; ++i) {
-            char b = uart_getc(uart_ctl);
+            char b = uart_getc(uart0_ctl);
             (*addr_ptr) = b; 
             addr_ptr += 1;
         }
@@ -124,7 +124,7 @@ uintptr_t uart_get_code(void) {
 
         const char msg[] = "<Yancheng Ou>: success: Received the program!\n";
         for (unsigned i = 0; i < sizeof(msg)-1; ++i) {
-            uart_putc(uart_ctl, msg[i]); 
+            uart_putc(uart0_ctl, msg[i]); 
         }
         asm volatile (
             "fence iorw, iorw" 

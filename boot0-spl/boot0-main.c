@@ -18,13 +18,13 @@ void main(void) {
     int dram_size;
     int status;
 
-    uart_ctl = uart_init(0, 1); 
+    uart0_ctl = uart_init(0, 1); 
     // const char msg[] = "Hello World!!!"; 
     // for (unsigned i = 0; i < sizeof(msg); ++i) {
     //     if (msg[i] == '\0') {
-    //         uart_putc(uart_ctl, '\n'); 
+    //         uart_putc(uart0_ctl, '\n'); 
     //     } else {
-    //         uart_putc(uart_ctl, msg[i]); 
+    //         uart_putc(uart0_ctl, msg[i]); 
     //     }
     // }
     sys_clock_init(); 
@@ -34,8 +34,8 @@ void main(void) {
     // int pe16v = 0; 
     // int count = 0; 
     // while (count < 10) {
-    //     char c = uart_getc(uart_ctl); 
-    //     uart_putc(uart_ctl, c);
+    //     char c = uart_getc(uart0_ctl); 
+    //     uart_putc(uart0_ctl, c);
     //     pe16v = (!pe16v); 
     //     gpio_write(gpio_pe, 16, pe16v);
     //     count += 1; 
@@ -49,10 +49,10 @@ void main(void) {
         const char msg[] = "Boot Error! Rebooting..."; 
         for (unsigned i = 0; i < sizeof(msg); ++i) {
             if (msg[i] == '\0') {
-                // uart_putc(uart_ctl, '\r'); 
-                uart_putc(uart_ctl, '\n'); 
+                // uart_putc(uart0_ctl, '\r'); 
+                uart_putc(uart0_ctl, '\n'); 
             } else {
-                uart_putc(uart_ctl, msg[i]); 
+                uart_putc(uart0_ctl, msg[i]); 
             }
         }
         delay_ms(1000); 

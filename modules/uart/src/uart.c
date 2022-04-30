@@ -12,7 +12,7 @@
 // struct uart_dbg     *uart0_dbg     = (struct uart_dbg*)(UART0_BASE + 0x00B0); 
 // struct uart_fifo_clock_control *uart0_fifo_clock_control = (struct uart_fifo_clock_control*)(UART0_BASE + 0x00F0); 
 // struct uart_rxdma   *uart0_rxdma   = (struct uart_rxdma*)(UART0_BASE + 0x0100); 
-struct uart_control *uart_ctl;
+struct uart_control *uart0_ctl;
 void uart_clock_init(int port) {
     uint32_t uart_bgr = get32(CCU_UART_BGR_REG); 
     uart_bgr &= ~(1<<(CCM_UART_RST_OFFSET + port));
