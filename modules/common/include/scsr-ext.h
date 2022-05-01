@@ -70,7 +70,7 @@ SCOUNTERINTEN: the mapping of MCOUNTERINTEN, the i-th bit writable only if MCOUN
 SCOUNTEROF: the mapping of MCOUNTEROF, also complies with MCOUNTERWEN's permission 
 SCYCLE: cycle counter 
 SINTERET: the counter of retired instructions 
-SHPMCOUNTERn: the mapping of MHPMCOUNTERn
+SHPMCOUNTERn: the mapping of MHPMCOUNTERn, complies with MCOUNTERWEN's permission 
 
 SMIR: mmu index 
 SMEH: mmu entry high bits 

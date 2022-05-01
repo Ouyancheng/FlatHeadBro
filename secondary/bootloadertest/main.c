@@ -4,9 +4,7 @@
 #include "reset.h"
 #include "fence.h"
 #include "printf.h"
-#include "mcsr-ext.h"
-#include "scsr-ext.h"
-#include "csr-ext.h"
+#include "cache.h"
 /** get the hardware core id, should be 0 as D1 only has single core */
 inline uintptr_t get_mhartid(void) {
     uintptr_t thread_id; 
@@ -46,10 +44,31 @@ void print_hex(uintptr_t i) {
     }
     dev_barrier(); 
 }
+int array[1048576];
 void main(void) {
     uart0_ctl = uart_init(0, 1); 
-
     print_str("hello!!!\n");
+    uint64_t current_us = get_current_time_us(); 
+    uint64_t end_us = 0; 
+    for (int i = 0; i < 1048576; ++i) {
+        array[i] = i+1; 
+    }
+    end_us = get_current_time_us(); 
+    printf("dcache-disabled: writing 1M integers takes %d us\n", end_us - current_us); 
+    dev_barrier();
+    
+    cache_enable_status_set(1, 1, 0, 1, 1, 1, 1); 
+    cache_prefetch_status_set(1, 1, DCACHE_PREFETCH4); 
+    cache_invalidate(1, 1, 1, 1, 1, 1); 
+    delay_cycles(5000); // we technically don't need this 
+    current_us = get_current_time_us(); 
+    end_us = 0; 
+    for (int i = 0; i < 1048576; ++i) {
+        array[i] = i+2; 
+    }
+    end_us = get_current_time_us(); 
+    printf("dcache-enabled: writing 1M integers takes %d us\n", end_us - current_us); 
+    dev_barrier(); 
 
     // print_hex(get_mhartid()); 
     // uart_putc(uart0_ctl, '\n'); 
@@ -58,8 +77,9 @@ void main(void) {
 
     uint64_t mcor_csr = read_csr(MCOR); 
     uint64_t mhcr_csr = read_csr(MHCR); 
+    uint64_t mhint_csr = read_csr(MHINT); 
 
-    printf("the current MCOR csr is: 0b%032b\nthe current MHCR csr is: 0b%032b\n\n", mcor_csr, mhcr_csr); 
+    printf("the current MCOR csr is:  0b%032b\nthe current MHCR csr is:  0b%032b\nthe current MHINT csr is: 0b%032b\n\n", mcor_csr, mhcr_csr, mhint_csr); 
 
 #ifdef ECHO_TEST
     gpio_set_config(gpio_pe, 16, gpio_config_output); 
