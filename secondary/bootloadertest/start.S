@@ -124,25 +124,6 @@ _multicore_sleep:
     wfi 
     j _multicore_sleep
 
-/*
- * The location of section
- */
-    .align 3
-_image_start:
-    RVPTR __image_start
-_image_end:
-    RVPTR __image_end
-_global_pointer$:
-    RVPTR __global_pointer$
-_data_start:
-    RVPTR __data_start
-_data_end:
-    RVPTR __data_end
-_bss_start:
-    RVPTR __bss_start
-_bss_end:
-    RVPTR __bss_end
-_stack_start:
-    RVPTR __stack_start
-_stack_end:
-    RVPTR __stack_end
+
+
+
