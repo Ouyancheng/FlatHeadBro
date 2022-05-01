@@ -69,6 +69,10 @@ void main(void) {
     end_us = get_current_time_us(); 
     printf("dcache-enabled: writing 1M integers takes %d us\n", end_us - current_us); 
     dev_barrier(); 
+    /*
+    dcache-disabled: writing 1M integers takes 211395 us
+    dcache-enabled: writing 1M integers takes 8765 us
+    */
 
     // print_hex(get_mhartid()); 
     // uart_putc(uart0_ctl, '\n'); 
