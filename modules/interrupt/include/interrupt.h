@@ -59,6 +59,36 @@ uintptr_t disable_all_interrupts(void);
 
 // __attribute__((interrupt("machine"))) only applies to function with no parameter 
 void interrupt_handler(uintptr_t cause, uintptr_t pc, uintptr_t fault_address); 
-
+/// the cause of the interrupt 
+enum INTERRUPT_CAUSE {
+    USER_SOFTWARE_INTERRUPT       = 0, 
+    SUPERVISOR_SOFTWARE_INTERRUPT = 1, 
+    MACHINE_SOFTWARE_INTERRUPT    = 3, 
+    // ------------------------------------
+    USER_TIMER_INTERRUPT          = 4, 
+    SUPERVISOR_TIMER_INTERRUPT    = 5, 
+    MACHINE_TIMER_INTERRUPT       = 7, 
+    // ------------------------------------
+    USER_EXTERNAL_INTERRUPT       = 8, 
+    SUPERVISOR_EXTERNAL_INTERRUPT = 9, 
+    MACHINE_EXTERNAL_INTERRUPT    = 11 
+};
+/// the cause of the exception 
+enum EXCEPTION_CAUSE {
+    INSTRUCTION_ADDRESS_MISALIGNED_EXCEPTION = 0, 
+    INSTRUCTION_ACCESS_FAULT_EXCEPTION       = 1, 
+    ILLEGAL_INSTRUCTION_EXCEPTION            = 2, 
+    BREAKPOINT_EXCEPTION                     = 3, 
+    LOAD_ADDRESS_MISALIGNED_EXCEPTION        = 4, 
+    LOAD_ACCESS_FAULT_EXCEPTION              = 5, 
+    STORE_AMO_ADDRESS_MISALIGNED_EXCEPTION   = 6, 
+    STORE_AMO_ADDRESS_FAULT_EXCEPTION        = 7, 
+    ENVIRONMENT_CALL_FROM_U_MODE_EXCEPTION   = 8, 
+    ENVIRONMENT_CALL_FROM_S_MODE_EXCEPTION   = 9, 
+    ENVIRONMENT_CALL_FROM_M_MODE_EXCEPTION   = 11, 
+    INSTRUCTION_PAGE_FAULT_EXCEPTION         = 12, 
+    LOAD_PAGE_FAULT_EXCEPTION                = 13, 
+    STORE_AMO_PAGE_FAULT_EXCEPTION           = 15, 
+};
 
 #endif 

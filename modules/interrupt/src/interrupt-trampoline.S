@@ -113,7 +113,24 @@ interrupt_vector:
     j direct_interrupt_trampoline // 11: machine external interrupt 
 
 
-
+.align 4
+.global exception_trampoline 
+exception_trampoline: 
+    INTERRUPT_SAVE_REGS
+    // the cause of the interrupt 
+    csrr a0, mcause 
+    // the fault pc 
+    csrr a1, mepc 
+    // if applicable, the fault address 
+    csrr a2, mtval 
+    // call the interrupt handler written in C 
+    // jal exception_handler  
+    // should we add pc by 4 so that it won't raise the exception again? 
+    csrr t0, mepc 
+    addi t0, t0, 4 
+    csrw mepc, t0 
+    INTERRUPT_LOAD_REGS 
+    mret 
 
 
 
