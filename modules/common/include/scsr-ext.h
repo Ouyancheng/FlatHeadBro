@@ -1,6 +1,6 @@
 #ifndef SCSR_EXT_H 
 #define SCSR_EXT_H 
-#include "csr-read-write.h"
+// #include "csr-read-write.h"
 
 /////////////////////////////////////////// RISC-V standard supervisor-mode csrs ////////////////////////////////////
 // supervisor status 

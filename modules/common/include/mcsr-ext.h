@@ -1,6 +1,6 @@
 #ifndef MSCR_EXT_H
 #define MSCR_EXT_H 
-#include "csr-read-write.h"
+// #include "csr-read-write.h"
 
 /////////////////////////////////////////// RISC-V standard machine-mode csrs ////////////////////////////////////
 // vendor id 
@@ -293,6 +293,26 @@ The result of a cache read is stored in mcdata0 and mcdata1 csrs:
     DCACHE DATA => MCDATA0 data[63:0], MCDATA1 data[127:64]
 */
 
+#define MSTATUS_UIE         (1 << 0)
+#define MSTATUS_SIE         (1 << 1)
+#define MSTATUS_MIE         (1 << 3)
+#define MSTATUS_UPIE        (1 << 4)
+#define MSTATUS_SPIE        (1 << 5)
+#define MSTATUS_MPIE        (1 << 7)
+#define MSTATUS_SPP         (1 << 8)
+#define MSTATUS_MPP         (3 << 11)
+#define MSTATUS_FS          (3 << 13)
+#define MSTATUS_XS          (3 << 15)
+#define MSTATUS_MPRV        (1 << 17)
+#define MSTATUS_SUM         (1 << 18)
+#define MSTATUS_MXR         (1 << 19)
+#define MSTATUS_TVM         (1 << 20)
+#define MSTATUS_TW          (1 << 21)
+#define MSTATUS_TSR         (1 << 22)
+#define MSTATUS32_SD        (1 << 31)
+#define MSTATUS_UXL         (3ULL << 32)
+#define MSTATUS_SXL         (3ULL << 34)
+#define MSTATUS64_SD        (1ULL << 63)
 
 
 #endif 

@@ -2,6 +2,7 @@
 #define CACHE_H 
 
 #include "mcsr-ext.h"
+#include "csr-read-write.h"
 #define SUPPORT_WRITE_THROUGH 0 
 static inline void cache_enable_status_set(
     int icache_enable, 

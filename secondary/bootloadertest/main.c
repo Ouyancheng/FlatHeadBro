@@ -5,6 +5,7 @@
 #include "fence.h"
 #include "printf.h"
 #include "cache.h"
+#include "interrupt.h"
 /** get the hardware core id, should be 0 as D1 only has single core */
 inline uintptr_t get_mhartid(void) {
     uintptr_t thread_id; 
@@ -91,6 +92,11 @@ void main(void) {
     uint64_t mhint_csr = read_csr(MHINT); 
 
     printf("the current MCOR csr is:  0b%032b\nthe current MHCR csr is:  0b%032b\nthe current MHINT csr is: 0b%032b\n\n", mcor_csr, mhcr_csr, mhint_csr); 
+
+    uintptr_t mtvec = set_interrupt_handler((uintptr_t)&direct_interrupt_trampoline, INTERRUPT_HANDLER_DIRECT); 
+    uintptr_t mie = enable_all_interrupts(); 
+    printf("mtvec = 0b%b\nmie = 0b%b\n\n", mtvec, mie); 
+    dev_barrier(); 
 
 #ifdef ECHO_TEST
     gpio_set_config(gpio_pe, 16, gpio_config_output); 

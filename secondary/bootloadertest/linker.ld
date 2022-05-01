@@ -21,6 +21,7 @@ SECTIONS
 		/*start.o (.text*)*/
 		/*main.o (.text*)*/
 		*(.text*)
+		*(.text.trampoline)
 		*(.init.text)
 		*(.exit.text)
 		*(.iplt)

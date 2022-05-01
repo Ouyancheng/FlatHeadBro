@@ -5,6 +5,7 @@ fhb_include_module(common)
 fhb_include_module(gpio)
 fhb_include_module(uart)
 fhb_include_module(printf)
+fhb_include_module(interrupt)
 project(bootloadertest)
 
 enable_language( C CXX ASM )
@@ -35,6 +36,7 @@ target_link_libraries(${TARGET}.elf PUBLIC
     gpio
     uart
     printf
+    interrupt
 )
 
 add_custom_command(TARGET ${TARGET}.elf POST_BUILD
