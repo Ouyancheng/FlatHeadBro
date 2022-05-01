@@ -51,6 +51,7 @@ extern "C" {
 #define MIE_SEIE			(1 << 9)
 #define MIE_MEIE			(1 << 11)
 
+#if 0
 #define csr_swap(csr, val)							\
 ({													\
 	unsigned long __v = (unsigned long)(val);		\
@@ -110,6 +111,7 @@ extern "C" {
 			      : : "rK" (__v)					\
 			      : "memory");						\
 })
+#endif 
 
 #ifdef __cplusplus
 }
