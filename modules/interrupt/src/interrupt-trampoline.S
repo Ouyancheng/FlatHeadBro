@@ -112,7 +112,7 @@ interrupt_vector:
     j direct_interrupt_trampoline // 10: reserved 
     j direct_interrupt_trampoline // 11: machine external interrupt 
 
-
+#if 0
 .align 4
 .global exception_trampoline 
 exception_trampoline: 
@@ -132,7 +132,7 @@ exception_trampoline:
     INTERRUPT_LOAD_REGS 
     mret 
 
-
+#endif 
 
 
 
