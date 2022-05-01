@@ -4,6 +4,7 @@
 #include "reset.h"
 #include "fence.h"
 #include "printf.h"
+#include "mcsr-ext.h"
 /** get the hardware core id, should be 0 as D1 only has single core */
 inline uintptr_t get_mhartid(void) {
     uintptr_t thread_id; 
@@ -53,6 +54,12 @@ void main(void) {
 
     printf("%d %x %b %s\n", 123, 123, 123, "hello world!!! testing printf!!!"); 
 
+    uint64_t mcor_csr = read_csr(MCOR); 
+    uint64_t mhcr_csr = read_csr(MHCR); 
+
+    printf("the current MCOR csr is: 0b%032b\nthe current MHCR csr is: 0b%032b\n\n", mcor_csr, mhcr_csr); 
+
+#ifdef ECHO_TEST
     gpio_set_config(gpio_pe, 16, gpio_config_output); 
     int pe16v = 0; 
     int i = 0; 
@@ -63,6 +70,7 @@ void main(void) {
         pe16v = (!pe16v); 
         gpio_write(gpio_pe, 16, pe16v);
     }
+#endif 
     return; 
 }
 

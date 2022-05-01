@@ -28,8 +28,11 @@
 /// File instrumented by Yancheng Ou 
 #include "uart.h"
 #include "stdarg.h"
+#define DRAM_DEBUG 0 
 static void sys_uart_putc(char c) {
+#if DRAM_DEBUG
     uart_putc(uart0_ctl, c); 
+#endif 
 }
 static int vpf_str_to_num(const char * fmt, int * num) 
 {
@@ -125,10 +128,12 @@ static int vpf(const char * fmt, va_list va)
 
 int sys_uart_printf(const char * fmt, ...)
 {
+#if DRAM_DEBUG
     va_list	va;
 
     va_start(va, fmt);
     vpf(fmt, va);
     va_end(va);
+#endif 
     return 0;
 }

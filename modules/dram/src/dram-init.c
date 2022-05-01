@@ -3,8 +3,8 @@
 #include "delay.h"
 extern int init_DRAM(int type, const struct ddr3_param_t *param);
 
-void sys_dram_init(const struct ddr3_param_t *param) {
-    init_DRAM(0, param);
+int sys_dram_init(const struct ddr3_param_t *param) {
+    return init_DRAM(0, param);
 }
 void sdelay(unsigned long us) {
     uint64_t t1 = get_arch_counter();

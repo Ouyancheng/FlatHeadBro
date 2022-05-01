@@ -1,16 +1,18 @@
 #ifndef MSCR_EXT_H
 #define MSCR_EXT_H 
-#include <stdint.h>
+#include "csr-read-write.h"
 
+
+/////////////////////////////////////////// C906 extended csrs ////////////////////////////////////
 // inhibit counter 
 #define    MCOUNTINHIBIT  "0x320" 
 // extended status 
 #define    MXSTATUS       "0x7C0" 
-// hardware configuration, used to enable cache 
+// hardware configuration, used to enable cache, branch predictor, target predictor 
 #define    MHCR           "0x7C1" 
 // hardware operation, used to invalidate i$/d$/BTB/BHT 
 #define    MCOR           "0x7C2" 
-// hardware hint operation 
+// hardware hint operation, used to enable and control the predictors and prefetch 
 #define    MHINT          "0x7C5" 
 // the reset vector base 
 #define    MRVBR          "0x7C7" 
@@ -54,6 +56,7 @@
 //     MCPUID        = 0xFC0, // CPU ID 
 // };
 
+/////////////////////////////////////////// C906 mxstatus ////////////////////////////////////
 
 // pmdu = 0 enable performance counter on user mode and vice versa 
 #define MXSTATUS_PMDU  (1 << 10)
@@ -98,6 +101,8 @@
 // };
 // _Static_assert(sizeof(struct MXSTATUS_csr) == 8, "MXSTATUS size is not 64-bit!"); 
 
+/////////////////////////////////////////// C906 mhcr ////////////////////////////////////
+
 // icache enable 
 #define MHCR_IE  (1 << 0)
 // dcache enable 
@@ -130,6 +135,7 @@
 // };
 // _Static_assert(sizeof(struct MHCR_csr) == 8, "MHCR size is not 64-bit!"); 
 
+/////////////////////////////////////////// C906 mcor ////////////////////////////////////
 
 // cache select 0b01 icache, 0b10 dcache, 0b11 i and d
 #define MCOR_CACHESEL_I_CACHE (0b01 << 0)
@@ -144,6 +150,7 @@
 // invalidate BTB 
 #define MCOR_BTB_INV (1 << 17)
 
+/////////////////////////////////////////// C906 mhint ////////////////////////////////////
 
 // dcache prefetch, 1 = ON, 0 = OFF 
 #define MHINT_DPLD   (1 << 2)
@@ -152,9 +159,7 @@
 
 // icache prefetch 
 #define MHINT_IPLD   (1 << 8)
-
 // MHINT_IWPE is the way prediction, but position not on datasheet! 
-
 // prefetch 2 lines for dcache 
 #define MHINT_D_DIS_2  (0b00 << 13)
 // 4 lines 
@@ -164,49 +169,28 @@
 // 16 lines 
 #define MHINT_D_DIS_16 (0b11 << 13)
 
+/////////////////////////////////////////// C906 cache read ////////////////////////////////////
+
 // issue a read request to L1 cache! should set the mcindex 
 #define MCINS_READ_L1 (1 << 0)
-// the index offset for mcindex 
+// the index offset for mcindex, index is 16-bit 
 #define MCINDEX_INDEX_OFFSET (0)
-// the way offset 
+// the way offset, each way is 4-bit 
 #define MCINDEX_WAY_OFFSET1 (17)
 #define MCINDEX_WAY_OFFSET2 (21)
 // the cache category to access 
-#define MCINDEX_RID_ICACHE_TAG (0b00 << 28)
+#define MCINDEX_RID_ICACHE_TAG  (0b00 << 28)
 #define MCINDEX_RID_ICACHE_DATA (0b01 << 28)
-#define MCINDEX_RID_DCACHE_TAG (0b10 << 28)
+#define MCINDEX_RID_DCACHE_TAG  (0b10 << 28)
 #define MCINDEX_RID_DCACHE_DATA (0b11 << 28)
 
 /*
-ICACHE TAG  => MCDATA0[39:12] TAG, MCDATA0[0] VALID bit 
-ICACHE DATA => MCDATA0 data[63:0], MCDATA1 data[127:64]
-DCACHE TAG  => MCDATA0[39:12] TAG, MCDATA0[2] DIRTY bit, MCDATA0[0] VALID bit
-DCACHE DATA => MCDATA0 data[63:0], MCDATA1 data[127:64]
+The result of a cache read is stored in mcdata0 and mcdata1 csrs: 
+    ICACHE TAG  => MCDATA0[39:12] TAG, MCDATA0[0] VALID bit 
+    ICACHE DATA => MCDATA0 data[63:0], MCDATA1 data[127:64]
+    DCACHE TAG  => MCDATA0[39:12] TAG, MCDATA0[2] DIRTY bit, MCDATA0[0] VALID bit
+    DCACHE DATA => MCDATA0 data[63:0], MCDATA1 data[127:64]
 */
-
-#define write_csr(csr, val) \
-({ \
-    uint64_t v = (uint64_t)val; \
-    asm volatile (\ 
-        "csrw " csr ", %0" \
-        : \
-        : "rK"(v) \
-        : "memory" \
-    ); \
-})
-
-#define read_csr(csr) \
-({ \
-    uint64_t v; \
-    asm volatile (\ 
-        "csrr %0, " csr  \
-        : "=r"(v) \
-        : \
-        : "memory" \
-    ); \
-    v; \
-})
-
 
 
 
