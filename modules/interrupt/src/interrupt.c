@@ -33,7 +33,8 @@ void exception_trampoline(void) {
     printf("hello interrupt!\n");
 }
 /*
-Here's what clang generates (better than gcc): 
+Here's what clang generates 
+(better than gcc, gcc also saves the vector registers (because it's turned on), but in a strange way): 
 0000000040001d88 <exception_trampoline>:
 40001d88: 13 01 01 e8  	addi	sp, sp, -384
 40001d8c: 23 3c 11 16  	sd	ra, 376(sp)

@@ -27,8 +27,14 @@
 #if __riscv_flen == 32
     #define IREG_TO_FREG fmv.w.x
     // older versions of this instruction naming is fmv.s.x 
+    #define FLDR         flw 
+    #define FSTR         fsw 
+    #define FLEN_BYTES   4 
 #elif __riscv_flen == 64
     #define IREG_TO_FREG fmv.d.x
+    #define FLDR         fsd 
+    #define FSTR         fld 
+    #define FLEN_BYTES   8 
 #endif 
 
 #endif 

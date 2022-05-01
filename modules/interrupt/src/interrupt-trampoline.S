@@ -1,7 +1,7 @@
 #include "asm-defs.h" 
 
 // allocate 31 positions for the registers (except for x0/zero) 
-.macro INTERRUPT_SAVE_REGS 
+.macro INTERRUPT_PUSH_ALL_IREGS 
     addi sp, sp, -31 * XLEN_BYTES
     STR x1,  0*XLEN_BYTES(sp)
     STR x2,  1*XLEN_BYTES(sp)
@@ -35,7 +35,7 @@
     STR x30, 29*XLEN_BYTES(sp)
     STR x31, 30*XLEN_BYTES(sp)
 .endm 
-.macro INTERRUPT_LOAD_REGS
+.macro INTERRUPT_POP_ALL_IREGS
     LDR x1,  0*XLEN_BYTES(sp)
     LDR x2,  1*XLEN_BYTES(sp)
     LDR x3,  2*XLEN_BYTES(sp)
@@ -70,12 +70,100 @@
     addi sp, sp, 31 * XLEN_BYTES 
 .endm 
 
+.macro INTERRUPT_PUSH_IREGS 
+    addi sp, sp, -16*XLEN_BYTES
+    STR ra,  0*XLEN_BYTES(sp)
+    STR t0,  1*XLEN_BYTES(sp)
+    STR t1,  2*XLEN_BYTES(sp)
+    STR t2,  3*XLEN_BYTES(sp)
+    STR a0,  4*XLEN_BYTES(sp)
+    STR a1,  5*XLEN_BYTES(sp)
+    STR a2,  6*XLEN_BYTES(sp)
+    STR a3,  7*XLEN_BYTES(sp)
+    STR a4,  8*XLEN_BYTES(sp)
+    STR a5,  9*XLEN_BYTES(sp)
+    STR a6,  10*XLEN_BYTES(sp)
+    STR a7,  11*XLEN_BYTES(sp)
+    STR t3,  12*XLEN_BYTES(sp)
+    STR t4,  13*XLEN_BYTES(sp)
+    STR t5,  14*XLEN_BYTES(sp)
+    STR t6,  15*XLEN_BYTES(sp)
+.endm 
+
+.macro INTERRUPT_POP_IREGS 
+    LDR ra,  0*XLEN_BYTES(sp)
+    LDR t0,  1*XLEN_BYTES(sp)
+    LDR t1,  2*XLEN_BYTES(sp)
+    LDR t2,  3*XLEN_BYTES(sp)
+    LDR a0,  4*XLEN_BYTES(sp)
+    LDR a1,  5*XLEN_BYTES(sp)
+    LDR a2,  6*XLEN_BYTES(sp)
+    LDR a3,  7*XLEN_BYTES(sp)
+    LDR a4,  8*XLEN_BYTES(sp)
+    LDR a5,  9*XLEN_BYTES(sp)
+    LDR a6,  10*XLEN_BYTES(sp)
+    LDR a7,  11*XLEN_BYTES(sp)
+    LDR t3,  12*XLEN_BYTES(sp)
+    LDR t4,  13*XLEN_BYTES(sp)
+    LDR t5,  14*XLEN_BYTES(sp)
+    LDR t6,  15*XLEN_BYTES(sp)
+    addi sp, sp, 16*XLEN_BYTES
+.endm 
+
+.macro INTERRUPT_PUSH_FREGS 
+    addi sp, sp, -20*FLEN_BYTES
+    FSTR ft0,  0*FLEN_BYTES(sp)
+    FSTR ft1,  1*FLEN_BYTES(sp)
+    FSTR ft2,  2*FLEN_BYTES(sp)
+    FSTR ft3,  3*FLEN_BYTES(sp)
+    FSTR ft4,  4*FLEN_BYTES(sp)
+    FSTR ft5,  5*FLEN_BYTES(sp)
+    FSTR ft6,  6*FLEN_BYTES(sp)
+    FSTR ft7,  7*FLEN_BYTES(sp)
+    FSTR fa0,  8*FLEN_BYTES(sp)
+    FSTR fa1,  9*FLEN_BYTES(sp)
+    FSTR fa2,  10*FLEN_BYTES(sp)
+    FSTR fa3,  11*FLEN_BYTES(sp)
+    FSTR fa4,  12*FLEN_BYTES(sp)
+    FSTR fa5,  13*FLEN_BYTES(sp)
+    FSTR fa6,  14*FLEN_BYTES(sp)
+    FSTR fa7,  15*FLEN_BYTES(sp) 
+    FSTR ft8,  16*FLEN_BYTES(sp)
+    FSTR ft9,  17*FLEN_BYTES(sp)
+    FSTR ft10, 18*FLEN_BYTES(sp)
+    FSTR ft11, 19*FLEN_BYTES(sp)
+.endm 
+
+.macro INTERRUPT_POP_FREGS 
+    FLDR ft0,  0*FLEN_BYTES(sp)
+    FLDR ft1,  1*FLEN_BYTES(sp)
+    FLDR ft2,  2*FLEN_BYTES(sp)
+    FLDR ft3,  3*FLEN_BYTES(sp)
+    FLDR ft4,  4*FLEN_BYTES(sp)
+    FLDR ft5,  5*FLEN_BYTES(sp)
+    FLDR ft6,  6*FLEN_BYTES(sp)
+    FLDR ft7,  7*FLEN_BYTES(sp)
+    FLDR fa0,  8*FLEN_BYTES(sp)
+    FLDR fa1,  9*FLEN_BYTES(sp)
+    FLDR fa2,  10*FLEN_BYTES(sp)
+    FLDR fa3,  11*FLEN_BYTES(sp)
+    FLDR fa4,  12*FLEN_BYTES(sp)
+    FLDR fa5,  13*FLEN_BYTES(sp)
+    FLDR fa6,  14*FLEN_BYTES(sp)
+    FLDR fa7,  15*FLEN_BYTES(sp) 
+    FLDR ft8,  16*FLEN_BYTES(sp)
+    FLDR ft9,  17*FLEN_BYTES(sp)
+    FLDR ft10, 18*FLEN_BYTES(sp)
+    FLDR ft11, 19*FLEN_BYTES(sp)
+    addi sp, sp, 20*FLEN_BYTES
+.endm 
+/// TODO: save and load vector registers 
 
 .section .text.trampoline 
 .align 4 
 .globl direct_interrupt_trampoline 
 direct_interrupt_trampoline: 
-    INTERRUPT_SAVE_REGS 
+    INTERRUPT_PUSH_IREGS 
 
     // the cause of the interrupt 
     csrr a0, mcause 
@@ -92,7 +180,7 @@ direct_interrupt_trampoline:
     addi t0, t0, 4 
     csrw mepc, t0 
 
-    INTERRUPT_LOAD_REGS 
+    INTERRUPT_POP_IREGS 
     mret 
 
 
@@ -116,7 +204,7 @@ interrupt_vector:
 .align 4
 .global exception_trampoline 
 exception_trampoline: 
-    INTERRUPT_SAVE_REGS
+    INTERRUPT_PUSH_IREGS
     // the cause of the interrupt 
     csrr a0, mcause 
     // the fault pc 
@@ -129,7 +217,7 @@ exception_trampoline:
     csrr t0, mepc 
     addi t0, t0, 4 
     csrw mepc, t0 
-    INTERRUPT_LOAD_REGS 
+    INTERRUPT_POP_IREGS 
     mret 
 
 #endif 
