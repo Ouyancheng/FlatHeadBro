@@ -91,6 +91,9 @@ struct uart_control *uart_init(int port, int set_gpio) {
     ctl->lcr &= (~0x80);  // disable the latch access 
     ctl->lcr = ((PARITY & 0x03) << 3) | ((STOP & 0x01) << 2) | (DLEN & 0x03);  // 8n1 
     ctl->fcr = 0x7; 
+    if (port == 0) {
+        uart0_ctl = ctl; 
+    }
     return ctl;
 
 }

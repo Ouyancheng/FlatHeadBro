@@ -49,10 +49,10 @@ void main(void) {
 
     print_str("hello!!!\n");
 
-    print_hex(get_mhartid()); 
-    uart_putc(uart0_ctl, '\n'); 
-
-    printf("%d %x %b %s\n", 123, 123, 123, "hello world!!! testing printf!!!"); 
+    // print_hex(get_mhartid()); 
+    // uart_putc(uart0_ctl, '\n'); 
+    // printf("%d %x %b %s\n", 123, 123, 123, "hello world!!! testing printf!!!"); 
+    printf("the current thread id is: %b\n", get_mhartid()); 
 
     uint64_t mcor_csr = read_csr(MCOR); 
     uint64_t mhcr_csr = read_csr(MHCR); 
