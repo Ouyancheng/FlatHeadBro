@@ -101,6 +101,8 @@ reset:
     ld gp, (t0)
 .option pop
 
+/// this is the wrong stack initialization sequence, it assumes the thread ids are continuous 
+#if 0
     /* Initialize stacks */
     la t1, _stack_start
     ld t1, (t1)
@@ -108,12 +110,17 @@ reset:
     ld t2, (t2)
     sub t0, t2, t1  /* basically the stack size */
     
-    csrr t3, mhartid  /* the thread id */
+    csrr t3, mhartid  /* the thread id, we shouldn't rely on it being continuous! */
     /* since we have only one core, we only need to care about core0, if multicore, other cores go to sleep (WFI?) */
     li t4, 1
     div t0, t0, t4
     mul t0, t0, t3
     sub sp, t2, t0
+#endif 
+
+    csrr t0, mhartid 
+    bne t0, zero, _multicore_sleep 
+    la sp, __stack_end 
     
     jal clear_bss 
     jal main
@@ -129,6 +136,10 @@ clbss_1:
     addi t0, t0, XLEN_BYTES
     blt t0, t1, clbss_1
     ret
+
+_multicore_sleep: 
+    wfi 
+    j _multicore_sleep
 
 /*
  * The location of section
