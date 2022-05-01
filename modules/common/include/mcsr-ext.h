@@ -155,7 +155,7 @@
 #define MXSTATUS_PMDS  (1 << 11)
 // pmdm = 0 enable performance counter on machien mode and vice versa 
 #define MXSTATUS_PMDM  (1 << 13)
-// the minimum control granularity of PMP, but C906 only supports 4K PMP
+// the minimum control granularity of PMP, but C906 only supports 4K PMP (always 1)
 #define MXSTATUS_PMP4K (1 << 14)
 // MM = 1 enable non-aligned access, otherwise generate an exception on non-aligned access 
 #define MXSTATUS_MM    (1 << 15)
@@ -165,11 +165,11 @@
 #define MXSTATUS_CLINTEE (1 << 17)
 // MHRD = 0 enable hardware backfilling on TLB miss 
 #define MXSTATUS_MHRD (1 << 18)
-// MAEE = 1 user can configure the address property of a PTE 
+// MAEE = 1 user can configure the extended address property of a PTE 
 #define MXSTATUS_MAEE (1 << 21)
 // THEADISAEE = 1 enable C906 extended instructions 
 #define MXSTATUS_THEADISAEE (1 << 22)
-// PM = 0b00 user mode, PM = 0b01 super mode, PM = 0b11 machine mode 
+// the current mode PM = 0b00 user mode, PM = 0b01 super mode, PM = 0b11 machine mode 
 #define MXSTATUS_PM (1 << 30) 
 
 // struct MXSTATUS_csr {
@@ -259,6 +259,16 @@
 #define MHINT_D_DIS_8  (0b10 << 13)
 // 16 lines 
 #define MHINT_D_DIS_16 (0b11 << 13)
+
+/*
+MCOUNTERWEN 
+    bit 0 : allow writing the SCYCLE in supervisor mode 
+    bit 2 : allow writing the SINSTRET in supervisor mode 
+    bit 3 : allow writing the SHPMCOUNTER3 in supervisor mode 
+    bit 4 .. 31 : allow writing the SHPMCOUNTER4..31 in supervisor mode 
+*/
+
+
 
 /////////////////////////////////////////// C906 cache read ////////////////////////////////////
 

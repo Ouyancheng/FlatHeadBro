@@ -5,6 +5,8 @@
 #include "fence.h"
 #include "printf.h"
 #include "mcsr-ext.h"
+#include "scsr-ext.h"
+#include "csr-ext.h"
 /** get the hardware core id, should be 0 as D1 only has single core */
 inline uintptr_t get_mhartid(void) {
     uintptr_t thread_id; 

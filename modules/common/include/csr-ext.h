@@ -37,16 +37,32 @@
 #define VXSAT  "0x009" 
 // vector rounding mode 
 #define VXRM   "0x00A"
-// vector length register 
+// vector length register read only 
 #define VL     "0xC20"
-// vector datatype 
+// vector datatype read only 
 #define VTYPE  "0xC21"
-// vector number of bytes 
+// vector number of bytes, C906's vector register is 128-bit, so this is 16 always 
 #define VLENB  "0xC22" 
 /////////////////////////////////////////// C906 extended user-mode csrs ////////////////////////////////////
 // user-mode extended floating point control register 
 #define FXCR "0x800"
 
+/*
+FXCR is almost the same as FCSR, with a few more fields 
+bit 5: FE if there's any floating point exception, this bit is 1 
+bit 23: DQNaN 
+    if this is 0, then the QNaN output will be RISC-V's specified fixed value, 
+    i.e., sign = 0, exponent = all 1, mantissa = 10000...0, 
+    otherwise the QNaN will comply with IEEE754 (multiple values) 
+*/
+
+
+/*
+VSTART the element starting position when executing vector instructions, this clears on execution of every vector instruction 
+VXSAT flags whether there are overflow happening 
+VXRM  the counting mode (bit 1..0), mode = 0 round up, mode = 1 round to even, mode = 2 round towards 0, mode = 3 round to odd 
+VL    the vector length (read only)
+*/
 
 #endif 
 
