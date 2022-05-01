@@ -272,14 +272,14 @@ MCOUNTERWEN
 
 /////////////////////////////////////////// C906 cache read ////////////////////////////////////
 
-// issue a read request to L1 cache! should set the mcindex 
+// issue a read request to L1 cache! only the first bit is valid. should set the mcindex 
 #define MCINS_READ_L1 (1 << 0)
 // the index offset for mcindex, index is 17-bit (16:0)
 #define MCINDEX_INDEX_OFFSET (0)
-// the way offset, each way is 4-bit 
+// the way offset, each way is 4-bit (20:17), (24:21)
 #define MCINDEX_WAY_OFFSET1 (17)
 #define MCINDEX_WAY_OFFSET2 (21)
-// the cache category to access 
+// the cache category to access (31:28)
 #define MCINDEX_RID_ICACHE_TAG  (0b0000 << 28)
 #define MCINDEX_RID_ICACHE_DATA (0b0001 << 28)
 #define MCINDEX_RID_DCACHE_TAG  (0b0010 << 28)
