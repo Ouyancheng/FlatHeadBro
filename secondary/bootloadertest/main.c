@@ -70,9 +70,16 @@ void main(void) {
     printf("dcache-enabled: writing 1M integers takes %d us\n", end_us - current_us); 
     dev_barrier(); 
     /*
+    clang: 
     dcache-disabled: writing 1M integers takes 211395 us
     dcache-enabled: writing 1M integers takes 8765 us
     */
+    /*
+    T-Head Semi's riscv64-unknown-elf-gcc: 
+    dcache-disabled: writing 1M integers takes 216301 us
+    dcache-enabled: writing 1M integers takes 10701 us
+    */
+    // wait... why the ``optimized'' gcc's slower than the generic clang??? 
 
     // print_hex(get_mhartid()); 
     // uart_putc(uart0_ctl, '\n'); 
