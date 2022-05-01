@@ -87,6 +87,11 @@ direct_interrupt_trampoline:
     // call the interrupt handler written in C 
     jal interrupt_handler 
 
+    // should we add pc by 4 so that it won't raise the interrupt again? 
+    csrr t0, mepc 
+    addi t0, t0, 4 
+    csrw mepc, t0 
+
     INTERRUPT_LOAD_REGS 
     mret 
 

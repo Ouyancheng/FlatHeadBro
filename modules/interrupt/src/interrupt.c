@@ -25,6 +25,6 @@ uintptr_t disable_all_interrupts(void) {
 }
 
 void interrupt_handler(uintptr_t cause, uintptr_t pc, uintptr_t fault_address) {
-    printf("interrupt arises! cause=%x, pc=%x, fault_address=%x\n", cause, pc, fault_address); 
+    printf("interrupt arises! cause=0x%x, pc=%x, fault_address=%x\n", cause, pc, fault_address); 
     return; 
 }

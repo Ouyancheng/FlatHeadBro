@@ -107,6 +107,12 @@ void main(void) {
     printf("mtvec = 0b%b\nmie = 0b%b\n\n", mtvec, mie); 
     dev_barrier(); 
 
+    asm volatile (
+        "ecall" : : : "memory"
+    );
+
+    delay_ms(1000);
+
 #ifdef ECHO_TEST
     gpio_set_config(gpio_pe, 16, gpio_config_output); 
     int pe16v = 0; 
