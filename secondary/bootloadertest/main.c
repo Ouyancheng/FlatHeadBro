@@ -51,7 +51,7 @@ void main(void) {
     uint64_t current_us = get_current_time_us(); 
     uint64_t end_us = 0; 
     for (int i = 0; i < 1048576; ++i) {
-        array[i] = i+1; 
+        array[i] = array[i] + 1; 
     }
     end_us = get_current_time_us(); 
     printf("dcache-disabled: writing 1M integers takes %d us\n", end_us - current_us); 
@@ -64,7 +64,7 @@ void main(void) {
     current_us = get_current_time_us(); 
     end_us = 0; 
     for (int i = 0; i < 1048576; ++i) {
-        array[i] = i+2; 
+        array[i] = array[i] + 2; 
     }
     end_us = get_current_time_us(); 
     printf("dcache-enabled: writing 1M integers takes %d us\n", end_us - current_us); 
