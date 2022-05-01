@@ -102,7 +102,7 @@ void main(void) {
 
     printf("the current MCOR csr is:  0b%032b\nthe current MHCR csr is:  0b%032b\nthe current MHINT csr is: 0b%032b\n\n", mcor_csr, mhcr_csr, mhint_csr); 
 
-    uintptr_t mtvec = set_interrupt_handler((uintptr_t)&direct_interrupt_trampoline, INTERRUPT_HANDLER_DIRECT); 
+    uintptr_t mtvec = set_interrupt_vector((uintptr_t)&direct_interrupt_trampoline, INTERRUPT_HANDLER_DIRECT); 
     uintptr_t mie = enable_all_interrupts(); 
     printf("mtvec = 0b%b\nmie = 0b%b\n\n", mtvec, mie); 
     dev_barrier(); 

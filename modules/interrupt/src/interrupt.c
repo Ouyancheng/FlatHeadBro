@@ -4,7 +4,7 @@
 #include "printf.h"
 
 
-uintptr_t set_interrupt_handler(uintptr_t address, enum interrupt_handler_mode mode) {
+uintptr_t set_interrupt_vector(uintptr_t address, enum interrupt_handler_mode mode) {
     uintptr_t base = (address & (~((uintptr_t)0b11))); 
     base |= (uintptr_t)mode & 0b11; 
     write_csr(MTVEC, base); 

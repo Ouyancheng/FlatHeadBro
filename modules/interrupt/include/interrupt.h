@@ -45,7 +45,7 @@ enum interrupt_handler_mode {
  *      if INTERRUPT_HANDLER_DIRECT, the address will be the address of the single universal interrupt handler 
  * @return the mtvec register value 
  */
-uintptr_t set_interrupt_handler(uintptr_t address, enum interrupt_handler_mode mode); 
+uintptr_t set_interrupt_vector(uintptr_t address, enum interrupt_handler_mode mode); 
 /**
  * enables all interrupts 
  * @return the mie register value 
