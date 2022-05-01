@@ -97,27 +97,10 @@ reset:
     /* Initialize global pointer, should not relax because relaxing uses the global pointer... */
 .option push
 .option norelax
-    la t0, _global_pointer$
-    ld gp, (t0)
+    la gp, __global_pointer$ 
 .option pop
 
-/// this is the wrong stack initialization sequence, it assumes the thread ids are continuous 
-#if 0
-    /* Initialize stacks */
-    la t1, _stack_start
-    ld t1, (t1)
-    la t2, _stack_end
-    ld t2, (t2)
-    sub t0, t2, t1  /* basically the stack size */
-    
-    csrr t3, mhartid  /* the thread id, we shouldn't rely on it being continuous! */
-    /* since we have only one core, we only need to care about core0, if multicore, other cores go to sleep (WFI?) */
-    li t4, 1
-    div t0, t0, t4
-    mul t0, t0, t3
-    sub sp, t2, t0
-#endif 
-
+    // D1 only has single core, so this is always 0 
     csrr t0, mhartid 
     bne t0, zero, _multicore_sleep 
     la sp, __stack_end 

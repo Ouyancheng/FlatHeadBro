@@ -46,9 +46,18 @@ void print_hex(uintptr_t i) {
     dev_barrier(); 
 }
 int array[1048576];
+extern char __data_start;
 void main(void) {
     uart0_ctl = uart_init(0, 1); 
     print_str("hello!!!\n");
+    uintptr_t gp; 
+    asm volatile (
+        "mv %0, gp"
+        : "=r"(gp)
+        :
+        : "memory"
+    ); 
+    printf("gp register = %x\n__data_start = %x\n+0x800=%x\n", gp, &__data_start, &__data_start+0x800); 
     uint64_t current_us = get_current_time_us(); 
     uint64_t end_us = 0; 
     for (int i = 0; i < 1048576; ++i) {
