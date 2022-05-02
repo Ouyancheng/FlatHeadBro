@@ -41,9 +41,7 @@
 #ifdef PRINTF_INCLUDE_CONFIG_H
 #include "printf_config.h"
 #endif
-void _putchar(char character) {
-  uart_putc(uart0_ctl, character); 
-}
+
 
 // 'ntoa' conversion buffer size, this must be big enough to hold one converted
 // numeric number including padded zeros (dynamically created on stack)

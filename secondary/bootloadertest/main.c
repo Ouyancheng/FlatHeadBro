@@ -111,7 +111,7 @@ void main(void) {
         "ecall" : : : "memory"
     );
 
-    delay_ms(1000);
+    // delay_ms(1000);
 
 #ifdef ECHO_TEST
     gpio_set_config(gpio_pe, 16, gpio_config_output); 

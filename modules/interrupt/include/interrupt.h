@@ -90,5 +90,22 @@ enum EXCEPTION_CAUSE {
     LOAD_PAGE_FAULT_EXCEPTION                = 13, 
     STORE_AMO_PAGE_FAULT_EXCEPTION           = 15, 
 };
+/**
+ * Increment the machine exception return pc by inc 
+ * @param inc the number to add to the exception return pc, MUST be a constant immediate value
+ * @return the resulting exception return pc 
+ */
+static inline uintptr_t add_to_mexception_return_pc(uintptr_t inc) {
+    uintptr_t temp_pc; 
+    asm volatile (
+        "csrr %0, mepc \n"
+        "addi %0, %0, %1 \n"
+        "csrw mepc, %0 \n"
+        : "+rK"(temp_pc) // both written and read 
+        : "i"(inc) 
+        : "memory"
+    );
+    return temp_pc; 
+}
 
 #endif 

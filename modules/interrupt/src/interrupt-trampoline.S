@@ -159,6 +159,38 @@
 .endm 
 /// TODO: save and load vector registers 
 
+.macro mtrampoline_save_IREGS handler_function
+    INTERRUPT_PUSH_IREGS
+    // the cause of the interrupt 
+    csrr a0, mcause 
+    // the fault pc 
+    csrr a1, mepc 
+    // if applicable, the fault address 
+    csrr a2, mtval 
+    // call handler 
+    jal \handler_function
+    // NOTE: if increamenting PC is needed, do it in handler_function
+    INTERRUPT_POP_IREGS
+    mret
+.endm 
+
+.macro mtrampoline_save_IFREGS handler_function
+    INTERRUPT_PUSH_IREGS
+    INTERRUPT_PUSH_FREGS
+    // the cause of the interrupt 
+    csrr a0, mcause 
+    // the fault pc 
+    csrr a1, mepc 
+    // if applicable, the fault address 
+    csrr a2, mtval 
+    // call handler 
+    jal \handler_function
+    // NOTE: if increamenting PC is needed, do it in handler_function
+    INTERRUPT_POP_FREGS
+    INTERRUPT_POP_IREGS
+    mret
+.endm 
+
 .section .text.trampoline 
 .align 4 
 .globl direct_interrupt_trampoline 
@@ -187,18 +219,24 @@ direct_interrupt_trampoline:
 .align 5
 .global interrupt_vector 
 interrupt_vector: 
-    j direct_interrupt_trampoline // 0: user software interrupt / all of the exceptions 
-    j direct_interrupt_trampoline // 1: supervisor software interrupt 
-    j direct_interrupt_trampoline // 2: reserved 
-    j direct_interrupt_trampoline // 3: machine software interrupt 
-    j direct_interrupt_trampoline // 4: user timer interrupt 
-    j direct_interrupt_trampoline // 5: supervisor timer interrupt 
-    j direct_interrupt_trampoline // 6: reserved 
-    j direct_interrupt_trampoline // 7: machine timer interrupt 
-    j direct_interrupt_trampoline // 8: user external interrupt 
-    j direct_interrupt_trampoline // 9: supervisor external interrupt 
-    j direct_interrupt_trampoline // 10: reserved 
-    j direct_interrupt_trampoline // 11: machine external interrupt 
+    j default_interrupt_trampoline // 0: user software interrupt / all of the exceptions 
+    j default_interrupt_trampoline // 1: supervisor software interrupt 
+    j default_interrupt_trampoline // 2: reserved 
+    j default_interrupt_trampoline // 3: machine software interrupt 
+    j default_interrupt_trampoline // 4: user timer interrupt 
+    j default_interrupt_trampoline // 5: supervisor timer interrupt 
+    j default_interrupt_trampoline // 6: reserved 
+    j default_interrupt_trampoline // 7: machine timer interrupt 
+    j default_interrupt_trampoline // 8: user external interrupt 
+    j default_interrupt_trampoline // 9: supervisor external interrupt 
+    j default_interrupt_trampoline // 10: reserved 
+    j default_interrupt_trampoline // 11: machine external interrupt 
+
+.align 4
+.global default_interrupt_trampoline 
+default_interrupt_trampoline: 
+    mtrampoline_save_IFREGS default_vector_handler
+
 
 #if 0
 .align 4
