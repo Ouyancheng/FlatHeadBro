@@ -103,15 +103,28 @@ void main(void) {
     printf("the current MCOR csr is:  0b%032b\nthe current MHCR csr is:  0b%032b\nthe current MHINT csr is: 0b%032b\n\n", mcor_csr, mhcr_csr, mhint_csr); 
 
     uintptr_t mtvec = set_interrupt_vector((uintptr_t)&interrupt_vector, INTERRUPT_HANDLER_VECTOR); 
+    // uintptr_t mtvec = set_interrupt_vector((uintptr_t)&direct_interrupt_trampoline, INTERRUPT_HANDLER_DIRECT); 
     uintptr_t mie = enable_all_interrupts(); 
-    printf("mtvec = 0b%b\nmie = 0b%b\n\n", mtvec, mie); 
+    // printf("mtvec = 0b%b\nmie = 0b%b\n\n", mtvec, mie); 
     dev_barrier(); 
-
+#if TEST_ECALL
     asm volatile (
         "ecall" : : : "memory"
     );
 
+#endif 
     // delay_ms(1000);
+    clint_enable(); 
+    dev_barrier();
+    // clint_set_machine_software_interrupt(1); 
+    dev_barrier(); 
+    while (1) {
+        clint_set_machine_timer_interrupt(24*1000); 
+        ////////// Something happens, we will figure this out later... ////////// 
+        // clint_set_supervisor_timer_interrupt(24*1000); 
+        delay_ms(2000); 
+    }
+    
 
 #ifdef ECHO_TEST
     gpio_set_config(gpio_pe, 16, gpio_config_output); 

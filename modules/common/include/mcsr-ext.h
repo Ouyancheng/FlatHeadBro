@@ -161,7 +161,7 @@
 #define MXSTATUS_MM    (1 << 15)
 // UCME = 0 disable the extended cache instruction, and vice versa 
 #define MXSTATUS_UCME  (1 << 16)
-// CLINT counter interrupt enable 
+// CLINT interrupt enable / the core local interrupt 
 #define MXSTATUS_CLINTEE (1 << 17)
 // MHRD = 0 enable hardware backfilling on TLB miss 
 #define MXSTATUS_MHRD (1 << 18)

@@ -1,9 +1,16 @@
 #include "plic.h"
 #include "get-put.h"
-
+#include "mcsr-ext.h"
+#include "interrupt.h"
 void (*irq_dispatch_table[PLIC_MAX_INTERRUPTS])(void); 
-
+void plic_enable(void) {
+    csr_set_bit(MIE, MIE_MEIE); 
+}
+void plic_disable(void) {
+    csr_clear_bit(MIE, MIE_MEIE); 
+}
 void plic_reset(void) {
+    plic_disable(); 
     for (int i = 0; i < PLIC_MAX_INTERRUPTS; ++i) {
         // disable all interrupts 
         put32(PLIC_MIEn(i), 0); 

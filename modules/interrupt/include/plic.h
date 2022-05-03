@@ -1,7 +1,7 @@
 #ifndef PLIC_H 
 #define PLIC_H 
 
-#define PLIC_BASE        (0x10000000ULL)
+#define PLIC_BASE        (0x10000000UL)
 /// PLIC priority register (0 < n < 256) 
 #define PLIC_PRIOn(n)     (PLIC_BASE + 0x0004 * (n))
 /// PLIC interrupt pending register (0 <= n < 9) 
@@ -30,6 +30,8 @@
 
 typedef void(*irq_handler_t)(void); 
 
+void plic_enable(void); 
+void plic_disable(void); 
 void plic_reset(void); 
 
 void plic_interrupt_enable(int irq, irq_handler_t handler, int priority); 

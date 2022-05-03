@@ -18,6 +18,7 @@ add_library(${TARGET}
     "${CMAKE_CURRENT_LIST_DIR}/src/interrupt.c"
     "${CMAKE_CURRENT_LIST_DIR}/src/interrupt-trampoline.S"
     "${CMAKE_CURRENT_LIST_DIR}/src/plic.c"
+    "${CMAKE_CURRENT_LIST_DIR}/src/clint.c"
 ) 
 
 # set_target_properties(${TARGET}  PROPERTIES PREFIX "")

@@ -224,9 +224,9 @@ interrupt_vector:
     j default_interrupt_trampoline // 2: reserved 
     j default_interrupt_trampoline // 3: machine software interrupt 
     j default_interrupt_trampoline // 4: user timer interrupt 
-    j default_interrupt_trampoline // 5: supervisor timer interrupt 
+    j clint_supervisor_timer_interrupt_handler // 5: supervisor timer interrupt 
     j default_interrupt_trampoline // 6: reserved 
-    j default_interrupt_trampoline // 7: machine timer interrupt 
+    j clint_machine_timer_interrupt_handler // 7: machine timer interrupt 
     j default_interrupt_trampoline // 8: user external interrupt 
     j default_interrupt_trampoline // 9: supervisor external interrupt 
     j default_interrupt_trampoline // 10: reserved 
