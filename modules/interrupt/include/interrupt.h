@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "utilities.h"
 #include "csr-read-write.h"
+#include "plic.h" 
 extern unsigned direct_interrupt_trampoline; 
 extern unsigned interrupt_vector;
 // supervisor mode software interrupt enable 
