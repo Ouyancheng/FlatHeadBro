@@ -30,15 +30,15 @@ void plic_interrupt_enable(int irq, irq_handler_t handler, int priority) {
 
 void plic_interrupt_disable(int irq) {
     irq &= 0xFF; 
-    // deregister on the dispatch table 
-    irq_dispatch_table[irq] = (irq_handler_t)0;
-    // set the priority to 0 to invalidate the interrupt 
-    put32(PLIC_PRIOn(irq), 0);  
     // disable the interrupt 
     uintptr_t plic_mie_addr = PLIC_MIEn(irq); 
     uint32_t plic_mie_n = get32(plic_mie_addr); 
     plic_mie_n &= ~(1 << (irq % 32)); 
     put32(plic_mie_addr, plic_mie_n); 
+    // set the priority to 0 to invalidate the interrupt 
+    put32(PLIC_PRIOn(irq), 0);  
+    // deregister on the dispatch table 
+    irq_dispatch_table[irq] = (irq_handler_t)0;
 }
 
 void plic_dispatch_interrupt(void) {
