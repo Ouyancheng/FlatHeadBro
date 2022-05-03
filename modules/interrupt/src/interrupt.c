@@ -32,7 +32,9 @@ void interrupt_handler(uintptr_t cause, uintptr_t pc, uintptr_t fault_address) {
 void default_vector_handler(uintptr_t cause, uintptr_t pc, uintptr_t fault_address) {
     printf("vector interrupt arises! cause=0x%x, pc=%x, fault_address=%x\n", cause, pc, fault_address); 
     // should we add pc by 4 so that it won't raise the interrupt again? 
-    add_to_mexception_return_pc(4); 
+    add_imm_to_mexception_return_pc(4); 
+    // add_var_to_mexception_return_pc(4); 
+    // add_imm_to_csr("mepc", 4); 
 }
 #if 0
 void exception_trampoline(void) __attribute__((interrupt("machine")));

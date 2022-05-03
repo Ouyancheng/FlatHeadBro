@@ -1,6 +1,7 @@
 #ifndef CSR_READ_WRITE_H 
 #define CSR_READ_WRITE_H 
 #include <stdint.h>
+#include "utilities.h"
 #define write_csr(csr, val) \
 ({ \
     uint64_t v = (uint64_t)val; \
@@ -82,4 +83,36 @@
     v; \
 })
 
+
+#define _add_imm_to_csr(csr, imm) \
+({ \
+    uintptr_t temp_pc; \
+    asm volatile ( \
+        "csrr %0, " csr "\n" \
+        "addi %0, %0, %1 \n" \
+        "csrw " csr ", %0 \n" \
+        : "=r"(temp_pc) \
+        : "i"(imm) \
+        : "memory" \
+    ); \
+    temp_pc; \
+})
+#define add_imm_to_csr(csr, imm) \
+({ \
+    _Static_assert(is_immediate(imm), "add_imm_to_csr must be incremented by an immediate"); \
+    _add_imm_to_csr(csr, imm); \
+})
+#define add_var_to_csr(csr, val) \
+({ \
+    uintptr_t temp_pc; \
+    asm volatile ( \
+        "csrr %0, " csr "\n" \
+        "add %0, %0, %1 \n" \
+        "csrw " csr ", %0 \n" \
+        : "=r"(temp_pc) \
+        : "r"(val) \
+        : "memory" \
+    ); \
+    temp_pc; \
+})
 #endif 
