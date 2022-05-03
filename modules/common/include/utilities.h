@@ -14,7 +14,7 @@
 6) if one is a pointer to void, the result is a pointer to void with combined cvr-qualifiers
 */
 #define is_immediate(x) ( \
-    _Generic( (0 ?  (void*)(uintptr_t)((x) - (x)) : (int*)(0)), \
+    _Generic( (0 ?  (void*)(uintptr_t)((x) - (x)) : (int*)(0x40000000ULL)), \
         int*: 1, \
         void*: 0, \
         default: 0 \
