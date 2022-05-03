@@ -36,6 +36,6 @@ void plic_interrupt_enable(int irq, irq_handler_t handler, int priority);
 
 void plic_interrupt_disable(int irq); 
 
-void plic_interrupt_dispatch(void); 
+void plic_dispatch_interrupt(void) __attribute__((interrupt("machine"))); 
 
 #endif 

@@ -230,7 +230,7 @@ interrupt_vector:
     j default_interrupt_trampoline // 8: user external interrupt 
     j default_interrupt_trampoline // 9: supervisor external interrupt 
     j default_interrupt_trampoline // 10: reserved 
-    j default_interrupt_trampoline // 11: machine external interrupt 
+    j plic_dispatch_interrupt      // 11: machine external interrupt 
 
 .align 4
 .global default_interrupt_trampoline 
