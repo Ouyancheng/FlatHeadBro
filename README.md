@@ -53,7 +53,7 @@ sync
 diskutil unmountDisk <YOUR_SD_CARD_DEVICE> 
 ``` 
 
-Then insert your SD card to the Lichee RV and power it on (could be done via GPIO pins), the UART will print the following, use `screen /dev/cu.SLAB_USBtoUART 115200` to monitor UART, of course with a USB to UART dongle: 
+Then insert your SD card to the Lichee RV and power it on (could be done via GPIO pins), the UART will print the following, use `screen /dev/cu.SLAB_USBtoUART 115200` to monitor UART, of course with a USB to UART dongle (NOTE: this message is now suppressed -- it will print `dram init result (dram size): 0x200MB` indicating the board has 512MB RAM. If you still want to see the DRAM init message, set `DRAM_DEBUG` to 1 in `modules/dram/src/tinyprintf.c`): 
 ```
 DRAM only have internal ZQ!!
 get_pmu_exist() = 4294967295
