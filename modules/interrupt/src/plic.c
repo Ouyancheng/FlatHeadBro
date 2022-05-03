@@ -44,7 +44,7 @@ void plic_interrupt_disable(int irq) {
 void plic_dispatch_interrupt(void) {
     while (1) {
         uint32_t irq = get32(PLIC_MCLAIM); 
-        if (!irq || irq >= 256) return; 
+        if (!irq) return; 
         // handle the interrupt 
         void(*handler)(void) = irq_dispatch_table[irq]; 
         if (handler) { handler(); }
