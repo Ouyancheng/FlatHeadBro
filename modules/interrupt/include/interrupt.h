@@ -104,7 +104,7 @@ static inline uintptr_t _add_to_mexception_return_pc(uintptr_t inc) {
         "csrr %0, mepc \n"
         "addi %0, %0, %1 \n"
         "csrw mepc, %0 \n"
-        : "+rK"(temp_pc) // both written and read 
+        : "=r"(temp_pc) // +rK ? 
         : "i"(inc) 
         : "memory"
     );
