@@ -2,6 +2,7 @@
 #define UTILITIES_H 
 #include <stdint.h>
 /*
+https://en.cppreference.com/w/c/language/operator_other#Conditional_operator
 3) Performs a conversion from the result of the evaluation to the common type, defined as follows:
 1) if the expressions have arithmetic type, the common type is the type after usual arithmetic conversions
 2) if the expressions have struct/union type, the common type is that struct/union type
