@@ -95,48 +95,8 @@ enum EXCEPTION_CAUSE {
 
 #define add_imm_to_mexception_return_pc(imm) add_imm_to_csr("mepc", imm)
 #define add_var_to_mexception_return_pc(val) add_var_to_csr("mepc", val)
-#if 0
-/**
- * Increment the machine exception return pc by inc 
- * @param inc the number to add to the exception return pc, MUST be a constant immediate value
- * @return the resulting exception return pc 
- */
-static inline uintptr_t _add_imm_to_mexception_return_pc(uintptr_t inc) {
-    uintptr_t temp_pc; 
-    asm volatile (
-        "csrr %0, mepc \n"
-        "addi %0, %0, %1 \n"
-        "csrw mepc, %0 \n"
-        : "=r"(temp_pc) // +rK ? 
-        : "i"(inc) 
-        : "memory"
-    );
-    return temp_pc; 
-}
-// extern uintptr_t _exception_pc_must_be_incremented_by_an_immediate(uintptr_t);
-// #define add_imm_to_mexception_return_pc(inc) ((is_immediate(inc) _add_to_mexception_return_pc : _exception_pc_must_be_incremented_by_an_immediate)(inc))
-#define add_imm_to_mexception_return_pc(inc) ({ \
-    _Static_assert(is_immediate(inc), "exception pc must be incremented by an immediate"); \
-    _add_imm_to_mexception_return_pc(inc); \
-})
-/**
- * Increment the machine exception return pc by val 
- * NOTE: Some compilers may optimize this to an addi instruction if val is a constant, but this is not guaranteed, 
- * if you only need to add by an immediate constant, consider using add_imm_to_mexception_return_pc. 
- * @param val the variable to add to the exception return pc, no need to be an immediate
- * @return the resulting exception return pc 
- */
-static inline uintptr_t add_var_to_mexception_return_pc(uintptr_t val) {
-    uintptr_t temp_pc; 
-    asm volatile (
-        "csrr %0, mepc\n"
-        "add %0, %0, %1\n"
-        "csrw mepc, %0\n"
-        : "=r"(temp_pc)
-        : "r"(val)
-        : "memory"
-    );
-    return temp_pc; 
-}
-#endif 
+#define add_imm_to_sexception_return_pc(imm) add_imm_to_csr("sepc", imm)
+#define add_var_to_sexception_return_pc(val) add_var_to_csr("sepc", val)
+#define add_imm_to_uexception_return_pc(imm) add_imm_to_csr("uepc", imm)
+#define add_var_to_uexception_return_pc(val) add_var_to_csr("uepc", val)
 #endif 
