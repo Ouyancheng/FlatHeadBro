@@ -21,6 +21,9 @@ reset:
     csrw medeleg, zero
     csrw mie, zero
     csrw mip, zero
+    #define EN_THEADISAEE (0x1 << 22)
+    li t1, EN_THEADISAEE
+    csrs 0x7c0, t1
 
     /* Initial registers */
     li x1, 0 /* ra, we are not returning to boot0, if we plan to return, should also save sp */
@@ -56,7 +59,7 @@ reset:
     li x31, 0
 
     /* Enable FPU and accelerator if present */
-    li t0, MSTATUS_FS | MSTATUS_XS
+    li t0, MSTATUS_FS | MSTATUS_XS | (0x01800000)  // also enables the vector unit 
     csrs mstatus, t0
     /* the floating point registers */
 #ifdef __riscv_flen 

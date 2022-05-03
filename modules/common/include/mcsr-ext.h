@@ -153,7 +153,7 @@
 #define MXSTATUS_PMDU  (1 << 10)
 // pmds = 0 enable performance counter on super mode and vice versa 
 #define MXSTATUS_PMDS  (1 << 11)
-// pmdm = 0 enable performance counter on machien mode and vice versa 
+// pmdm = 0 enable performance counter on machine mode and vice versa 
 #define MXSTATUS_PMDM  (1 << 13)
 // the minimum control granularity of PMP, but C906 only supports 4K PMP (always 1)
 #define MXSTATUS_PMP4K (1 << 14)
