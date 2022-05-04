@@ -55,7 +55,7 @@ void main(void) {
         "mv %0, gp"
         : "=r"(gp)
         :
-        : "memory"
+        : 
     ); 
     printf("gp register = %x\n__data_start = %x\n+0x800=%x\n", gp, &__data_start, &__data_start+0x800); 
     uint64_t current_us = get_current_time_us(); 

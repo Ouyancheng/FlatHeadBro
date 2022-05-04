@@ -7,8 +7,8 @@ static inline uint64_t get_arch_counter(void) {
         "csrr %0, time\n"
         : "=r"(cnt)
         :
-        : "memory"
-    );
+        : 
+    ); // shouldn't need clobber 
     return cnt;
 }
 
