@@ -284,9 +284,9 @@ enum gpio_interrupt_debounce_clock {
     gpio_interrupt_debounce_LOSC_32KHz = 0, 
     gpio_interrupt_debounce_HOSC_24MHz = 1, 
 };
-/** The selected clock source is divided by 2^prescaler */
+/** The selected clock source is divided by 2^prescaler, the range of prescaler is 0 to 7 */
 void gpio_external_interrupt_debounce_get(enum gpio_port port, int pin, int *prescaler, enum gpio_interrupt_debounce_clock *clock);
-/** The selected clock source is divided by 2^prescaler */
+/** The selected clock source is divided by 2^prescaler, the range of prescaler is 0 to 7 */
 void gpio_external_interrupt_debounce_set(enum gpio_port port, int pin, int prescaler, enum gpio_interrupt_debounce_clock clock);  
 #endif 
 
