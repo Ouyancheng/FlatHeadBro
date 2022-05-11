@@ -113,6 +113,33 @@ void uart_putc(struct uart_control *ctl, char c);
 char uart_getc(struct uart_control *ctl); 
 int uart_has_data(struct uart_control *ctl);
 
+enum uart_interrupt_enable {
+    uart_enable_received_data_available_interrupt         = 1, 
+    uart_enable_transmit_holding_register_empty_interrupt = 1 << 1, 
+    uart_enable_receiver_line_status_interrupt            = 1 << 2, 
+    uart_enable_modem_status_interrupt                    = 1 << 3, 
+    uart_enable_RS485_interrupt                           = 1 << 4, 
+    uart_enable_programmable_THRE_interrupt               = 1 << 7 
+};
+
+void uart_interrupt_enable_set(struct uart_control *ctl, uint32_t interrupt_enable_register); 
+uint32_t uart_interrupt_enable_get(struct uart_control *ctl); 
+/** 
+ * the interrupt id for the uart, priority sorted from high to low, with the except of none which has no priority 
+ * the interrupt will be cleared by performing specific actions on uart 
+ * see D1 user manual 9.2.6.6 
+ */
+enum uart_interrupt_id {
+    uart_interrupt_id_none = 0b0001, 
+    uart_interrupt_id_receiver_line_status = 0b0110, 
+    uart_interrupt_id_RS485 = 0b0011, 
+    uart_interrupt_id_received_data_available = 0b0100, 
+    uart_interrupt_id_character_timeout = 0b1100, 
+    uart_interrupt_id_transmit_holding_register_empty = 0b0010, 
+    uart_interrupt_id_modem_status = 0b0000, 
+    uart_interrupt_id_busy = 0b0111 
+};
+void uart_get_interrupt_identity(struct uart_control *ctl, int *fifo_enabled, enum uart_interrupt_id *interrupt_id); 
 extern struct uart_control *uart0_ctl; 
 #endif 
 

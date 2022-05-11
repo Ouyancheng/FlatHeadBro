@@ -40,6 +40,12 @@ void gpio_has_interrupt(void) {
     print_hex(gpio_read(gpio_pe, 16));
     uart_putc(uart0_ctl, '\n'); 
 }
+void uart_has_interrupt(void) {
+    char c = uart_getc(uart0_ctl); 
+    print_str("uart received: "); 
+    uart_putc(uart0_ctl, c); 
+    uart_putc(uart0_ctl, '\n'); 
+}
 void main(void) {
     uart0_ctl = uart_init(0, 1); 
     print_str("hello!!!\n");
@@ -79,6 +85,8 @@ void main(void) {
     gpio_external_interrupt_debounce_set(gpio_pe, 16, 0b000, gpio_interrupt_debounce_LOSC_32KHz); 
     gpio_set_external_interrupt_config(gpio_pe, 16, gpio_interrupt_positive_edge); 
     plic_interrupt_enable(91, gpio_has_interrupt, 1); 
+    uart_interrupt_enable_set(uart0_ctl, (uint32_t)uart_enable_received_data_available_interrupt); 
+    plic_interrupt_enable(18, uart_has_interrupt, 1); 
     int i = 10;
     while (i --> 0) {
         // print_str("a");

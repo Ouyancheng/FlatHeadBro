@@ -109,7 +109,16 @@ int uart_has_data(struct uart_control *ctl) {
     return (ctl->lsr & 1); 
 }
 
-
-
+void uart_interrupt_enable_set(struct uart_control *ctl, uint32_t interrupt_enable_register) {
+    ctl->ier = interrupt_enable_register; 
+}
+uint32_t uart_interrupt_enable_get(struct uart_control *ctl) {
+    return ctl->ier; 
+}
+void uart_get_interrupt_identity(struct uart_control *ctl, int *fifo_enabled, enum uart_interrupt_id *interrupt_id) {
+    uint32_t interrupt_identity_register = ctl->ier; 
+    (*fifo_enabled) = ((interrupt_identity_register >> 6) & 0b11); 
+    (*interrupt_id) = (enum uart_interrupt_id)(interrupt_identity_register & 0b1111); 
+}
 
 
