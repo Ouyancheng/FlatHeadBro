@@ -22,6 +22,10 @@ void print_str(const char *str) {
         uart_putc(uart0_ctl, *str++); 
     }
 }
+void gpio_has_interrupt(void) {
+    gpio_external_interrupt_irq_clear(gpio_pe, 16);  // note: clear first! 
+    print_str("gpio has interrupt\n"); 
+}
 void print_hex(uintptr_t i) {
     char buffer[sizeof(uintptr_t)*2 + 2]; 
     int buf_idx = 0; 
@@ -113,6 +117,8 @@ void main(void) {
     );
 
 #endif 
+
+#if TEST_TIMER
     // delay_ms(1000);
     clint_enable(); 
     dev_barrier();
@@ -124,7 +130,22 @@ void main(void) {
         // clint_set_supervisor_timer_interrupt(24*1000); 
         delay_ms(2000); 
     }
-    
+#endif 
+    plic_reset(); 
+    dev_barrier(); 
+    plic_enable(); 
+    dev_barrier(); 
+    gpio_set_config(gpio_pe, 16, gpio_config_external_interrupt); 
+    gpio_external_interrupt_debounce_set(gpio_pe, 16, 0b000, gpio_interrupt_debounce_LOSC_32KHz); 
+    gpio_set_external_interrupt_config(gpio_pe, 16, gpio_interrupt_positive_edge); 
+    plic_interrupt_enable(91, gpio_has_interrupt, 1); 
+    int i = 10;
+    while (i --> 0) {
+        // print_str("a");
+        asm volatile ("wfi":::"memory"); 
+        // print_hex(gpio_read(gpio_pe, 16)); 
+        // delay_ms(3000);
+    }
 
 #ifdef ECHO_TEST
     gpio_set_config(gpio_pe, 16, gpio_config_output); 

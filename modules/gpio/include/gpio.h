@@ -113,7 +113,7 @@ struct gpio_control {
     volatile uint32_t drv[4]; 
     volatile uint32_t pull[2]; 
 };
-_Static_assert(sizeof(struct gpio_control) == sizeof(struct gpio_pd_control), "gpio control size not matching"); 
+// _Static_assert(sizeof(struct gpio_control) == sizeof(struct gpio_pd_control), "gpio control size not matching"); 
 
 /**
  * 0x0220 
@@ -200,7 +200,7 @@ struct gpio_eint {
     volatile uint32_t status; 
     volatile uint32_t deb; 
 };
-_Static_assert(sizeof(struct gpio_eint) == sizeof(struct gpio_pd_eint), "gpio eint size not matching"); 
+// _Static_assert(sizeof(struct gpio_eint) == sizeof(struct gpio_pd_eint), "gpio eint size not matching"); 
 
 /**
  * 0x0340 
@@ -238,6 +238,7 @@ enum gpio_config_state {
     gpio_config_function7 = 0b0111, 
     gpio_config_function8 = 0b1000, 
     gpio_config_function14 = 0b1110, 
+    gpio_config_external_interrupt = 0b1110, 
     gpio_config_io_diable = 0b1111 
 };
 
@@ -279,5 +280,13 @@ enum gpio_interrupt_config_state gpio_get_external_interrupt_config(enum gpio_po
 // interrupt status 
 int gpio_external_interrupt_irq_pending(enum gpio_port port, int pin); 
 void gpio_external_interrupt_irq_clear(enum gpio_port port, int pin); 
+enum gpio_interrupt_debounce_clock {
+    gpio_interrupt_debounce_LOSC_32KHz = 0, 
+    gpio_interrupt_debounce_HOSC_24MHz = 1, 
+};
+/** The selected clock source is divided by 2^prescaler */
+void gpio_external_interrupt_debounce_get(enum gpio_port port, int pin, int *prescaler, enum gpio_interrupt_debounce_clock *clock);
+/** The selected clock source is divided by 2^prescaler */
+void gpio_external_interrupt_debounce_set(enum gpio_port port, int pin, int prescaler, enum gpio_interrupt_debounce_clock clock);  
 #endif 
 

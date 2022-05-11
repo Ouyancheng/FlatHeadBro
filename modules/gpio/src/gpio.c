@@ -113,3 +113,13 @@ void gpio_external_interrupt_irq_clear(enum gpio_port port, int pin) {
     eint->status = (1 << pin); 
 }
 
+void gpio_external_interrupt_debounce_get(enum gpio_port port, int pin, int *prescaler, enum gpio_interrupt_debounce_clock *clock) {
+    struct gpio_eint *eint = (struct gpio_eint *)((uintptr_t)GPIO_BASE + 0x0200UL + (uintptr_t)port * 0x0020UL); 
+    uint32_t debounce_reg = eint->deb; 
+    (*clock) = (enum gpio_interrupt_debounce_clock)(debounce_reg & 1);
+    (*prescaler) = ((debounce_reg >> 4) & 0b111);
+}
+void gpio_external_interrupt_debounce_set(enum gpio_port port, int pin, int prescaler, enum gpio_interrupt_debounce_clock clock) {
+    struct gpio_eint *eint = (struct gpio_eint *)((uintptr_t)GPIO_BASE + 0x0200UL + (uintptr_t)port * 0x0020UL); 
+    eint->deb = (((uint32_t)clock) & 1) | ((prescaler & 0b111) << 4); 
+}
