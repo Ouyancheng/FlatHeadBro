@@ -130,15 +130,16 @@ uint32_t uart_interrupt_enable_get(struct uart_control *ctl);
  * see D1 user manual 9.2.6.6 
  */
 enum uart_interrupt_id {
-    uart_interrupt_id_none = 0b0001, 
-    uart_interrupt_id_receiver_line_status = 0b0110, 
-    uart_interrupt_id_RS485 = 0b0011, 
-    uart_interrupt_id_received_data_available = 0b0100, 
-    uart_interrupt_id_character_timeout = 0b1100, 
+    uart_interrupt_id_none                            = 0b0001, 
+    uart_interrupt_id_receiver_line_status            = 0b0110, 
+    uart_interrupt_id_RS485                           = 0b0011, 
+    uart_interrupt_id_received_data_available         = 0b0100, 
+    uart_interrupt_id_character_timeout               = 0b1100, 
     uart_interrupt_id_transmit_holding_register_empty = 0b0010, 
-    uart_interrupt_id_modem_status = 0b0000, 
-    uart_interrupt_id_busy = 0b0111 
+    uart_interrupt_id_modem_status                    = 0b0000, 
+    uart_interrupt_id_busy                            = 0b0111 
 };
+/** reads the interrupt identity register, note: the interrupt identity register is read only */
 void uart_get_interrupt_identity(struct uart_control *ctl, int *fifo_enabled, enum uart_interrupt_id *interrupt_id); 
 extern struct uart_control *uart0_ctl; 
 #endif 
