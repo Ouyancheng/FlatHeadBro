@@ -9,6 +9,7 @@ project(FlatHeadBro)
 # NOTE: do not use include, otherwise the linker scripts will be messed up! 
 add_subdirectory(boot0-spl)
 add_subdirectory(secondary/bootloadertest)
+add_subdirectory(secondary/interrupttest)
 
 
 
