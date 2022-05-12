@@ -44,12 +44,14 @@
  * 
  * MMU EntryHi register (SMEH)
  * bit 63 - 46 : reserved 
- * bit 45 - 19 : virtual page number, updated by hardware on page fault/TLB read, pre-written by software on TLB write 
+ * bit 45 - 19 : virtual page number (27 bits) note: 27+12 = 39 bits virtual address,
+ *  updated by hardware on page fault/TLB read, pre-written by software on TLB write 
  * bit 18, 17, 16 : page size, one-hot vector: bit 16: 4K, bit 17: 2M, bit 18: 1G 
- * bit 15 - 0 : the ASID address space ID, used to distinguish different processes, updated by hardware on TLB read, pre-written by software on TLB write 
+ * bit 15 - 0 : the ASID address space ID, used to distinguish different processes, 
+ *  updated by hardware on TLB read, pre-written by software on TLB write 
  * 
  * 
- * MMU EntryLo register (SMEL)
+ * MMU EntryLo register (SMEL) corresponding to a Sv39 page table entry 
  * bit 63 : SO strong order 0 = not strong order (for normal memory, default), 1 = strong order (for devices)
  * bit 62 : C cachable 0 = noncacheable 1 = cacheable, default is 0 
  * bit 61 : B bufferable 0 = nonbufferable 1 = bufferable, default is 0 
@@ -73,14 +75,55 @@
  * 
  * 
  * MMU address translation and protection register (SATP) Sv39 standard 
- * bit 63 - 60 : Mode translation mode 
+ * bit 63 - 60 : Mode translation mode, C906 only suppords Sv39 mode (value=8) and MMU off (value=0)
  * bit 59 - 44 : ASID 
  * bit 43 - 28 : - 
- * bit 27 - 0 : PPN 
+ * bit 27 - 0 : PPN of the root page table 
  */
 
 
 
+/*
+A virtual address va is translated into a physical address pa as follows:
+1. Let a be satp.ppn * PAGESIZE, and let i = LEVELS − 1. 
+    (For Sv32, PAGESIZE=2^12 and LEVELS=2.)
+2. Let pte be the value of the PTE at address a + va.vpn[i] * PTESIZE. 
+    (For Sv32, PTESIZE=4.) 
+    If accessing pte violates a PMA or PMP check, raise an access exception.
+3. If pte.v = 0, or if pte.r = 0 and pte.w = 1, stop and raise a page-fault exception.
+4. Otherwise, the PTE is valid. If pte.r = 1 or pte.x = 1, go to step 5. 
+    Otherwise, this PTE is a pointer to the next level of the page table. 
+    Let i = i − 1. If i < 0, stop and raise a page-fault exception. 
+    Otherwise, let a = pte.ppn * PAGESIZE and go to step 2.
+5. A leaf PTE has been found. 
+    Determine if the requested memory access is allowed by the pte.r, pte.w, pte.x, and pte.u bits, 
+    given the current privilege mode and the value of the SUM and MXR fields of the mstatus register. 
+    If not, stop and raise a page-fault exception.
+6. If i > 0 and pa.ppn[i − 1 : 0] != 0, this is a misaligned superpage; stop and raise a page-fault exception.
+7. If pte.a = 0, or if the memory access is a store and pte.d = 0, either raise a page-fault exception or:
+    Set pte.a to 1 and, if the memory access is a store, also set pte.d to 1.
+    If this access violates a PMA or PMP check, raise an access exception.
+    This update and the loading of pte in step 2 must be atomic; 
+        in particular, no intervening store to the PTE may be perceived to have occurred in-between.
+8. The translation is successful. The translated physical address is given as follows:
+    pa.pgoff = va.pgoff.
+    If i > 0, then this is a superpage translation and pa.ppn[i − 1 : 0] = va.vpn[i − 1 : 0]. 
+    pa.ppn[LEVELS − 1 : i] = pte.ppn[LEVELS − 1 : i].
+*/
 
 
+
+/*
+For Sv39, 
+virtual address: 
+|      VPN[2]      |      VPN[1]      |      VPN[0]      |      page offset      | 
+38               30 29              21 20              12 11                     0
+physical address: 
+|      PPN[2]      |      PPN[1]      |      PPN[0]      |      page offset      | 
+55               30 29              21 20              12 11                     0 
+PTE: 
+63 -- reserved -- 54 53 -- PPN[2] -- 28 27 -- PPN[1] -- 19 18 -- PPN[0] -- 10 9 -- RSW -- 8 D A G U X W R V 
+
+Sv39 has 2^9 PTEs for a page table, each entry is 8 bytes. Therefore, a page table size is exactly a page size 
+*/
 #endif 
