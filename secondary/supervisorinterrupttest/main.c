@@ -79,8 +79,7 @@ void main(void) {
     write_csr("mepc", (uintptr_t)(insupervisormode)); 
     // disable virtual memory 
     write_csr("satp", 0); 
-
-    // not sure why we need this 
+    // set PMP to allow RWX on all addresses! use TOR mode, and 0<=x<0xffffffff addresses are RWX 
     // see: https://linxy.dev/2021/05/26/fix-xv6-boot/
     asm volatile("csrw pmpaddr0, %0" : : "r" (0xffffffffULL));
     asm volatile("csrw pmpcfg0, %0" : : "r" (0x0FULL));
