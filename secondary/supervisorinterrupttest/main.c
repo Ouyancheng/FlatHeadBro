@@ -55,7 +55,8 @@ void main(void) {
     uint64_t mhcr_csr = read_csr(MHCR); 
     uint64_t mhint_csr = read_csr(MHINT); 
     printf("the current MCOR csr is:  0b%032b\nthe current MHCR csr is:  0b%032b\nthe current MHINT csr is: 0b%032b\n\n", mcor_csr, mhcr_csr, mhint_csr); 
-    
+    cache_enable_status_set(1, 1, 1, 1, 1, 1, 1); 
+    cache_prefetch_status_set(1, 1, DCACHE_PREFETCH2); 
     // must enable clint in machine mode 
     clint_enable_supervisor_interrupt(); 
     plic_enable_supervisor_access(); 
