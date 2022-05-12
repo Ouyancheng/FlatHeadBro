@@ -29,4 +29,11 @@ void delay_cycles(uint64_t cycles) {
     }
 }
 
-
+void enable_supervisor_counter_access(void) {
+    asm volatile (
+        "csrw mcounteren, %0"
+        :
+        :"rK"(0xFFFFFFFF)
+        :
+    ); 
+}

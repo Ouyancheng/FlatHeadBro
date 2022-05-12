@@ -17,7 +17,9 @@
 /// supervisor timer comparison register (higher 32-bit) 
 #define STIMECMPH0 (CLINT_BASE + 0xD004) 
 
+/// must be called from machine mode, because the corresponding bit in SXSTATUS is not writable 
 void clint_enable(void); 
+/// must be called from machine mode, because the corresponding bit in SXSTATUS is not writable 
 void clint_disable(void); 
 
 /// sets the MSIP0 register, val should only be 0 or 1 

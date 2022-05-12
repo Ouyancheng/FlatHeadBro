@@ -16,6 +16,7 @@
  * 1. I-uTLB (10 entry) + D-uTLB (10 entry) fully associative 
  * 2. jTLB two-way associative 256 indices (512 entries) 
  * configurable 128, 256, 512 entries 
+ * NOTE: only S-mode and U-mode should have virtual memory, M-mode should be all physical 
  */
 
 /**

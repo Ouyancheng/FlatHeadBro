@@ -30,8 +30,8 @@ set(FPIC "")
 # set(FPIC "-fPIC")
 # -nostartfiles  in C_FLAGS + ASM_FLAGS? 
 # -menable-experimental-extensions 
-# set(CODE_MODEL "medany")  # use auipc instruction rd = pc + (imm20 << 12)
-set(CODE_MODEL "medlow")  # use lui instruction to take the upper 20 bits of an immediate rd = (imm20 << 12) 
+set(CODE_MODEL "medany")  # use auipc instruction rd = pc + (imm20 << 12)
+# set(CODE_MODEL "medlow")  # use lui instruction to take the upper 20 bits of an immediate rd = (imm20 << 12) 
 set(C_FLAGS_COMMON                  "-march=${TARGET_ARCH} ${FPIC} --target=${TARGET_TRIPLET} -mabi=lp64d -mcmodel=${CODE_MODEL} -mno-relax -fno-stack-protector -Wall -nostdlib -ffreestanding -Werror -Wno-unused-function -Wno-unused-variable")
 set(CMAKE_C_FLAGS                   "-Og ${C_FLAGS_COMMON} -std=gnu11 -Wno-pointer-sign ")
 set(CMAKE_C_FLAGS_RELEASE           "-Os -DNDEBUG ${C_FLAGS_COMMON} -std=gnu11 -Wno-pointer-sign ")

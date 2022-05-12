@@ -10,6 +10,6 @@ project(FlatHeadBro)
 add_subdirectory(boot0-spl)
 add_subdirectory(secondary/bootloadertest)
 add_subdirectory(secondary/interrupttest)
-
+add_subdirectory(secondary/supervisorinterrupttest)
 
 

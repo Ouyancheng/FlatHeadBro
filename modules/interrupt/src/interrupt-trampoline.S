@@ -191,6 +191,24 @@
     mret
 .endm 
 
+.macro strampoline_save_IFREGS handler_function
+    INTERRUPT_PUSH_IREGS
+    INTERRUPT_PUSH_FREGS
+    // the cause of the interrupt 
+    csrr a0, scause 
+    // the fault pc 
+    csrr a1, sepc 
+    // if applicable, the fault address 
+    csrr a2, stval 
+    // call handler 
+    jal \handler_function
+    // NOTE: if increamenting PC is needed, do it in handler_function
+    INTERRUPT_POP_FREGS
+    INTERRUPT_POP_IREGS
+    sret
+.endm 
+
+
 .section .text.trampoline 
 .align 4 
 .globl direct_interrupt_trampoline 
@@ -228,14 +246,14 @@ interrupt_vector:
     j default_interrupt_trampoline // 6: reserved 
     j clint_machine_timer_interrupt_handler // 7: machine timer interrupt 
     j default_interrupt_trampoline // 8: user external interrupt 
-    j default_interrupt_trampoline // 9: supervisor external interrupt 
+    j plic_supervisor_dispatch_interrupt // 9: supervisor external interrupt 
     j default_interrupt_trampoline // 10: reserved 
-    j plic_dispatch_interrupt      // 11: machine external interrupt 
+    j plic_machine_dispatch_interrupt      // 11: machine external interrupt 
 
 .align 4
 .global default_interrupt_trampoline 
 default_interrupt_trampoline: 
-    mtrampoline_save_IFREGS default_vector_handler
+    strampoline_save_IFREGS default_vector_handler
 
 
 #if 0

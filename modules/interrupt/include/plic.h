@@ -30,14 +30,28 @@
 
 typedef void(*irq_handler_t)(void); 
 
-void plic_enable(void); 
-void plic_disable(void); 
-void plic_reset(void); 
+void plic_machine_enable(void); 
+void plic_machine_disable(void); 
+void plic_machine_reset(void); 
 
-void plic_interrupt_enable(int irq, irq_handler_t handler, int priority); 
+void plic_machine_interrupt_enable(int irq, irq_handler_t handler, int priority); 
 
-void plic_interrupt_disable(int irq); 
+void plic_machine_interrupt_disable(int irq); 
 
-void plic_dispatch_interrupt(void) __attribute__((interrupt("machine"))); 
+void plic_machine_dispatch_interrupt(void) __attribute__((interrupt("machine"))); 
+
+/// must be called from machine mode 
+void plic_enable_supervisor_access(void); 
+/// must be called from machine mode 
+void plic_disable_supervisor_access(void); 
+void plic_supervisor_enable(void); 
+void plic_supervisor_disable(void); 
+void plic_supervisor_reset(void); 
+
+void plic_supervisor_interrupt_enable(int irq, irq_handler_t handler, int priority); 
+
+void plic_supervisor_interrupt_disable(int irq); 
+
+void plic_supervisor_dispatch_interrupt(void) __attribute__((interrupt("supervisor"))); 
 
 #endif 

@@ -2,15 +2,22 @@
 #include "get-put.h"
 #include "delay.h"
 #include "mcsr-ext.h"
+#include "scsr-ext.h"
 #include "csr-read-write.h"
 #include "interrupt.h"
 #include "printf.h"
 #include "fence.h"
 void clint_enable(void) {
     csr_set_bit(MXSTATUS, MXSTATUS_CLINTEE); 
+    enable_supervisor_counter_access(); 
+    // csr_set_bit(SXSTATUS, MXSTATUS_CLINTEE); 
+    // uintptr_t mxstatus = read_csr("mxstatus"); 
+    // mxstatus |= MXSTATUS_CLINTEE; 
+    // write_csr("mxstatus", mxstatus); 
 }
 void clint_disable(void) {
     csr_clear_bit(MXSTATUS, MXSTATUS_CLINTEE); 
+    // csr_clear_bit(SXSTATUS, MXSTATUS_CLINTEE); 
 }
 /// sets the MSIP0 register, val should only be 0 or 1 
 void clint_set_machine_software_interrupt(uint32_t val) {
@@ -19,7 +26,7 @@ void clint_set_machine_software_interrupt(uint32_t val) {
 }
 /// sets the SSIP0 register, val should only be 0 or 1 
 void clint_set_supervisor_software_interrupt(uint32_t val) {
-    if (val) csr_set_bit(MIE, MIE_SSIE); else csr_clear_bit(MIE, MIE_SSIE); 
+    if (val) csr_set_bit(SIE, MIE_SSIE); else csr_clear_bit(SIE, MIE_SSIE); 
     put32(SSIP0, val & 1); 
 
 }
@@ -43,16 +50,15 @@ void clint_clear_machine_timer_interrupt(void) {
 }
 
 void clint_set_supervisor_timer_interrupt(uint64_t ticks_after) {
-    uint64_t now = get_arch_counter(); 
+    uint64_t now = get_arch_counter();  
     uint64_t target = ticks_after + now; 
-    // *(volatile uint64_t*)(STIMECMPL0) = now + ticks_after; 
     put32(STIMECMPL0, target & 0xFFFFFFFF); 
     put32(STIMECMPH0, target >> 32); 
-    csr_set_bit(MIE, MIE_STIE); 
+    csr_set_bit(SIE, MIE_STIE); 
     dev_barrier(); 
 }
 void clint_clear_supervisor_timer_interrupt(void) {
-    csr_clear_bit(MIE, MIE_STIE); 
+    csr_clear_bit(SIE, MIE_STIE); 
     // *(volatile uint64_t*)(STIMECMPL0) = UINT64_MAX; 
     put32(STIMECMPL0, UINT32_MAX); 
     put32(STIMECMPH0, UINT32_MAX);  

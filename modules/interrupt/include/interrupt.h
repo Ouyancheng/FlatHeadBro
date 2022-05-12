@@ -49,17 +49,20 @@ enum interrupt_handler_mode {
  *      if INTERRUPT_HANDLER_DIRECT, the address will be the address of the single universal interrupt handler 
  * @return the mtvec register value 
  */
-uintptr_t set_interrupt_vector(uintptr_t address, enum interrupt_handler_mode mode); 
+uintptr_t set_machine_interrupt_vector(uintptr_t address, enum interrupt_handler_mode mode); 
+uintptr_t set_supervisor_interrupt_vector(uintptr_t address, enum interrupt_handler_mode mode); 
 /**
  * enables all interrupts 
  * @return the mie register value 
  */
-uintptr_t enable_all_interrupts(void); 
+uintptr_t enable_all_machine_interrupts(void); 
+uintptr_t enable_all_supervisor_interrupts(void); 
 /** 
  * disabls all interrupts 
  * @return the mie register value  
  */
-uintptr_t disable_all_interrupts(void); 
+uintptr_t disable_all_machine_interrupts(void); 
+uintptr_t disable_all_supervisor_interrupts(void); 
 
 // __attribute__((interrupt("machine"))) only applies to function with no parameter 
 void interrupt_handler(uintptr_t cause, uintptr_t pc, uintptr_t fault_address); 
@@ -101,4 +104,9 @@ enum EXCEPTION_CAUSE {
 #define add_var_to_sexception_return_pc(val) add_var_to_csr("sepc", val)
 #define add_imm_to_uexception_return_pc(imm) add_imm_to_csr("uepc", imm)
 #define add_var_to_uexception_return_pc(val) add_var_to_csr("uepc", val)
+
+/** delegate interrupt to supervisor mode */
+void interrupt_delegate_to_supervisor_mode(uintptr_t interrupt_mask); 
+/** delegate exception to supervisor mode, notice that exception 11: ecall from M-mode could not be delegated */
+void exception_delegate_to_supervisor_mode(uintptr_t exception_mask); 
 #endif 

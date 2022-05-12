@@ -53,40 +53,41 @@ void main(void) {
     uint64_t mhcr_csr = read_csr(MHCR); 
     uint64_t mhint_csr = read_csr(MHINT); 
     printf("the current MCOR csr is:  0b%032b\nthe current MHCR csr is:  0b%032b\nthe current MHINT csr is: 0b%032b\n\n", mcor_csr, mhcr_csr, mhint_csr); 
-    uintptr_t mtvec = set_interrupt_vector((uintptr_t)&interrupt_vector, INTERRUPT_HANDLER_VECTOR); 
-    // uintptr_t mtvec = set_interrupt_vector((uintptr_t)&direct_interrupt_trampoline, INTERRUPT_HANDLER_DIRECT); 
-    uintptr_t mie = enable_all_interrupts(); 
+    uintptr_t mtvec = set_machine_interrupt_vector((uintptr_t)&interrupt_vector, INTERRUPT_HANDLER_VECTOR); 
+    // uintptr_t mtvec = set_machine_interrupt_vector((uintptr_t)&direct_interrupt_trampoline, INTERRUPT_HANDLER_DIRECT); 
+    uintptr_t mie = enable_all_machine_interrupts(); 
     // printf("mtvec = 0b%b\nmie = 0b%b\n\n", mtvec, mie); 
     dev_barrier(); 
+#define TEST_ECALL 0 
+#define TEST_TIMER 1 
 #if TEST_ECALL
     asm volatile (
         "ecall" : : : "memory"
     );
-
 #endif 
-
 #if TEST_TIMER
     clint_enable(); 
     dev_barrier();
     // clint_set_machine_software_interrupt(1);  // this raises an interrupt immediately 
     dev_barrier(); 
-    while (1) {
+    int j = 3; 
+    while (j --> 0) {
         clint_set_machine_timer_interrupt(24*1000); 
         ////////// we didn't delegate this to supervisor mode... ////////// 
         // clint_set_supervisor_timer_interrupt(24*1000); 
         delay_ms(2000); 
     }
 #endif 
-    plic_reset(); 
+    plic_machine_reset(); 
     dev_barrier(); 
-    plic_enable(); 
+    plic_machine_enable(); 
     dev_barrier(); 
     gpio_set_config(gpio_pe, 16, gpio_config_external_interrupt); 
     gpio_external_interrupt_debounce_set(gpio_pe, 16, 0b000, gpio_interrupt_debounce_LOSC_32KHz); 
     gpio_set_external_interrupt_config(gpio_pe, 16, gpio_interrupt_positive_edge); 
-    plic_interrupt_enable(91, gpio_has_interrupt, 1); 
+    plic_machine_interrupt_enable(91, gpio_has_interrupt, 1); 
     uart_interrupt_enable_set(uart0_ctl, (uint32_t)uart_enable_received_data_available_interrupt); 
-    plic_interrupt_enable(18, uart_has_interrupt, 1); 
+    plic_machine_interrupt_enable(18, uart_has_interrupt, 1); 
     int i = 10;
     while (i --> 0) {
         // print_str("a");
