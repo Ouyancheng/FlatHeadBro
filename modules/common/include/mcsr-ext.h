@@ -161,11 +161,11 @@
 #define MXSTATUS_MM    (1 << 15)
 // UCME = 0 disable the extended cache instruction, and vice versa 
 #define MXSTATUS_UCME  (1 << 16)
-// CLINT interrupt enable / the core local interrupt 
+// CLINT interrupt enable for supervisor mode / the core local interrupt 
 #define MXSTATUS_CLINTEE (1 << 17)
 // MHRD = 0 enable hardware backfilling on TLB miss 
 #define MXSTATUS_MHRD (1 << 18)
-// MAEE = 1 user can configure the extended address property of a PTE 
+// MAEE = 1 user can configure the extended address attributes of a PTE 
 #define MXSTATUS_MAEE (1 << 21)
 // THEADISAEE = 1 enable C906 extended instructions 
 #define MXSTATUS_THEADISAEE (1 << 22)
