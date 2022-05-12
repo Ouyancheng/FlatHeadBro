@@ -57,7 +57,7 @@
  * bit 59 : Sec / T trustable not used in C906, default is 1 
  * 
  * 
- * bit 37 - 10 : physical page number (38 bits)
+ * bit 37 - 10 : physical page number (28 bits), note: 28 + 12 = 40 bits physical address 
  * bit 9, 8 : RSW reserved for software 
  * bit 7 : D dirty bit / is writable reset to 0 
  * bit 6 : A accessed bit 1 = accessable 0 = not accessable reset to 0 
@@ -72,9 +72,10 @@
  * bit 0 : V valid bit reset to 0 
  * 
  * 
- * MMU address translation register (SATP) Sv39 standard 
+ * MMU address translation and protection register (SATP) Sv39 standard 
  * bit 63 - 60 : Mode translation mode 
  * bit 59 - 44 : ASID 
+ * bit 43 - 28 : - 
  * bit 27 - 0 : PPN 
  */
 
