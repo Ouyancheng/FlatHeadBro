@@ -66,7 +66,8 @@ void main(void) {
     );
 #endif 
 #if TEST_TIMER
-    clint_enable(); 
+    // clint_enable(); 
+    // clint_enable_supervisor_interrupt(); // this is not needed for machine mode 
     dev_barrier();
     // clint_set_machine_software_interrupt(1);  // this raises an interrupt immediately 
     dev_barrier(); 

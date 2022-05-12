@@ -57,13 +57,12 @@ void main(void) {
     printf("the current MCOR csr is:  0b%032b\nthe current MHCR csr is:  0b%032b\nthe current MHINT csr is: 0b%032b\n\n", mcor_csr, mhcr_csr, mhint_csr); 
     
     // must enable clint in machine mode 
-    clint_enable(); 
+    clint_enable_supervisor_interrupt(); 
     plic_enable_supervisor_access(); 
+    enable_supervisor_counter_access(); 
     // uintptr_t mtvec = set_machine_interrupt_vector((uintptr_t)&interrupt_vector, INTERRUPT_HANDLER_VECTOR); 
-    uintptr_t mtvec = set_machine_interrupt_vector((uintptr_t)&direct_interrupt_trampoline, INTERRUPT_HANDLER_DIRECT); 
-    uintptr_t stvec = set_supervisor_interrupt_vector((uintptr_t)&interrupt_vector, INTERRUPT_HANDLER_VECTOR); 
-    enable_all_machine_interrupts(); 
-    enable_all_supervisor_interrupts(); 
+    // uintptr_t mtvec = set_machine_interrupt_vector((uintptr_t)&direct_interrupt_trampoline, INTERRUPT_HANDLER_DIRECT); 
+    // enable_all_machine_interrupts(); 
     interrupt_delegate_to_supervisor_mode(0xffff); // delegate all interrupts 
     exception_delegate_to_supervisor_mode(0xffff); // delegate all exceptions 
     print_str("now enter supervisor mode~\n"); 
@@ -77,7 +76,7 @@ void main(void) {
     write_csr("mstatus", mstatus); 
     // set the M epc to the destination function we want to run in supervisor mode 
     write_csr("mepc", (uintptr_t)(insupervisormode)); 
-
+    // disable virtual memory 
     write_csr("satp", 0); 
 
     // not sure why we need this 
@@ -97,12 +96,13 @@ void main(void) {
 void insupervisormode(void) {
     // software_reset(); 
     print_str("Hello from supervisor mode~\n"); 
-    
+    uintptr_t stvec = set_supervisor_interrupt_vector((uintptr_t)&interrupt_vector, INTERRUPT_HANDLER_VECTOR); 
+    enable_all_supervisor_interrupts(); 
     // uintptr_t sie = enable_all_supervisor_interrupts(); 
     printf("stvec = 0x%x\nsie = 0b%b\n\n", read_csr(STVEC), read_csr(SIE)); 
     dev_barrier(); 
 #define TEST_ECALL 0 
-// figuring out why clint is not working... 
+// figuring out why clint is not working... now clint is working!!! make sure you enable the supervisor counter access 
 #define TEST_TIMER 1  
 #if TEST_ECALL
     asm volatile (

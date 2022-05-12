@@ -18,9 +18,9 @@
 #define STIMECMPH0 (CLINT_BASE + 0xD004) 
 
 /// must be called from machine mode, because the corresponding bit in SXSTATUS is not writable 
-void clint_enable(void); 
+void clint_enable_supervisor_interrupt(void); 
 /// must be called from machine mode, because the corresponding bit in SXSTATUS is not writable 
-void clint_disable(void); 
+void clint_disable_supervisor_interrupt(void); 
 
 /// sets the MSIP0 register, val should only be 0 or 1 
 void clint_set_machine_software_interrupt(uint32_t val); 

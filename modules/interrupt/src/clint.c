@@ -7,17 +7,11 @@
 #include "interrupt.h"
 #include "printf.h"
 #include "fence.h"
-void clint_enable(void) {
+void clint_enable_supervisor_interrupt(void) {
     csr_set_bit(MXSTATUS, MXSTATUS_CLINTEE); 
-    enable_supervisor_counter_access(); 
-    // csr_set_bit(SXSTATUS, MXSTATUS_CLINTEE); 
-    // uintptr_t mxstatus = read_csr("mxstatus"); 
-    // mxstatus |= MXSTATUS_CLINTEE; 
-    // write_csr("mxstatus", mxstatus); 
 }
-void clint_disable(void) {
+void clint_disable_supervisor_interrupt(void) {
     csr_clear_bit(MXSTATUS, MXSTATUS_CLINTEE); 
-    // csr_clear_bit(SXSTATUS, MXSTATUS_CLINTEE); 
 }
 /// sets the MSIP0 register, val should only be 0 or 1 
 void clint_set_machine_software_interrupt(uint32_t val) {
