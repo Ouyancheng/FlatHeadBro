@@ -1,6 +1,7 @@
 #ifndef DELAY_H
 #define DELAY_H
 #include <stdint.h>
+#define GET_COUNTER_INLINE 1 
 #if GET_COUNTER_INLINE
 static inline uint64_t get_arch_counter(void) {
     uint64_t cnt = 0;
