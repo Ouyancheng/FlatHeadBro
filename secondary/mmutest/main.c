@@ -145,6 +145,11 @@ void insupervisormode(void) {
         printf("waiting for %d-th interrupt...", i);
         asm volatile ("wfi":::"memory"); 
     }
+
+    extern char __rodata_start;
+    print_hex(*(&__rodata_start));
+    // according to the riscv virtual memory specification, this will raise a page fault!!! this is a store/AMO page fault 
+    *(&__rodata_start) = 0x0; 
     software_reset(); 
     return; 
 }
