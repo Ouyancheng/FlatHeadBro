@@ -23,7 +23,8 @@ https://en.cppreference.com/w/c/language/operator_other#Conditional_operator
 )
 
 
-
+#define ROUND_DOWN(number, target) (((number) / (target)) * (target)) 
+#define ROUND_UP(number, target) ((((number) + (target) - 1) / (target)) * (target)) 
 #endif 
 
 

@@ -2,6 +2,7 @@
 #define MMU_H 
 
 #include <stdint.h>
+#include <stddef.h>
 #include "pagealloc.h"
 /**
  * The MMU of C906 is compatible with RISC-V Sv39 virtual memory system 
@@ -158,21 +159,32 @@ Sv39 has 2^9 PTEs for a page table, each entry is 8 bytes. Therefore, a page tab
 #define VA_GET_VPN(va, level) ( ((va) >> (12 + (level) * 9)) & 0x1FF) 
 
 #define PA_PPN_OFFSET (12) 
-
+#define VIRTUAL_ADDRESS_END (1ULL << 39) 
+#define SATP_SV39 (UINT64_C(8) << 60)
+#define MAKE_SATP(pagetable) (SATP_SV39 | (((uint64_t)pagetable) >> PA_PPN_OFFSET))
 typedef uint64_t pagetable_entry_t; 
 // typedef struct pagetable_entry *pagetable_t; 
 typedef pagetable_entry_t *pagetable_t; 
-
 extern pagetable_t kernel_pagetable; 
-
 enum pagesize {
     pagesize_4K = 12,
     pagesize_2M = 21, 
     pagesize_1G = 30
 };
+/** 
+ * walk the page tables and try to get the pagetable entry given the virtual address 
+ * @param pagetable the root pagetable to seek 
+ * @param virtual_address the virtual address to translate 
+ * @param alloc_on_not_found whether to allocate a new pagetable if doesn't exist (NOTE: this option only supports 4K pages)
+ * @param end_level the level of the leaf pagetable (2=1G page, 1=2M page, 0=4K page) 
+ * @return the pointer to the pagetable entry 
+ * */
+pagetable_entry_t * vmem_get_pte(pagetable_t pagetable, uintptr_t virtual_address, int alloc_on_not_found, int *end_level); 
 
-pagetable_entry_t * get_pte(pagetable_t pagetable, uintptr_t virtual_address, int alloc_on_not_found, enum pagesize *psize); 
+// pagetable_entry_t * pagetable_walk(pagetable_t pagetable, uintptr_t virtual_address, int target_level, int alloc_on_not_found)
 
-#define VIRTUAL_ADDRESS_END (1ULL << 39) 
+int vmem_map_range(pagetable_t pagetable, uintptr_t virtual_address, size_t size, uintptr_t physical_address, int permission); 
 
+void vmem_kernel_init(void); 
+void vmem_kernel_set_satp(void); 
 #endif 

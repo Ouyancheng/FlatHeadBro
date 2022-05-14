@@ -2,38 +2,92 @@
 #include "kernelsdk.h"
 pagetable_t kernel_pagetable; 
 
-pagetable_entry_t * get_pte(pagetable_t pagetable, uintptr_t virtual_address, int alloc_on_not_found, enum pagesize *psize) {
+pagetable_entry_t * vmem_get_pte(pagetable_t pagetable, uintptr_t virtual_address, int alloc_on_not_found, int *end_level) {
     if (virtual_address >= VIRTUAL_ADDRESS_END) {
         panic("virtual address %p is out of Sv39 virtual address range!\n", virtual_address);
     }
     for (int level = 2; level > 0; --level) {
         pagetable_entry_t *pte = &(pagetable[VA_GET_VPN(virtual_address, level)]); 
-        if (!(*pte & PTE_V)) {
-            // invalid PTE 
+        if (!(*pte & PTE_V)) { // invalid PTE 
             if (alloc_on_not_found) {
-                pagetable_t *new_pt = (pagetable_t*)pagealloc(); 
-                if (!new_pt) {
+                pagetable_t new_pt = (pagetable_t)pagealloc(); 
+                if (!new_pt) { 
+                    (*end_level) = level;
                     return NULL; 
                 }
                 memset(new_pt, 0, PAGESIZE); 
                 (*pte) = ((((uintptr_t)new_pt >> PA_PPN_OFFSET) << PTE_PPN_OFFSET) | PTE_V);
             } else {
+                (*end_level) = level;
                 return NULL; 
             }
         } else if ((*pte) & (PTE_R | PTE_W | PTE_X)) {
             // mega pages: 2M / 1G 
-            if (level == 2) {
-                *psize = pagesize_1G; 
-            } else {
-                assert(level == 1); 
-                *psize = pagesize_2M;
-            }
+            (*end_level) = level; 
             return pte; 
         }
         pagetable = (pagetable_t)(((*pte) >> PTE_PPN_OFFSET) << PA_PPN_OFFSET); 
     }
-    (*psize) = pagesize_4K; 
+    (*end_level) = 0; 
     return &(pagetable[VA_GET_VPN(virtual_address, 0)]); 
 }
 
-
+int vmem_map_range(pagetable_t pagetable, uintptr_t virtual_address, size_t size, uintptr_t physical_address, int permission) {
+    int end_level;
+    for (uintptr_t vaddr = ROUND_DOWN(virtual_address, PAGESIZE); 
+        vaddr <= ROUND_DOWN(virtual_address + size - 1, PAGESIZE); 
+        vaddr += PAGESIZE, physical_address += PAGESIZE
+    ) {
+        pagetable_entry_t *pte = vmem_get_pte(pagetable, vaddr, 1, &end_level);
+        if (!pte) {
+            return -1; // run out of kernel memory 
+        }
+        if (!((*pte) & PTE_V)) {  // brand-new pte 
+            (*pte) = ((physical_address >> PA_PPN_OFFSET) << PTE_PPN_OFFSET) | PTE_V | PTE_A | PTE_D | permission; 
+        } else { // otherwise it's a remapping 
+            panic("remapping virtual address %p to physical address %p, original physical address is %p\n", 
+                vaddr, physical_address, (((*pte) >> PTE_PPN_OFFSET) << PA_PPN_OFFSET));
+        }
+        
+    }
+    return 0; 
+}
+extern char __text_start;
+extern char __text_end;
+extern char __rodata_start; 
+extern char __rodata_end;  
+extern char __data_start; 
+extern char __data_end; 
+extern char __kernel_memory_end; 
+void vmem_kernel_init(void) {
+    kernel_pagetable = (pagetable_t)pagealloc();
+    memset(kernel_pagetable, 0, PAGESIZE); 
+    // manually map the first 1GB I/O address 0x00000000 - 0x40000000 
+    kernel_pagetable[0] = PTE_V | PTE_A | PTE_D | PTE_R | PTE_W | PTE_X | PTE_G; 
+    // map kernel's text section 
+    vmem_map_range(kernel_pagetable, 
+        (uintptr_t)&__text_start, 
+        &__text_end - &__text_start, 
+        (uintptr_t)&__text_start, 
+        PTE_R | PTE_X
+    ); 
+    // map kernel's data section 
+    vmem_map_range(kernel_pagetable, 
+        (uintptr_t)&__rodata_start, 
+        &__rodata_end - &__rodata_start, 
+        (uintptr_t)&__rodata_start, 
+        PTE_R
+    ); 
+    vmem_map_range(kernel_pagetable, 
+        (uintptr_t)&__data_start, 
+        &__kernel_memory_end - &__data_start, 
+        (uintptr_t)&__data_start, 
+        PTE_R | PTE_W | PTE_X
+    ); // just set everything after the data segment to RWX 
+    // map kernel's stack section 
+    // included 
+}
+void vmem_kernel_set_satp(void) {
+    write_csr(SATP, MAKE_SATP(kernel_pagetable)); 
+    asm volatile("sfence.vma zero, zero":::"memory");
+}
