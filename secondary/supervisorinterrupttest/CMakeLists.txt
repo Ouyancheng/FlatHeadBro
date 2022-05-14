@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../../modules/module.cmake)
-fhb_include_module(common)
 fhb_include_module(gpio)
-fhb_include_module(uart)
-fhb_include_module(printf)
+fhb_include_module(kernelsdk)
 fhb_include_module(interrupt)
+fhb_include_module(virtualmemory)
 project(supervisorinterrupttest)
 
 enable_language( C CXX ASM )
@@ -32,10 +31,8 @@ target_include_directories(${TARGET}.elf PUBLIC
 )
 
 target_link_libraries(${TARGET}.elf PUBLIC 
-    common
     gpio
-    uart
-    printf
+    kernelsdk
     interrupt
 )
 

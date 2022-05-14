@@ -1,10 +1,8 @@
 #ifndef MMU_H 
 #define MMU_H 
 
-#include "csr-read-write.h"
-#include "scsr-ext.h"
-#include "cache.h"
-#include "fence.h"
+#include <stdint.h>
+#include "pagealloc.h"
 /**
  * The MMU of C906 is compatible with RISC-V Sv39 virtual memory system 
  * functionalities: 
@@ -127,4 +125,54 @@ PTE:
 
 Sv39 has 2^9 PTEs for a page table, each entry is 8 bytes. Therefore, a page table size is exactly a page size 
 */
+/// little-endian only 
+// struct pagetable_entry {
+//     unsigned V   : 1;  // valid 
+//     unsigned R   : 1;  // readable 
+//     unsigned W   : 1;  // writable 
+//     unsigned X   : 1;  // executable 
+//     unsigned U   : 1;  // user-accessable 
+//     unsigned G   : 1;  // global 
+//     unsigned A   : 1;  // accessable
+//     unsigned D   : 1;  // dirty 
+//     unsigned RSW : 2;  // reserved for software 
+//     unsigned PPN0: 9;  // 
+//     unsigned PPN1: 9;  // 
+//     unsigned PPN2: 9;  // 
+//     unsigned reserved:27;
+// } __attribute__ ((packed));
+// _Static_assert(sizeof(struct pagetable_entry) == 8); 
+
+#define PTE_V (1 << 0)
+#define PTE_R (1 << 1) 
+#define PTE_W (1 << 2)
+#define PTE_X (1 << 3) 
+#define PTE_U (1 << 4)
+#define PTE_G (1 << 5) 
+#define PTE_A (1 << 6) 
+#define PTE_D (1 << 7) 
+#define PTE_RSW_OFFSET (8) 
+#define PTE_RSW_MASK (0b11 << PTE_RSW_OFFSET) 
+#define PTE_PPN_OFFSET (10) 
+#define PTE_PPN_MASK (0x7FFFFFF << PTE_PPN_OFFSET) 
+#define VA_GET_VPN(va, level) ( ((va) >> (12 + (level) * 9)) & 0x1FF) 
+
+#define PA_PPN_OFFSET (12) 
+
+typedef uint64_t pagetable_entry_t; 
+// typedef struct pagetable_entry *pagetable_t; 
+typedef pagetable_entry_t *pagetable_t; 
+
+extern pagetable_t kernel_pagetable; 
+
+enum pagesize {
+    pagesize_4K = 12,
+    pagesize_2M = 21, 
+    pagesize_1G = 30
+};
+
+pagetable_entry_t * get_pte(pagetable_t pagetable, uintptr_t virtual_address, int alloc_on_not_found, enum pagesize *psize); 
+
+#define VIRTUAL_ADDRESS_END (1ULL << 39) 
+
 #endif 
