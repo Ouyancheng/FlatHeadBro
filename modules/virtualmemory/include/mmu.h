@@ -155,9 +155,9 @@ Sv39 has 2^9 PTEs for a page table, each entry is 8 bytes. Therefore, a page tab
 #define PTE_RSW_OFFSET (8) 
 #define PTE_RSW_MASK (0b11 << PTE_RSW_OFFSET) 
 #define PTE_PPN_OFFSET (10) 
-#define PTE_PPN_MASK (UINT64_C(0x7FFFFFF) << PTE_PPN_OFFSET) 
+#define PTE_PPN_MASK (UINT64_C(0xFFFFFFF) << PTE_PPN_OFFSET) 
 #define VA_GET_VPN(va, level) ( ((va) >> (12 + (level) * 9)) & 0x1FF) 
-
+// NOTE: the PA in PPN has 28 bits, where PPN[2] is a 10-bit field !!! 
 #define PA_PPN_OFFSET (12) 
 #define VIRTUAL_ADDRESS_END (1ULL << 39) 
 #define SATP_SV39 (UINT64_C(8) << 60)
