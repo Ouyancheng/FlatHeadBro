@@ -32,7 +32,7 @@ pagetable_entry_t * vmem_get_pte(pagetable_t pagetable, uintptr_t virtual_addres
     return &(pagetable[VA_GET_VPN(virtual_address, 0)]); 
 }
 
-int vmem_map_range(pagetable_t pagetable, uintptr_t virtual_address, size_t size, uintptr_t physical_address, int permission) {
+int vmem_map_range(pagetable_t pagetable, uintptr_t virtual_address, size_t size, uintptr_t physical_address, uint64_t permission) {
     int end_level;
     for (uintptr_t vaddr = ROUND_DOWN(virtual_address, PAGESIZE); 
         vaddr <= ROUND_DOWN(virtual_address + size - 1, PAGESIZE); 
@@ -60,10 +60,13 @@ extern char __data_start;
 extern char __data_end; 
 extern char __kernel_memory_end; 
 void vmem_kernel_init(void) {
+    pagealloc_init();
     kernel_pagetable = (pagetable_t)pagealloc();
     memset(kernel_pagetable, 0, PAGESIZE); 
     // manually map the first 1GB I/O address 0x00000000 - 0x40000000 
-    kernel_pagetable[0] = PTE_V | PTE_A | PTE_D | PTE_R | PTE_W | PTE_X | PTE_G; 
+    // kernel_pagetable[0] = PTE_V | PTE_A | PTE_D | PTE_R | PTE_W | PTE_X | PTE_G | (UINT64_C(1) << 63); 
+    vmem_map_range(kernel_pagetable, 0x0, 0x40000000, 0x0, PTE_R | PTE_W | PTE_X | PTE_G | (UINT64_C(1) << 63)); 
+    // printf("mapping kernel.text... __text_start=%p, __text_end=%p\n", &__text_start, &__text_end);
     // map kernel's text section 
     vmem_map_range(kernel_pagetable, 
         (uintptr_t)&__text_start, 
@@ -71,6 +74,7 @@ void vmem_kernel_init(void) {
         (uintptr_t)&__text_start, 
         PTE_R | PTE_X
     ); 
+    // printf("mapping kernel.rodata... __rodata_start=%p, __rodata_end=%p\n", &__rodata_start, &__rodata_end);
     // map kernel's data section 
     vmem_map_range(kernel_pagetable, 
         (uintptr_t)&__rodata_start, 
@@ -78,6 +82,11 @@ void vmem_kernel_init(void) {
         (uintptr_t)&__rodata_start, 
         PTE_R
     ); 
+    // printf("mapping kernel.data... kernel_mem_end - data_start = %x data_start=%p kernel_mem_end=%p\n", 
+    //     &__kernel_memory_end - &__data_start,
+    //     &__data_start,
+    //     &__kernel_memory_end
+    // );
     vmem_map_range(kernel_pagetable, 
         (uintptr_t)&__data_start, 
         &__kernel_memory_end - &__data_start, 
@@ -86,6 +95,7 @@ void vmem_kernel_init(void) {
     ); // just set everything after the data segment to RWX 
     // map kernel's stack section 
     // included 
+    // printf("done mapping!!!\n");
 }
 void vmem_kernel_set_satp(void) {
     write_csr(SATP, MAKE_SATP(kernel_pagetable)); 

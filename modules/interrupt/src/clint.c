@@ -67,6 +67,8 @@ void clint_machine_timer_interrupt_handler(void) {
 void clint_supervisor_timer_interrupt_handler(void) {
     printf("supervisor timer interrupt occurred!\n"); 
     clint_clear_supervisor_timer_interrupt(); 
+    // schedule the next interrupt for testing 
+    clint_set_supervisor_timer_interrupt(24*1000000); 
 }
 
 

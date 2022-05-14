@@ -104,7 +104,22 @@ static inline void cache_prefetch_status_set(
     mhint_csr |= (((uint64_t)(dcache_prefetch_lines)) << 13); 
     write_csr(MHINT, mhint_csr); 
 }
-
+static inline void dcache_clear_invalidate_all(void) {
+    asm volatile (
+        ".word 0b00000000001100000000000000001011"
+        :
+        :
+        : "memory"
+    );
+}
+static inline void icache_invalidate_all_broadcast(void) {
+    asm volatile (
+        ".word 0b00000001000100000000000000001011"
+        :
+        :
+        : "memory"
+    );
+}
 #endif 
 
 

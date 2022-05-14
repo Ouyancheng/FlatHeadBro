@@ -1,5 +1,6 @@
 #include "kernelsdk.h"
 
+uint8_t __attribute__((aligned(4096))) kernel_stack[4096]; 
 int panic_at(const char *file, int line, const char *function, const char *format, ...) {
     va_list args;
     va_start(args, format);

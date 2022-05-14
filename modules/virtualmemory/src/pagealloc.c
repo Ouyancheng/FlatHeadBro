@@ -49,6 +49,8 @@ void *pagealloc(void) {
         // unlock 
         return (void*)freenode; 
     }
+    // printf("kmem.page_freelist=%p\n", kmem.page_freelist);
+    // printf("freenode->next=%p\n", freenode->next);
     kmem.page_freelist = freenode->next; 
     // unlock 
     freenode->next = NULL; 

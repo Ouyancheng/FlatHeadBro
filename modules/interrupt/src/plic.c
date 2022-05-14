@@ -3,6 +3,7 @@
 #include "mcsr-ext.h"
 #include "scsr-ext.h"
 #include "interrupt.h"
+#include "printf.h"
 void (*irq_dispatch_table[PLIC_MAX_INTERRUPTS])(void); 
 void plic_machine_enable(void) {
     csr_set_bit(MIE, MIE_MEIE); 
@@ -114,14 +115,24 @@ void plic_supervisor_interrupt_disable(int irq) {
 }
 
 void plic_supervisor_dispatch_interrupt(void) {
+    // printf("PLIC dispatching interrupt!\n");
     while (1) {
+        // printf("one interrupt start\n");
         uint32_t irq = get32(PLIC_SCLAIM); 
-        if (!irq) return; 
+        // printf("one interrupt claimed\n");
+        if (!irq) {
+            // printf("no interrupt? irq=%d\n", irq);
+            return; 
+        }
+        // printf("about to dispatch\n");
         // handle the interrupt 
         void(*handler)(void) = irq_dispatch_table[irq]; 
         if (handler) { handler(); }
+        // printf("one interrupt dispatched\n");
         put32(PLIC_SCLAIM, irq); 
+        // printf("one interrupt done\n");
     }
+    // printf("PLIC done dispatching interrupt!\n");
 }
 
 

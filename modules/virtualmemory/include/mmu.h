@@ -144,18 +144,18 @@ Sv39 has 2^9 PTEs for a page table, each entry is 8 bytes. Therefore, a page tab
 // } __attribute__ ((packed));
 // _Static_assert(sizeof(struct pagetable_entry) == 8); 
 
-#define PTE_V (1 << 0)
-#define PTE_R (1 << 1) 
-#define PTE_W (1 << 2)
-#define PTE_X (1 << 3) 
-#define PTE_U (1 << 4)
-#define PTE_G (1 << 5) 
-#define PTE_A (1 << 6) 
-#define PTE_D (1 << 7) 
+#define PTE_V (UINT64_C(1) << 0)
+#define PTE_R (UINT64_C(1) << 1) 
+#define PTE_W (UINT64_C(1) << 2)
+#define PTE_X (UINT64_C(1) << 3) 
+#define PTE_U (UINT64_C(1) << 4)
+#define PTE_G (UINT64_C(1) << 5) 
+#define PTE_A (UINT64_C(1) << 6) 
+#define PTE_D (UINT64_C(1) << 7) 
 #define PTE_RSW_OFFSET (8) 
 #define PTE_RSW_MASK (0b11 << PTE_RSW_OFFSET) 
 #define PTE_PPN_OFFSET (10) 
-#define PTE_PPN_MASK (0x7FFFFFF << PTE_PPN_OFFSET) 
+#define PTE_PPN_MASK (UINT64_C(0x7FFFFFF) << PTE_PPN_OFFSET) 
 #define VA_GET_VPN(va, level) ( ((va) >> (12 + (level) * 9)) & 0x1FF) 
 
 #define PA_PPN_OFFSET (12) 
@@ -183,7 +183,7 @@ pagetable_entry_t * vmem_get_pte(pagetable_t pagetable, uintptr_t virtual_addres
 
 // pagetable_entry_t * pagetable_walk(pagetable_t pagetable, uintptr_t virtual_address, int target_level, int alloc_on_not_found)
 
-int vmem_map_range(pagetable_t pagetable, uintptr_t virtual_address, size_t size, uintptr_t physical_address, int permission); 
+int vmem_map_range(pagetable_t pagetable, uintptr_t virtual_address, size_t size, uintptr_t physical_address, uint64_t permission); 
 
 void vmem_kernel_init(void); 
 void vmem_kernel_set_satp(void); 

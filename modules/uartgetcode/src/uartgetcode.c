@@ -55,6 +55,12 @@ static void wait_for_data(uint64_t usec_timeout) {
 }
 
 uintptr_t uart_get_code(void) {
+    // for (int i = 0; i < 6; ++i) {
+    //     boot_put32(GET_PROG_INFO); 
+    // }
+    // while (uart_has_data(uart0_ctl)) {
+    //     uart_getc(uart0_ctl);
+    // }
     while (1) {
         // 0. keep sending GET_PROG_INFO every 300ms until there's data
         wait_for_data(300 * 1000);

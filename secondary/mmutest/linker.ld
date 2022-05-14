@@ -11,13 +11,16 @@ SECTIONS
         PROVIDE(__text_start = .);
         *(.text.start)  /* the starter code */
         *(.text*)       /* the rest of the text section */
-        . = ALIGN(4096)
+        . = ALIGN(4096);
+        /* NOTE: the trampoline is mapped to .text* above, the following block is empty */
         /* now the interrupt / exception trampoline */
+        /*
         PROVIDE(__trampoline_start = .); 
         *(.text.trampoline)
         . = ALIGN(4096);
         PROVIDE(__trampoline_end = .);
-        ASSERT(__trampoline_end - __trampoline_start == 4096, "trampoline is larger than a page"); 
+        ASSERT(__trampoline_end - __trampoline_start <= 4096, "trampoline is larger than a page"); 
+        */
 
         PROVIDE(__text_end = .); 
     }
@@ -29,6 +32,7 @@ SECTIONS
         *(.rodata .rodata.*)
         . = ALIGN(16); 
         *(.got*) /* Global Offset Table */
+        . = ALIGN(4096);  /* align the rodata so that it could align in pages */
         PROVIDE(__rodata_end = .); 
     }
 
