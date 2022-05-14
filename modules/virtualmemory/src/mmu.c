@@ -64,7 +64,10 @@ void vmem_kernel_init(void) {
     kernel_pagetable = (pagetable_t)pagealloc();
     memset(kernel_pagetable, 0, PAGESIZE); 
     // manually map the first 1GB I/O address 0x00000000 - 0x40000000 
+    /// NOTE: if I use the 1GB superpage then the PLIC's SCLAIM register is always reading 0... why is that??? 
     // kernel_pagetable[0] = PTE_V | PTE_A | PTE_D | PTE_R | PTE_W | PTE_X | PTE_G | (UINT64_C(1) << 63); 
+    // this alone costs 1*1024*1024*1024 / 4096 / 512 * 4096 = 2097152 bytes / 2MB for the last level page table 
+    // (512 last level page tables, 1 second level page table, and one entry for the first level page table) 
     vmem_map_range(kernel_pagetable, 0x0, 0x40000000, 0x0, PTE_R | PTE_W | PTE_X | PTE_G | (UINT64_C(1) << 63)); 
     // printf("mapping kernel.text... __text_start=%p, __text_end=%p\n", &__text_start, &__text_end);
     // map kernel's text section 
