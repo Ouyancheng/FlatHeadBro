@@ -47,6 +47,7 @@ void insupervisormode(void);
 void main(void) {
     uart0_ctl = uart_init(0, 1); 
     print_str("hello!!!\n");
+    printf("sp=%p, kstack=%p\n", ({uintptr_t rsp; asm volatile ("mv %0, sp":"=r"(rsp)::); rsp;}), &(kernel_stack[0])); 
     uint64_t mcor_csr = read_csr(MCOR); 
     uint64_t mhcr_csr = read_csr(MHCR); 
     uint64_t mhint_csr = read_csr(MHINT); 
@@ -148,7 +149,7 @@ void insupervisormode(void) {
 
     extern char __rodata_start;
     print_hex(*(&__rodata_start));
-    // according to the riscv virtual memory specification, this will raise a page fault!!! this is a store/AMO page fault 
+    // according to the riscv virtual memory specification, this will raise a page fault!!! this is a store/AMO page fault (15/0xf)
     *(&__rodata_start) = 0x0; 
     software_reset(); 
     return; 

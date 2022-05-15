@@ -100,6 +100,8 @@ reset:
     bne t0, zero, _multicore_sleep 
     jal clear_bss 
     la sp, kernel_stack // this is defined in kernelsdk 
+    li t0, (KERNEL_STACK_SIZE_PER_CORE-RISCV_STACK_ALIGN_BYTES)
+    add sp, sp, t0 
     jal main
     /* we need to call this if we don't return, */
     /* and we couldn't return because we've cleared the ra/x1 register */

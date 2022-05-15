@@ -1,6 +1,6 @@
 #ifndef KERNEL_SDK 
 #define KERNEL_SDK 
-
+#include "asm-defs.h"
 #include "cache.h"
 #include "csr-ext.h"
 #include "csr-read-write.h"
@@ -30,4 +30,5 @@ int panic_at(const char *file, int line, const char *function, const char *forma
 // #define assert(condition) ((condition) ? ((void)0) : ((void)panic("assertion " #condition " failed")))
 #define assert(condition) ((condition) ? ((void)0) : ((void)panic("assertion failed")))
 #endif // ! NDEBUG 
+extern uint8_t __attribute__((aligned(4096))) kernel_stack[KERNEL_STACK_SIZE_PER_CORE * CORE_COUNT];  // we only have single core 
 #endif 

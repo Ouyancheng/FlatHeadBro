@@ -36,7 +36,9 @@
     #define FSTR         fsd 
     #define FLEN_BYTES   8 
 #endif 
-
+#define CORE_COUNT 1 
+#define KERNEL_STACK_SIZE_PER_CORE 2097152 
+#define RISCV_STACK_ALIGN_BYTES 16 
 #endif 
 
 
