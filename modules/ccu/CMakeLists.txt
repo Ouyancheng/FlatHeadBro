@@ -10,10 +10,7 @@ set(TARGET ccu)
 set(ccu_INCLUDE_DIRS 
     "${CMAKE_CURRENT_LIST_DIR}/include"
 )
-set(TARGET_INCLUDE_DIRS
-    ${TARGET_INCLUDE_DIRS}
-    ${ccu_INCLUDE_DIRS}
-)
+
 add_library(${TARGET} 
     "${CMAKE_CURRENT_LIST_DIR}/src/clock-init.c"
 ) 
@@ -24,7 +21,7 @@ add_library(${TARGET}
 
 
 target_include_directories(${TARGET} PUBLIC 
-    ${TARGET_INCLUDE_DIRS}
+    ${ccu_INCLUDE_DIRS}
 )
 
 target_link_libraries(${TARGET} PUBLIC

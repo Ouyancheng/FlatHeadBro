@@ -15,20 +15,10 @@ set(LINKER_SCRIPT ${CMAKE_CURRENT_LIST_DIR}/linker.ld)
 
 include(${PROJECT_ROOT}/cmake/linker.cmake)
 
-message(STATUS "linker project root = ${PROJECT_ROOT}")
-
-set(TARGET_INCLUDE_DIRS
-    ${TARGET_INCLUDE_DIRS}
-)
-
 add_executable(${TARGET}.elf 
     "${CMAKE_CURRENT_LIST_DIR}/main.c"
     "${CMAKE_CURRENT_LIST_DIR}/start.S"
 ) 
-
-target_include_directories(${TARGET}.elf PUBLIC 
-    ${TARGET_INCLUDE_DIRS}
-)
 
 target_link_libraries(${TARGET}.elf PUBLIC 
     gpio

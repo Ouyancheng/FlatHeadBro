@@ -34,10 +34,7 @@ message(STATUS "linker project root = ${PROJECT_ROOT}")
 set(boot0main_INCLUDE_DIRS
     "${CMAKE_CURRENT_LIST_DIR}/include"
 )
-set(TARGET_INCLUDE_DIRS
-    ${TARGET_INCLUDE_DIRS}
-    ${boot0main_INCLUDE_DIRS}
-)
+
 # file(GLOB BOOT0_C_FILES src/*.c)
 # file(GLOB BOOT0_S_FILES src/*.S)
 
@@ -48,7 +45,7 @@ add_executable(${TARGET}.elf
 ) 
 
 target_include_directories(${TARGET}.elf PUBLIC 
-    ${TARGET_INCLUDE_DIRS}
+    ${boot0main_INCLUDE_DIRS}
 )
 
 

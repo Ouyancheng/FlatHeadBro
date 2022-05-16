@@ -11,10 +11,8 @@ set(TARGET kernelsdk)
 set(kernelsdk_INCLUDE_DIRS 
     "${CMAKE_CURRENT_LIST_DIR}/include"
 )
-set(TARGET_INCLUDE_DIRS
-    ${TARGET_INCLUDE_DIRS}
-    ${kernelsdk_INCLUDE_DIRS}
-)
+
+
 add_library(${TARGET} 
     "${CMAKE_CURRENT_LIST_DIR}/src/kernelsdk.c"
     "${CMAKE_CURRENT_LIST_DIR}/src/c_string.c"
@@ -25,7 +23,7 @@ add_library(${TARGET}
 # set_target_properties(${TARGET}  PROPERTIES SUFFIX ".a")
 
 target_include_directories(${TARGET} PUBLIC 
-    ${TARGET_INCLUDE_DIRS}
+    ${kernelsdk_INCLUDE_DIRS}
 )
 target_link_libraries(${TARGET} PUBLIC
     common 

@@ -11,10 +11,8 @@ set(TARGET common)
 set(common_INCLUDE_DIRS 
     "${CMAKE_CURRENT_LIST_DIR}/include"
 )
-set(TARGET_INCLUDE_DIRS
-    ${TARGET_INCLUDE_DIRS}
-    ${common_INCLUDE_DIRS}
-)
+
+
 add_library(${TARGET} 
     "${CMAKE_CURRENT_LIST_DIR}/src/delay.c"
     "${CMAKE_CURRENT_LIST_DIR}/src/reset.c"
@@ -27,7 +25,7 @@ add_library(${TARGET}
 
 
 target_include_directories(${TARGET} PUBLIC 
-    ${TARGET_INCLUDE_DIRS}
+    ${common_INCLUDE_DIRS}
 )
 
 

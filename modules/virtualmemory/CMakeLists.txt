@@ -10,10 +10,9 @@ set(TARGET virtualmemory)
 set(virtualmemory_INCLUDE_DIRS 
     "${CMAKE_CURRENT_LIST_DIR}/include"
 )
-set(TARGET_INCLUDE_DIRS
-    ${TARGET_INCLUDE_DIRS}
-    ${virtualmemory_INCLUDE_DIRS}
-)
+
+
+
 add_library(${TARGET} 
     "${CMAKE_CURRENT_LIST_DIR}/src/mmu.c"
     "${CMAKE_CURRENT_LIST_DIR}/src/pagealloc.c"
@@ -23,7 +22,7 @@ add_library(${TARGET}
 # set_target_properties(${TARGET}  PROPERTIES OUTPUT_NAME ${TARGET})
 # set_target_properties(${TARGET}  PROPERTIES SUFFIX ".a")
 target_include_directories(${TARGET} PUBLIC 
-    ${TARGET_INCLUDE_DIRS}
+    ${virtualmemory_INCLUDE_DIRS}
 )
 target_link_libraries(${TARGET} PUBLIC
     kernelsdk

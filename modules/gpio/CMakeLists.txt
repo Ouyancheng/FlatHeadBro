@@ -10,10 +10,9 @@ set(TARGET gpio)
 set(gpio_INCLUDE_DIRS 
     "${CMAKE_CURRENT_LIST_DIR}/include"
 )
-set(TARGET_INCLUDE_DIRS
-    ${TARGET_INCLUDE_DIRS}
-    ${gpio_INCLUDE_DIRS}
-)
+
+
+
 add_library(${TARGET} 
     "${CMAKE_CURRENT_LIST_DIR}/src/gpio.c"
 ) 
@@ -24,7 +23,7 @@ add_library(${TARGET}
 
 
 target_include_directories(${TARGET} PUBLIC 
-    ${TARGET_INCLUDE_DIRS}
+    ${gpio_INCLUDE_DIRS}
 )
 
 
