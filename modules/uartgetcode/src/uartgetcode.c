@@ -54,7 +54,7 @@ static void wait_for_data(uint64_t usec_timeout) {
     }
 }
 
-uintptr_t uart_get_code(void) {
+uintptr_t uart_get_code(uintptr_t target_address) {
     // for (int i = 0; i < 6; ++i) {
     //     boot_put32(GET_PROG_INFO); 
     // }
@@ -83,7 +83,7 @@ uintptr_t uart_get_code(void) {
         //     continue; 
         // }
 
-        uintptr_t code_address = 0x40000000UL; 
+        uintptr_t code_address = target_address; 
 
         // 3. If the binary will collide with us, abort. 
         //    you can assume that code must be below where the booloader code

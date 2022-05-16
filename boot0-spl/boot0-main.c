@@ -80,7 +80,7 @@ void main(void) {
 #endif 
 
     // get code via UART 
-    uintptr_t secondary_program_start_address = uart_get_code(); 
+    uintptr_t secondary_program_start_address = uart_get_code(DRAM_START); 
     if (!secondary_program_start_address || secondary_program_start_address != DRAM_START) {
         const char msg[] = "Boot Error! Rebooting..."; 
         for (unsigned i = 0; i < sizeof(msg); ++i) {
