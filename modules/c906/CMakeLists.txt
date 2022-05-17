@@ -1,22 +1,22 @@
 cmake_minimum_required(VERSION 3.10)
+
 include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
 include_guard(GLOBAL)
-fhb_include_module(c906)
+fhb_include_module(riscv64) 
+project(c906)
 
-project(timer)
 enable_language( C CXX ASM )
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(TARGET timer)
-set(timer_INCLUDE_DIRS 
+set(TARGET c906)
+set(c906_INCLUDE_DIRS 
     "${CMAKE_CURRENT_LIST_DIR}/include"
 )
 
 
-
 add_library(${TARGET} 
-    "${CMAKE_CURRENT_LIST_DIR}/src/timer.c"
-    "${CMAKE_CURRENT_LIST_DIR}/src/reset.c"
-) 
+    "${CMAKE_CURRENT_LIST_DIR}/src/delay.c"
+    "${CMAKE_CURRENT_LIST_DIR}/src/delay-asm.S"
+)
 
 # set_target_properties(${TARGET}  PROPERTIES PREFIX "")
 # set_target_properties(${TARGET}  PROPERTIES OUTPUT_NAME ${TARGET})
@@ -24,11 +24,10 @@ add_library(${TARGET}
 
 
 target_include_directories(${TARGET} PUBLIC 
-    ${timer_INCLUDE_DIRS}
+    ${c906_INCLUDE_DIRS}
 )
-
-target_link_libraries(${TARGET} PUBLIC
-    c906 
+target_link_libraries(${TARGET} PUBLIC 
+    riscv64 
 )
 
 

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
 include_guard(GLOBAL)
 fhb_include_module(common)
+fhb_include_module(riscv64) 
+fhb_include_module(timer)
 fhb_include_module(simplecrc)
 fhb_include_module(printf)
 project(kernelsdk)
@@ -27,6 +29,8 @@ target_include_directories(${TARGET} PUBLIC
 )
 target_link_libraries(${TARGET} PUBLIC
     common 
+    riscv64 
+    timer 
     simplecrc
     printf
 )

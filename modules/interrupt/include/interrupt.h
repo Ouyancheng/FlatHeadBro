@@ -2,26 +2,13 @@
 #define INTERRUPT_H 
 #include <stdint.h>
 #include "utilities.h"
+#include "mcsr-standard.h"
+#include "scsr-standard.h" 
 #include "csr-read-write.h"
 #include "plic.h" 
 #include "clint.h" 
 extern unsigned direct_interrupt_trampoline; 
 extern unsigned interrupt_vector;
-// supervisor mode software interrupt enable 
-#define MIE_SSIE (1 << 1) 
-// machine mode software interrupt enable 
-#define MIE_MSIE (1 << 3)
-// supervisor mode timer interrupt enable 
-#define MIE_STIE (1 << 5)
-// machine mode timer interrupt enable 
-#define MIE_MTIE (1 << 7) 
-// supervisor mode external interrupt enable 
-#define MIE_SEIE (1 << 9)
-// machine mode external interrupt enable 
-#define MIE_MEIE (1 << 11) 
-// machine mode performance counter overflow interrupt enable 
-#define MIE_MOIE (1 << 17)
-
 /**
  * When MODE=Direct, all traps into machine mode cause the pc to be set to the address in the BASE field. 
  * When MODE=Vectored, all synchronous exceptions into machine mode cause the pc to be set to the address in the BASE field, 

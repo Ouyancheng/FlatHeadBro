@@ -1,7 +1,4 @@
 #include "interrupt.h"
-#include "mcsr-ext.h"
-#include "scsr-ext.h"
-#include "csr-read-write.h"
 #include "printf.h"
 #include "reset.h"
 

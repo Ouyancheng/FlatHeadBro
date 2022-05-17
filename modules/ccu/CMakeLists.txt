@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
 include_guard(GLOBAL)
 fhb_include_module(common)
-
+fhb_include_module(c906)
 project(ccu)
 enable_language( C CXX ASM )
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -26,6 +26,7 @@ target_include_directories(${TARGET} PUBLIC
 
 target_link_libraries(${TARGET} PUBLIC
     common 
+    c906 
 )
 
 

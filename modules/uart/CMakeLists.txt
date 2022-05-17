@@ -3,7 +3,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
 include_guard(GLOBAL)
 fhb_include_module(common)
 fhb_include_module(gpio)
-
+fhb_include_module(c906)
 project(uart)
 enable_language( C CXX ASM )
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -26,6 +26,7 @@ target_include_directories(${TARGET} PUBLIC
 target_link_libraries(${TARGET} PUBLIC
     common  
     gpio 
+    c906 
 )
 
 

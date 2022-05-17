@@ -1,6 +1,9 @@
 #ifndef KERNEL_SDK 
 #define KERNEL_SDK 
 #include "asm-defs.h"
+#include "csr-standard.h" 
+#include "mcsr-standard.h" 
+#include "scsr-standard.h" 
 #include "cache.h"
 #include "csr-ext.h"
 #include "csr-read-write.h"

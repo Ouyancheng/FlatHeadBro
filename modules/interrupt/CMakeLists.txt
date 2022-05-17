@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 include(${CMAKE_CURRENT_LIST_DIR}/../module.cmake)
 include_guard(GLOBAL)
 fhb_include_module(common)
+fhb_include_module(c906)
+fhb_include_module(riscv64)
 fhb_include_module(printf)
+fhb_include_module(timer)
 project(interrupt)
 enable_language( C CXX ASM )
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -28,7 +31,10 @@ target_include_directories(${TARGET} PUBLIC
 )
 target_link_libraries(${TARGET} PUBLIC
     common
+    c906 
+    riscv64 
     printf
+    timer 
 )
 
 

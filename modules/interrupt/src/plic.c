@@ -1,9 +1,11 @@
 #include "plic.h"
 #include "get-put.h"
+#include "mcsr-standard.h"
 #include "mcsr-ext.h"
 #include "scsr-ext.h"
-#include "interrupt.h"
-#include "printf.h"
+#include "scsr-standard.h" 
+#include "csr-read-write.h"
+// #include "printf.h"
 void (*irq_dispatch_table[PLIC_MAX_INTERRUPTS])(void); 
 void plic_machine_enable(void) {
     csr_set_bit(MIE, MIE_MEIE); 

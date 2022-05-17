@@ -3,8 +3,9 @@
 #include "delay.h"
 #include "mcsr-ext.h"
 #include "scsr-ext.h"
+#include "mcsr-standard.h"
+#include "scsr-standard.h"
 #include "csr-read-write.h"
-#include "interrupt.h"
 #include "printf.h"
 #include "fence.h"
 void clint_enable_supervisor_interrupt(void) {

@@ -1,4 +1,5 @@
 #include "mcsr-ext.h"
+#include "mcsr-standard.h" 
 #include "asm-defs.h"
 .section .text.start
     .global _start
