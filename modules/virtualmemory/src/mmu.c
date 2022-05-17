@@ -45,10 +45,14 @@ int vmem_map_range(pagetable_t pagetable, uintptr_t virtual_address, size_t size
             return -1; // run out of kernel memory 
         }
         if (!((*pte) & PTE_V)) {  // brand-new pte 
-            (*pte) = ((physical_address >> PA_PPN_OFFSET) << PTE_PPN_OFFSET) | PTE_V | PTE_A | PTE_D | permission; 
+            // (*pte) = ((physical_address >> PA_PPN_OFFSET) << PTE_PPN_OFFSET) | PTE_V | PTE_A | PTE_D | permission; 
+            (*pte) = PA_TO_PTE(physical_address) | PTE_V | PTE_A | PTE_D | permission; 
         } else { // otherwise it's a remapping 
             panic("remapping virtual address %p to physical address %p, original physical address is %p\n", 
-                vaddr, physical_address, (((*pte) >> PTE_PPN_OFFSET) << PA_PPN_OFFSET));
+                vaddr, physical_address, 
+                // (((*pte) >> PTE_PPN_OFFSET) << PA_PPN_OFFSET)
+                PTE_GET_PA(*pte) 
+            );
         }
         
     }
