@@ -4,9 +4,9 @@ pagetable_t kernel_pagetable;
 
 pagetable_entry_t * vmem_get_pte(pagetable_t pagetable, uintptr_t virtual_address, int alloc_on_not_found, int *end_level) {
     if (virtual_address >= VIRTUAL_ADDRESS_END) {
-        panic("virtual address %p is out of Sv39 virtual address range!\n", virtual_address);
+        panic("virtual address %p is out of virtual address range!\n", virtual_address);
     }
-    for (int level = 2; level > 0; --level) {
+    for (int level = PAGE_TABLE_MAXIMUM_LEVELS; level > 0; --level) {
         pagetable_entry_t *pte = &(pagetable[VA_GET_VPN(virtual_address, level)]); 
         if (!(*pte & PTE_V)) { // invalid PTE 
             if (alloc_on_not_found) {
@@ -16,7 +16,8 @@ pagetable_entry_t * vmem_get_pte(pagetable_t pagetable, uintptr_t virtual_addres
                     return NULL; 
                 }
                 memset(new_pt, 0, PAGESIZE); 
-                (*pte) = ((((uintptr_t)new_pt >> PA_PPN_OFFSET) << PTE_PPN_OFFSET) | PTE_V);
+                // (*pte) = ((((uintptr_t)new_pt >> PA_PPN_OFFSET) << PTE_PPN_OFFSET) | PTE_V);
+                (*pte) = PA_TO_PTE(new_pt) | PTE_V; 
             } else {
                 (*end_level) = level;
                 return NULL; 
@@ -26,7 +27,8 @@ pagetable_entry_t * vmem_get_pte(pagetable_t pagetable, uintptr_t virtual_addres
             (*end_level) = level; 
             return pte; 
         }
-        pagetable = (pagetable_t)(((*pte) >> PTE_PPN_OFFSET) << PA_PPN_OFFSET); 
+        // pagetable = (pagetable_t)(((*pte) >> PTE_PPN_OFFSET) << PA_PPN_OFFSET); 
+        pagetable = (pagetable_t)PTE_GET_PA(*pte); 
     }
     (*end_level) = 0; 
     return &(pagetable[VA_GET_VPN(virtual_address, 0)]); 

@@ -155,16 +155,32 @@ Sv39 has 2^9 PTEs for a page table, each entry is 8 bytes. Therefore, a page tab
 #define PTE_RSW_OFFSET (8) 
 #define PTE_RSW_MASK (0b11 << PTE_RSW_OFFSET) 
 #define PTE_PPN_OFFSET (10) 
-#define PTE_PPN_MASK (UINT64_C(0xFFFFFFF) << PTE_PPN_OFFSET) 
+/////////////////////////////////////////// Sv39/Sv48 specific, in total 44 bits PPN //////////////////////////////////// 
+#define PTE_PPN_MASK (UINT64_C(0xFFFFFFFFFFF) << PTE_PPN_OFFSET) 
+/////////////////////////////////////////// Sv39/Sv48 specific, each VPN is 9-bit /////////////////////////////////////// 
 #define VA_GET_VPN(va, level) ( ((va) >> (12 + (level) * 9)) & 0x1FF) 
-// NOTE: the PA in PPN has 28 bits, where PPN[2] is a 10-bit field !!! 
+// NOTE: the PA in PPN has 28 bits, where PPN[2] is a 10-bit field in C906 !!! 
 #define PA_PPN_OFFSET (12) 
+/////////////////////////////////////////// Sv39 specific ///////////////////////////////////////////////////////////////
 #define VIRTUAL_ADDRESS_END (1ULL << 39) 
 #define SATP_SV39 (UINT64_C(8) << 60)
 #define MAKE_SATP(pagetable) (SATP_SV39 | (((uint64_t)pagetable) >> PA_PPN_OFFSET))
+#define PAGE_TABLE_MAXIMUM_LEVELS (2) 
 typedef uint64_t pagetable_entry_t; 
 // typedef struct pagetable_entry *pagetable_t; 
+/////////////////////////////////////////// End Sv39 specific ///////////////////////////////////////////////////////////////
 typedef pagetable_entry_t *pagetable_t; 
+#define PTE_GET_PA(pte) ( \
+    ( \
+        ((pagetable_entry_t)(pte) & PTE_PPN_MASK) \
+        >> PTE_PPN_OFFSET \
+    ) << PA_PPN_OFFSET \
+)
+#define PA_TO_PTE(pa) ( \
+    ( \
+        ((uintptr_t)(pa) >> PA_PPN_OFFSET) << PTE_PPN_OFFSET \
+    ) & PTE_PPN_MASK \
+)
 extern pagetable_t kernel_pagetable; 
 enum pagesize {
     pagesize_4K = 12,
