@@ -58,6 +58,27 @@ void main(void) {
     uintptr_t mie = enable_all_machine_interrupts(); 
     // printf("mtvec = 0b%b\nmie = 0b%b\n\n", mtvec, mie); 
     dev_barrier(); 
+    // print_str("detecting tselect\n"); 
+    // for (int i = 0; i <= 3; ++i) {
+    //     write_csr("tselect", i);
+    //     int aa = read_csr("tselect");
+    //     if (aa != i) {
+    //         printf("tselect up to %d\n", i);
+    //         break;
+    //     } 
+    //     uint64_t tdata1 = read_csr("tdata1"); 
+    //     uint64_t type = tdata1 >> 60;
+    //     if (type == 0) {
+    //         printf("tselect up to %d\n", i);
+    //         break;
+    //     }
+    //     // printf("i=%d tinfo = 0b%b\n", i, read_csr("tinfo")); 
+    // }
+    // printf("tselect = %x\n", read_csr("tselect"));
+    ////////// No tselect is accessable in M-mode!!!!!! 
+    // printf("tcontrol = %x\n", read_csr("0x7a5"));
+    ////////// tcontrol is not accessable in M-mode!!!!!! 
+    // print_hex(read_csr("0x7aa"));
 #define TEST_ECALL 0 
 #define TEST_TIMER 1 
 #if TEST_ECALL
