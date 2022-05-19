@@ -22,7 +22,7 @@ If using riscv64-unknown-elf-gcc, modify `cmake/toolchain.cmake` to specify your
 ```
 mkdir build 
 cd build 
-cmake ../boot0-spl --toolchain ../cmake/toolchain.cmake
+cmake .. --toolchain ../cmake/toolchain.cmake
 make 
 ```
 #### Using clang 
@@ -30,7 +30,7 @@ If using clang, modify `cmake/clang-toolchain.cmake` to specify your path to cla
 ```
 mkdir build 
 cd build 
-cmake ../boot0-spl --toolchain ../cmake/clang-toolchain.cmake
+cmake .. --toolchain ../cmake/clang-toolchain.cmake
 make 
 ```
 
