@@ -14,6 +14,7 @@
 // struct uart_rxdma   *uart0_rxdma   = (struct uart_rxdma*)(UART0_BASE + 0x0100); 
 struct uart_control *uart0_ctl;
 void uart_clock_init(int port) {
+#if 0
     uint32_t uart_bgr = get32(CCU_UART_BGR_REG); 
     uart_bgr &= ~(1<<(CCM_UART_RST_OFFSET + port));
     put32(CCU_UART_BGR_REG, uart_bgr); 
@@ -26,7 +27,18 @@ void uart_clock_init(int port) {
     put32(CCU_UART_BGR_REG, uart_bgr);
     delay_us(100);
     uart_bgr |= (1 << (CCM_UART_GATING_OFFSET + port));
-    put32(CCU_UART_BGR_REG, uart_bgr);
+    put32(CCU_UART_BGR_REG, uart_bgr); 
+#endif 
+    uint32_t val;
+    /* enable module clock */
+    val = get32(CCU_UART_BGR_REG);
+    val |= 1 << (CCM_UART_GATING_OFFSET + port);
+    put32(CCU_UART_BGR_REG, val);
+
+    /* de-assert the module */
+    val = get32(CCU_UART_BGR_REG);
+    val |= 1 << (CCM_UART_RST_OFFSET + port);
+    put32(CCU_UART_BGR_REG, val);
 }
 void uart_set_gpio(int port) {
     switch (port) {
@@ -83,19 +95,34 @@ struct uart_control *uart_init(int port, int set_gpio) {
     }
     
     struct uart_control *ctl = (struct uart_control*)((uintptr_t)UART0_BASE+port*0x400UL); 
-    ctl->mcr = 0b11;
+    struct uart_halt *hlt = (struct uart_halt*)((uintptr_t)UART0_BASE + port * 0x400UL + 0x00A4UL); 
     uint32_t uart_clock_divisor = (24000000 + 8 * UART_BAUD) / (16 * UART_BAUD); 
-    ctl->lcr |= 0x80;  // enable the divisor latch access bit to set baud 
+    // write fcr[FIFOE] to 1 to enable TX/RX fifos 
+    ctl->fcr |= (1 << 0); 
+    // write halt[HALT_TX] to 1 to disable TX transfer 
+    hlt->halt |= (1 << 0); 
+    // set lcr[DLAB] to 1 to access the dlh and dll registers 
+    ctl->lcr |= 0x80;  // enable the divisor latch access bit to set baud: lcr[DLAB] = 1 
+    // set the baud rate 
     ctl->dlh = ((uart_clock_divisor >> 8) & 0xFF);
     ctl->dll = (uart_clock_divisor & 0xFF); 
+    // set lcr[DLAB] to 0 to disable latch access 
     ctl->lcr &= (~0x80);  // disable the latch access 
+    
+
+    ////////////////////////////
+    // set data width, stop bit, parity bit 
     ctl->lcr = ((PARITY & 0x03) << 3) | ((STOP & 0x01) << 2) | (DLEN & 0x03);  // 8n1 
+    // reset, enable FIFO and set FIFO trigger condition by writing to the fcr register 
     ctl->fcr = 0x7; 
+    // set flow control parameter by writing to the mcr register 
+    ctl->mcr = 0b11;
+    // set halt[HALT_TX] to 0 to enable TX transfer 
+    hlt->halt &= ~(1 << 0); 
     if (port == 0) {
         uart0_ctl = ctl; 
     }
     return ctl;
-
 }
 void uart_putc(struct uart_control *ctl, char c) {
     while ((ctl->lsr & (1 << 6)) == 0) {} 
@@ -116,7 +143,7 @@ uint32_t uart_interrupt_enable_get(struct uart_control *ctl) {
     return ctl->ier; 
 }
 void uart_get_interrupt_identity(struct uart_control *ctl, int *fifo_enabled, enum uart_interrupt_id *interrupt_id) {
-    uint32_t interrupt_identity_register = ctl->ier; 
+    uint32_t interrupt_identity_register = ctl->iir; 
     (*fifo_enabled) = ((interrupt_identity_register >> 6) & 0b11); 
     (*interrupt_id) = (enum uart_interrupt_id)(interrupt_identity_register & 0b1111); 
 }

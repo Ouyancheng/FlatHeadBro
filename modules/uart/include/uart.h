@@ -29,7 +29,7 @@ struct uart_control {
 #define dll rbr
 // divisor latch high register 
 #define dlh ier 
-// interrupt identity register 
+// interrupt identity register, NOTE: iir is all read, fcr is all write, so no conflict  
 #define iir fcr
 
 // /**
