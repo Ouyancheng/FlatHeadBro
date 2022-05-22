@@ -4,6 +4,6 @@
 
 void pagealloc_init(void); 
 void pagefree(void *page); 
-/// allocate a page and return its base address, currently only supports 4K page 
+/// allocate a page and return its base address, currently only supports PAGESIZE (4K) page 
 void *pagealloc(void); 
 #endif 
