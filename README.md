@@ -195,18 +195,18 @@ And it will print the hello message.
 - https://github.com/bigmagic123/d1-nezha-baremeta 
 - https://mp.weixin.qq.com/s/MdrtuX3s1aUf0tdivXfpKQ
 - https://whycan.com/t_6440.html 
-- (Nezha description) https://linux-sunxi.org/Allwinner_Nezha#U-Boot
-- (Lichee RV description) https://linux-sunxi.org/Sipeed_Lichee_RV 
-- (D1 description from Fedora) https://fedoraproject.org/wiki/Architectures/RISC-V/Allwinner 
-- (Boot SD card layout) https://linux-sunxi.org/Bootable_SD_card 
-- (Description of the BROM for Allwinner ARM processors) https://linux-sunxi.org/BROM 
-- (The boot0spl header format) https://linux-sunxi.org/EGON 
-- (The FEL USB protocol) https://github.com/hno/Allwinner-Info/blob/master/FEL-usb/USB-protocol.txt 
-- (The Display Engine 2 register guide) https://linux-sunxi.org/DE2_Register_Guide 
-- (RISC-V assembly programming guide) https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md 
-- (RISC-V Non-ISA specification) https://github.com/riscv-non-isa 
-- (RISC-V instructions) https://msyksphinz-self.github.io/riscv-isadoc/html/rvi.html 
-
+- [Nezha description] https://linux-sunxi.org/Allwinner_Nezha#U-Boot
+- [Lichee RV description] https://linux-sunxi.org/Sipeed_Lichee_RV 
+- [D1 description from Fedora] https://fedoraproject.org/wiki/Architectures/RISC-V/Allwinner 
+- [Boot SD card layout] https://linux-sunxi.org/Bootable_SD_card 
+- [Description of the BROM for Allwinner ARM processors] https://linux-sunxi.org/BROM 
+- [The boot0spl header format] https://linux-sunxi.org/EGON 
+- [The FEL USB protocol] https://github.com/hno/Allwinner-Info/blob/master/FEL-usb/USB-protocol.txt 
+- [The Display Engine 2 register guide] https://linux-sunxi.org/DE2_Register_Guide 
+- [RISC-V assembly programming guide] https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md 
+- [RISC-V Non-ISA specification] https://github.com/riscv-non-isa 
+- [RISC-V instructions] https://msyksphinz-self.github.io/riscv-isadoc/html/rvi.html 
+- [A brief justification of RISC-V's calling convention] https://inst.eecs.berkeley.edu/~cs61c/resources/RISCV_Calling_Convention.pdf 
 
 
 
