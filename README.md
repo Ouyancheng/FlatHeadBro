@@ -201,8 +201,11 @@ And it will print the hello message.
 - (Boot SD card layout) https://linux-sunxi.org/Bootable_SD_card 
 - (Description of the BROM for Allwinner ARM processors) https://linux-sunxi.org/BROM 
 - (The boot0spl header format) https://linux-sunxi.org/EGON 
-
-
+- (The FEL USB protocol) https://github.com/hno/Allwinner-Info/blob/master/FEL-usb/USB-protocol.txt 
+- (The Display Engine 2 register guide) https://linux-sunxi.org/DE2_Register_Guide 
+- (RISC-V assembly programming guide) https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md 
+- (RISC-V Non-ISA specification) https://github.com/riscv-non-isa 
+- (RISC-V instructions) https://msyksphinz-self.github.io/riscv-isadoc/html/rvi.html 
 
 
 
