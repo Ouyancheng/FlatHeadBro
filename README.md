@@ -195,9 +195,12 @@ And it will print the hello message.
 - https://github.com/bigmagic123/d1-nezha-baremeta 
 - https://mp.weixin.qq.com/s/MdrtuX3s1aUf0tdivXfpKQ
 - https://whycan.com/t_6440.html 
-- https://linux-sunxi.org/Allwinner_Nezha#U-Boot
-
-
+- (Nezha description) https://linux-sunxi.org/Allwinner_Nezha#U-Boot
+- (Lichee RV description) https://linux-sunxi.org/Sipeed_Lichee_RV 
+- (D1 description from Fedora) https://fedoraproject.org/wiki/Architectures/RISC-V/Allwinner 
+- (Boot SD card layout) https://linux-sunxi.org/Bootable_SD_card 
+- (Description of the BROM for Allwinner ARM processors) https://linux-sunxi.org/BROM 
+- (The boot0spl header format) https://linux-sunxi.org/EGON 
 
 
 
