@@ -56,6 +56,8 @@ sync
 diskutil unmountDisk <YOUR_SD_CARD_DEVICE> 
 ``` 
 
+**There's also a simplified version of the boot0 bootloader `bin/boot0lite-sdcard.bin` (source code in folder `boot0`), you may use it to replace `boot0-sdcard.bin`.**
+
 Then insert your SD card to the Lichee RV and power it on (could be done via GPIO pins), the UART will print the following, use `screen /dev/cu.SLAB_USBtoUART 115200` to monitor UART, of course with a USB to UART dongle (NOTE: this message is now suppressed -- it will print `dram init result (dram size): 0x200MB` indicating the board has 512MB RAM. If you still want to see the DRAM init message, set `DRAM_DEBUG` to 1 in `modules/dram/src/tinyprintf.c`): 
 ```
 DRAM only have internal ZQ!!
