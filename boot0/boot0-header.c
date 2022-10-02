@@ -1,7 +1,7 @@
 #include "boot0-header.h"
 #include "boot0.h"
 
-#define ROUND_UP_TO_8(x) ((x + 7) / 8 * 8)
+#define ROUND_UP_TO_8(x) (((x) + 7) / 8 * 8)
 
 /** encoding of the jump instruction to skip over the header */
 #define BROM_FILE_HEAD_SIZE         (ROUND_UP_TO_8(sizeof(struct boot0_header)) & 0x00FFFFF)  /* for some reasons, the entry point is aligned to 8 bytes */
