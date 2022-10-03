@@ -10,6 +10,7 @@ SECTIONS
         *(.boot0header.header)
     }
     /* . = ALIGN(1); */ 
+    /* do we need to manually align this to 8? */
     .text : {
         /* the entry code */
         *(.text.boot0entry)
