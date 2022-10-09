@@ -13,4 +13,6 @@ add_subdirectory(secondary/bootloadertest)
 add_subdirectory(secondary/interrupttest)
 add_subdirectory(secondary/supervisorinterrupttest)
 add_subdirectory(secondary/mmutest)
+add_subdirectory(secondary/steppermotor)
+
 
