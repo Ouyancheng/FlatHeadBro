@@ -209,7 +209,7 @@
 .endm 
 
 
-.section .text.trampoline 
+.section .trampoline.text 
 .align 4 
 .globl direct_interrupt_trampoline 
 direct_interrupt_trampoline: 

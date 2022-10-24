@@ -1,29 +1,22 @@
 #include "mcsr-ext.h"
 #include "mcsr-standard.h" 
 #include "asm-defs.h"
-
-/* a macro for floating point mov */
-.macro ZERO_OUT_REG rd 
-    li \rd, 0 
-.endm 
-#undef MXSTATUS
-#define MXSTATUS 0x7C0
 .section .text.start
-.global _start
+    .global _start
 _start:
-    j bootup_reset
-
+    j reset
 /*
  * The actual reset code
  */
-bootup_reset:
+reset:
     /* Disable all interrupts */
     csrw mideleg, zero
     csrw medeleg, zero
     csrw mie, zero
     csrw mip, zero
-    li t1, MXSTATUS_THEADISAEE
-    csrs MXSTATUS, t1
+    #define EN_THEADISAEE (0x1 << 22)
+    li t1, EN_THEADISAEE
+    csrs 0x7c0, t1
 
     /* Initial registers */
     li x1, 0 /* ra, we are not returning to boot0, if we plan to return, should also save sp */
@@ -100,15 +93,16 @@ bootup_reset:
     /* Initialize global pointer, should not relax because relaxing uses the global pointer... */
 .option push
 .option norelax
-    la gp, __global_pointer$ 
+    la gp, __global_pointer 
 .option pop
 
     // D1 only has single core, so this is always 0 
     csrr t0, mhartid 
     bne t0, zero, _multicore_sleep 
-    la sp, __stack_end 
-    
     jal clear_bss 
+    la sp, kernel_stack // this is defined in kernelsdk 
+    li t0, (KERNEL_STACK_SIZE_PER_CORE-RISCV_STACK_ALIGN_BYTES)
+    add sp, sp, t0 
     jal main
     /* we need to call this if we don't return, */
     /* and we couldn't return because we've cleared the ra/x1 register */
