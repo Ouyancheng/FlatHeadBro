@@ -3,12 +3,12 @@ set(CMAKE_SYSTEM_PROCESSOR          riscv64)
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE   STATIC_LIBRARY)
 set(BAREMETAL_RV64_TOOLCHAIN_PATH "/Users/ouyancheng/homebrew/opt/llvm/bin/")
+# set(BAREMETAL_RV64_TOOLCHAIN_PATH "/opt/homebrew/opt/llvm/bin/")
 set(CMAKE_EXECUTABLE_SUFFIX "")
 set(CMAKE_AR                        "${BAREMETAL_RV64_TOOLCHAIN_PATH}llvm-ar${CMAKE_EXECUTABLE_SUFFIX}")
 set(CMAKE_ASM_COMPILER              "${BAREMETAL_RV64_TOOLCHAIN_PATH}clang${CMAKE_EXECUTABLE_SUFFIX}")
 set(CMAKE_C_COMPILER                "${BAREMETAL_RV64_TOOLCHAIN_PATH}clang${CMAKE_EXECUTABLE_SUFFIX}")
 set(CMAKE_CXX_COMPILER              "${BAREMETAL_RV64_TOOLCHAIN_PATH}clang++${CMAKE_EXECUTABLE_SUFFIX}")
-### WTF lld has a bug?!! Why is it placing the string pool between the header and the entry?????!!!!!
 set(CMAKE_LINKER                    "${BAREMETAL_RV64_TOOLCHAIN_PATH}ld.lld${CMAKE_EXECUTABLE_SUFFIX}")
 # set(CMAKE_LINKER "/Volumes/Data/workspaces/xuantie-gcc/bin/riscv64-unknown-elf-ld")
 set(CMAKE_OBJCOPY                   "${BAREMETAL_RV64_TOOLCHAIN_PATH}llvm-objcopy${CMAKE_EXECUTABLE_SUFFIX}")
