@@ -52,7 +52,7 @@ uintptr_t disable_all_machine_interrupts(void);
 uintptr_t disable_all_supervisor_interrupts(void); 
 
 // __attribute__((interrupt("machine"))) only applies to function with no parameter 
-void interrupt_handler(uintptr_t cause, uintptr_t pc, uintptr_t fault_address); 
+void /*__attribute__((section(".trampoline.text")))*/ interrupt_handler(uintptr_t cause, uintptr_t pc, uintptr_t fault_address); 
 /// the cause of the interrupt 
 enum INTERRUPT_CAUSE {
     USER_SOFTWARE_INTERRUPT       = 0, 

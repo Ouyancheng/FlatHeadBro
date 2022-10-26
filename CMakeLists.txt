@@ -16,3 +16,11 @@ add_subdirectory(secondary/mmutest)
 add_subdirectory(secondary/steppermotor)
 
 
+if (CMAKE_C_COMPILER_ID STREQUAL "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS "15")
+    set(CMAKE_C_FLAGS                   "${CMAKE_C_FLAGS} -mno-relax ")
+    set(CMAKE_C_FLAGS_RELEASE           "${CMAKE_C_FLAGS_RELEASE} -mno-relax ")
+    set(CMAKE_CXX_FLAGS                 "${CMAKE_CXX_FLAGS} -mno-relax")
+    set(CMAKE_CXX_FLAGS_RELEASE         "${CMAKE_CXX_FLAGS_RELEASE} -mno-relax")
+    set(CMAKE_ASM_FLAGS                 "${CMAKE_ASM_FLAGS} -mno-relax") 
+endif()
+# message(STATUS "${CMAKE_C_COMPILER_ID}-${CMAKE_C_COMPILER_VERSION}, ${CMAKE_C_FLAGS} ${CMAKE_ASM_FLAGS}")

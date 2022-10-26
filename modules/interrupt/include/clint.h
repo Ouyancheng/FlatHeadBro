@@ -33,8 +33,8 @@ void clint_clear_machine_timer_interrupt(void);
 void clint_set_supervisor_timer_interrupt(uint64_t ticks_after); 
 void clint_clear_supervisor_timer_interrupt(void); 
 
-void clint_machine_timer_interrupt_handler(void) __attribute__((interrupt("machine"))); 
-void clint_supervisor_timer_interrupt_handler(void) __attribute__((interrupt("supervisor"))); 
+void /*__attribute__((section(".trampoline.text")))*/ clint_machine_timer_interrupt_handler(void) /*__attribute__((interrupt("machine")))*/; 
+void /*__attribute__((section(".trampoline.text")))*/ clint_supervisor_timer_interrupt_handler(void) /*__attribute__((interrupt("supervisor")))*/; 
 
 
 

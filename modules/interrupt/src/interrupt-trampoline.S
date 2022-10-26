@@ -209,8 +209,41 @@
 .endm 
 
 
-.section .trampoline.text 
-.align 4 
+// .section .trampoline.text 
+// ld.lld complains lots of things if we put these into .trampoline.text 
+// ld.lld: warning: ../../lib/libinterrupt.a(interrupt-trampoline.S.o):(.trampoline.text+0x0): has non-ABS relocation R_RISCV_JAL against symbol 'default_interrupt_trampoline'
+// ld.lld: error: ../../lib/libinterrupt.a(interrupt-trampoline.S.o):(.trampoline.text+0x0): relocation R_RISCV_JAL out of range: 1073741888 is not in [-1048576, 1048575]
+// same if we directly j to a global symbol in interrupt_vector (e.g., clint_supervisor_timer_interrupt_handler)
+.align 5
+.global interrupt_vector 
+interrupt_vector: 
+    j default_interrupt_trampoline // 0: user software interrupt / all of the exceptions 
+    j default_interrupt_trampoline // 1: supervisor software interrupt 
+    j default_interrupt_trampoline // 2: reserved 
+    j default_interrupt_trampoline // 3: machine software interrupt 
+    j default_interrupt_trampoline // 4: user timer interrupt 
+    j clint_supervisor_timer_interrupt_trampoline // 5: supervisor timer interrupt 
+    j default_interrupt_trampoline // 6: reserved 
+    j clint_machine_timer_interrupt_trampoline // 7: machine timer interrupt 
+    j default_interrupt_trampoline // 8: user external interrupt 
+    j plic_supervisor_interrupt_trampoline // 9: supervisor external interrupt 
+    j default_interrupt_trampoline // 10: reserved 
+    j plic_machine_interrupt_trampoline      // 11: machine external interrupt 
+
+.align 5
+// .global default_interrupt_trampoline // for some reasons clang-15 (ld.lld) complains about this if we use global symbol and put this in .trampoline.text
+default_interrupt_trampoline: 
+    strampoline_save_IFREGS default_vector_handler
+clint_supervisor_timer_interrupt_trampoline: 
+    strampoline_save_IFREGS clint_supervisor_timer_interrupt_handler
+clint_machine_timer_interrupt_trampoline: 
+    mtrampoline_save_IFREGS clint_machine_timer_interrupt_handler
+plic_supervisor_interrupt_trampoline: 
+    strampoline_save_IFREGS plic_supervisor_dispatch_interrupt
+plic_machine_interrupt_trampoline: 
+    mtrampoline_save_IFREGS plic_machine_dispatch_interrupt
+
+.align 5 
 .globl direct_interrupt_trampoline 
 direct_interrupt_trampoline: 
     INTERRUPT_PUSH_IREGS 
@@ -223,7 +256,7 @@ direct_interrupt_trampoline:
     csrr a2, mtval 
 
     // call the interrupt handler written in C 
-    jal interrupt_handler 
+    call interrupt_handler 
 
     // should we add pc by 4 so that it won't raise the exception again? 
     csrr t0, mepc 
@@ -234,26 +267,7 @@ direct_interrupt_trampoline:
     mret 
 
 
-.align 5
-.global interrupt_vector 
-interrupt_vector: 
-    j default_interrupt_trampoline // 0: user software interrupt / all of the exceptions 
-    j default_interrupt_trampoline // 1: supervisor software interrupt 
-    j default_interrupt_trampoline // 2: reserved 
-    j default_interrupt_trampoline // 3: machine software interrupt 
-    j default_interrupt_trampoline // 4: user timer interrupt 
-    j clint_supervisor_timer_interrupt_handler // 5: supervisor timer interrupt 
-    j default_interrupt_trampoline // 6: reserved 
-    j clint_machine_timer_interrupt_handler // 7: machine timer interrupt 
-    j default_interrupt_trampoline // 8: user external interrupt 
-    j plic_supervisor_dispatch_interrupt // 9: supervisor external interrupt 
-    j default_interrupt_trampoline // 10: reserved 
-    j plic_machine_dispatch_interrupt      // 11: machine external interrupt 
 
-.align 4
-.global default_interrupt_trampoline 
-default_interrupt_trampoline: 
-    strampoline_save_IFREGS default_vector_handler
 
 
 #if 0

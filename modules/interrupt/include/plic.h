@@ -38,7 +38,7 @@ void plic_machine_interrupt_enable(int irq, irq_handler_t handler, int priority)
 
 void plic_machine_interrupt_disable(int irq); 
 
-void plic_machine_dispatch_interrupt(void) __attribute__((interrupt("machine"))); 
+void /*__attribute__((section(".trampoline.text")))*/ plic_machine_dispatch_interrupt(void) /*__attribute__((interrupt("machine")))*/; 
 
 /// must be called from machine mode 
 void plic_enable_supervisor_access(void); 
@@ -52,6 +52,6 @@ void plic_supervisor_interrupt_enable(int irq, irq_handler_t handler, int priori
 
 void plic_supervisor_interrupt_disable(int irq); 
 
-void plic_supervisor_dispatch_interrupt(void) __attribute__((interrupt("supervisor"))); 
+void /*__attribute__((section(".trampoline.text")))*/ plic_supervisor_dispatch_interrupt(void) /*__attribute__((interrupt("supervisor")))*/; 
 
 #endif 
