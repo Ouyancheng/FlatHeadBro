@@ -96,7 +96,7 @@ e.g., if you want to build the uart module and all of its dependencies:
 ```
 mkdir build 
 cd build 
-cmake ../modules/uart --toolchain ../cmake/toolchain.cmake 
+cmake ../modules/uart --toolchain ../cmake/clang-toolchain.cmake 
 make 
 ```
 You will see `libcommon.a`, `libgpio.a`, `libuart.a` in the build/lib directory, and as you can see the uart module depends on the common and gpio modules. 
