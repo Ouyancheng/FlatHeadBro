@@ -24,7 +24,7 @@ If using riscv64-unknown-elf-gcc, **modify `cmake/gcc-toolchain.cmake` to specif
 mkdir build 
 cd build 
 cmake .. --toolchain ../cmake/gcc-toolchain.cmake
-# for older cmake versions, you may want: cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain.cmake 
+# for older cmake versions, you may want: cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/gcc-toolchain.cmake 
 make 
 ```
 If you are using T-head's own gcc, you can use `toolchain.cmake` as the toolchain file, that might take advantage of T-head's instruction extension. 
