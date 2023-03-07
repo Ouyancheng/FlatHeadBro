@@ -19,14 +19,15 @@ This is the first program to run after powering on and going through the BROM ph
 
 #### Using riscv64 gcc 
 
-If using riscv64-unknown-elf-gcc, **modify `cmake/toolchain.cmake` to specify your path to riscv64-unknown-elf-gcc and the binary utilities**. 
+If using riscv64-unknown-elf-gcc, **modify `cmake/gcc-toolchain.cmake` to specify your path to riscv64-unknown-elf-gcc and the binary utilities**. 
 ```
 mkdir build 
 cd build 
-cmake .. --toolchain ../cmake/toolchain.cmake
+cmake .. --toolchain ../cmake/gcc-toolchain.cmake
 # for older cmake versions, you may want: cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain.cmake 
 make 
 ```
+If you are using T-head's own gcc, you can use `toolchain.cmake` as the toolchain file, that might take advantage of T-head's instruction extension. 
 #### Using clang 
 If using clang, **modify `cmake/clang-toolchain.cmake` to specify your path to clang and the binary utilities** (Note: if you are using macOS, Apple's clang shipped with Command Line Tools will NOT work, please install the LLVM toolchain via homebrew: `brew install llvm`, and make sure your clang has the riscv64 target: `${YOUR_PATH_TO_CLANG}/clang --print-targets`). 
 ```
