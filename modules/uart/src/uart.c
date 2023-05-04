@@ -83,7 +83,7 @@ void uart_set_gpio(int port) {
     }
 }
 struct uart_control *uart_init(int port, int set_gpio) {
-    if (!(port <= 0 && port <= 5)) {
+    if (!(port >= 0 && port <= 5)) {
         return (struct uart_control *)0; 
     }
     /// set clock 
